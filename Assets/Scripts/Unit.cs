@@ -36,7 +36,6 @@ public class Unit : MonoBehaviour
         m_renderer = GetComponent<Renderer>();
         m_start_color = m_renderer.material.color;
     }
-
     public void TakeDamage(float damage, StatusEffect status_effect = StatusEffect.Clean)
     {
         // Apply status effect 
@@ -61,7 +60,13 @@ public class Unit : MonoBehaviour
         health -= damage * damage_multiplier;
         if (health < 0.0f)
         {
-            death_callback.Invoke();
+            // Call callbacks if any
+            if (death_callback != null)
+            {
+                death_callback.Invoke();
+            }
+
+            // Clean up
             Destroy(gameObject);
         }
     }
@@ -83,8 +88,9 @@ public class Unit : MonoBehaviour
     {
         // TODO: Change to shader wipe
         m_renderer.material.color = Color.white;
-        yield return new WaitForSeconds(0.05f);
+        yield return new WaitForSeconds(0.1f);
         m_renderer.material.color = m_start_color;
+
         m_damage_effect_routine = null;
     }
 

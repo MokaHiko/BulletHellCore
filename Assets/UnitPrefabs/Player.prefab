@@ -93,11 +93,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 82a0cc7ec444f0b4993fdd590f41075b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 7
-  attack_speed: 15
+  damage: 10
+  attack_speed: 6
   range: 100
   impact_particle_system: {fileID: 6542181596675643951, guid: a06539a0e911e2449920387a024e833d, type: 3}
-  spread: 0.075
+  spread: 0.05
   muzzle_flash: {fileID: 0}
   bullet_trail: {fileID: 5113547844858984007, guid: 6368f56043e3c894f89080b7d534b3f7, type: 3}
   bullet_trail_speed: 75

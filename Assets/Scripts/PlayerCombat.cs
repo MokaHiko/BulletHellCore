@@ -31,7 +31,6 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField]
     public TrailRenderer bullet_trail;
     public float bullet_trail_speed = 100.0f;
-
     public void Fire()
     {
         if (m_time_since_last_fire <= (1.0f / attack_speed) )
@@ -53,6 +52,10 @@ public class PlayerCombat : MonoBehaviour
             {
                 unit.TakeDamage(damage);
             }
+            else
+            {
+                Bounce(hit.point, Vector3.Reflect(dir, hit.normal));
+            }
 
             TrailRenderer trail = Instantiate(bullet_trail, m_fire_point.position, Quaternion.identity);
             StartCoroutine(SpawnTrail(trail, hit.point, hit.normal));
@@ -63,6 +66,25 @@ public class PlayerCombat : MonoBehaviour
             StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized));
         }
     }
+    void Bounce(Vector3 spawn_point, Vector3 dir)
+    {
+        if (Physics.Raycast(spawn_point, dir, out RaycastHit hit, range))
+        {
+            if (hit.collider.TryGetComponent<Unit>(out Unit unit))
+            {
+                unit.TakeDamage(damage * 10.0f);
+            }
+
+            TrailRenderer trail = Instantiate(bullet_trail, spawn_point, Quaternion.identity);
+            StartCoroutine(SpawnTrail(trail, hit.point, hit.normal));
+        }
+        else
+        {
+            TrailRenderer trail = Instantiate(bullet_trail, spawn_point, Quaternion.identity);
+            StartCoroutine(SpawnTrail(trail, spawn_point + (dir * range), -dir.normalized));
+        }
+    }
+
     void Start()
     {
         // Weapon asserts
