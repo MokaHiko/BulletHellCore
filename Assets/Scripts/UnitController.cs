@@ -8,6 +8,12 @@ public class UnitController : MonoBehaviour
 {
     public void GoTo(Vector3 position)
     {
+        if (m_unit.CheckState(UnitState.ManagedMovement))
+        {
+            return;
+        }
+
+        m_unit.ApplyState(UnitState.Moving);
         m_target_location = position;
     }
 
@@ -26,10 +32,21 @@ public class UnitController : MonoBehaviour
 
     private void FixedUpdate()
     {
+        if (m_unit.CheckState(UnitState.ManagedMovement))
+        {
+            return;
+        }
+
         Vector3 diff = (m_target_location - transform.position);
         if (diff.magnitude < 0.5)
         {
             m_target_location = transform.position;
+            m_unit.RemoveState(UnitState.Moving);
+            return;
+        }
+        
+        if (!m_unit.CheckState(UnitState.Moving))
+        {
             return;
         }
 
@@ -48,6 +65,7 @@ public class UnitController : MonoBehaviour
     [SerializeField]
     private Vector3 m_target_location = Vector3.zero;
 
+    // ~ Handles
     private Rigidbody m_rb;
     private Unit m_unit;
 }

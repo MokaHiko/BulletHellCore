@@ -2,16 +2,28 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum SpawnerEmissionShape
+{ 
+    Circle,
+    Targeted,
+}
+
 public class ProjectileSpawner : MonoBehaviour
 {
-    [SerializeField]
+    [Header("Emission")]
     public float spawn_rate = 1f;
-
-    [SerializeField]
     public float radius = 2.0f;
+    public SpawnerEmissionShape shape;
 
-    [SerializeField]
-    public List<GameObject> projectile_types;    
+    private const float min = 1;
+    private const float max = 10;
+
+    [Header("Projectile")]
+    [Range(min, max)]
+    public float scale;
+    public bool random_scale;
+
+    public List<GameObject> projectile_types;
 
     // Start is called before the first frame update
     void Start()
@@ -38,6 +50,12 @@ public class ProjectileSpawner : MonoBehaviour
             foreach(Vector3 point in m_points)
             {
                 var projectile = Instantiate(projectile_types[0], transform.position + (radius * point), Quaternion.LookRotation(point, Vector3.up));
+
+                if (random_scale)
+                {
+                    float scale_value = Random.Range(min, scale);
+                    projectile.transform.localScale *= scale_value;
+                }
                 projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * 15.0f;
             }
 

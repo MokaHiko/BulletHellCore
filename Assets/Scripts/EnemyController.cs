@@ -10,8 +10,14 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     public Transform target;
 
+    // Drops
+    [SerializeField]
+    public GameObject drop;
+
     void Start()
     {
+        Debug.Assert(drop != null);
+
         // Handles
         m_unit = GetComponent<Unit>();
         m_unit_controller = GetComponent<UnitController>();
@@ -34,6 +40,12 @@ public class EnemyController : MonoBehaviour
 
     void OnDeath()
     {
+        // Drop modifier
+        float will_drop = Random.Range(-1.0f, 1f);
+        if (will_drop > 0.5f)
+        {
+            Instantiate(drop, transform.position, Quaternion.identity);
+        }
     }
 
     // ~ Handles

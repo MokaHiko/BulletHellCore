@@ -1,23 +1,46 @@
+using System;
 using System.Collections;
-using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
+using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
+[Flags]
+public enum UnitState
+{
+    None = 0,
+
+    Moving = 1 << 0,
+    ManagedMovement = 1 << 1,
+
+    TakingDamage = 1 << 2,
+
+    Dead = 1 << 8,
+};
+
+[Flags]
 public enum StatusEffect
 {
-    Clean,
-    Burning, 
-    Shocked, 
-
-    Max, 
+    None = 0,
+    Burning = 1 << 0, 
+    ShortCircuit = 1 << 1,
+    Armored = 1 << 2,
 };
 
 public delegate void UnitDeathCallback();
+public delegate void UnitDamagedCallback(float damage);
 
 public class Unit : MonoBehaviour
 {
+    const float min_energy = 0.0f;
+    const float max_energy = 100.0f;
+
     [SerializeField]
     public float health = 0.0f;
+
+    [SerializeField]
+    public float energy = max_energy;
+
+    [SerializeField]
+    public float energy_gain_rate = 1.0f;
 
     [SerializeField]
     public float movement_speed = 0.0f;
@@ -30,66 +53,127 @@ public class Unit : MonoBehaviour
 
     // Callbacks
     public UnitDeathCallback death_callback;
+    public UnitDamagedCallback damaged_callback;
 
-    private void Start()
+    // Status Effect Handles
+    public ParticleSystem short_circuit_particles;
+
+    // State Flags Helpers
+    public bool CheckState(UnitState state_flags){ return (m_state & state_flags) == state_flags;}
+    public void ApplyState(UnitState state_flags){ m_state |= state_flags;}
+    public void RemoveState(UnitState state_flags) { m_state &= ~state_flags; }
+
+    // Status Flags Helpers
+    public bool CheckStatus(StatusEffect status_flags){ return (m_status_effect & status_flags) == status_flags;}
+    public void ApplyStatus(StatusEffect status_flags){ m_status_effect |= status_flags;}
+    public void RemoveStatus(StatusEffect status_flags) { m_status_effect &= ~status_flags; }
+
+    // Returns whether or not there was enough energy
+    public bool SpendEnergy(float amount)
     {
-        m_renderer = GetComponent<Renderer>();
-        m_start_color = m_renderer.material.color;
-    }
-    public void TakeDamage(float damage, StatusEffect status_effect = StatusEffect.Clean)
-    {
-        // Apply status effect 
-        switch (status_effect)
+        // Check already negative or short circuited
+        if (energy < 0.0f || CheckStatus(StatusEffect.ShortCircuit))
         {
-            case StatusEffect.Burning:
-            {
-            }
-            break;
-            case StatusEffect.Max:
-            default:
-            {
-            }break;
+            return false;
         }
+
+        // Barrow but short circuit
+        if (energy - amount < 0.0f)
+        {
+            if (m_short_circuit_routine == null)
+            {
+                m_short_circuit_routine = StartCoroutine(ShortCircuitEffect());
+                return true;
+            }
+        }
+
+        energy -= amount;
+        return true;
+    }
+
+    public void TakeDamage(float damage, StatusEffect status_effect = StatusEffect.None)
+    {
+        ApplyStatus(status_effect);
         
         if(m_damage_effect_routine == null) 
-        { 
+        {
             m_damage_effect_routine = StartCoroutine(nameof(DefaultDamageEffect));
         }
-
-        // Do damage
+        m_last_damage = damage * damage_multiplier;
         health -= damage * damage_multiplier;
+
+        damaged_callback?.Invoke(m_last_damage);
+
         if (health < 0.0f)
         {
-            // Call callbacks if any
-            if (death_callback != null)
-            {
-                death_callback.Invoke();
-            }
+            // Invoke callbacks
+            death_callback?.Invoke();
 
             // Clean up
             Destroy(gameObject);
         }
     }
 
+    private void Start()
+    {
+        m_renderer = GetComponent<Renderer>();
+        m_start_color = m_renderer.material.color;
+
+        // Defaults
+        m_state = UnitState.None;
+        m_status_effect = StatusEffect.None;
+    }
+
     void Update() 
-    { 
-        if(m_status_effect == StatusEffect.Clean) 
+    {
+        energy = Mathf.Clamp(energy + (energy_gain_rate * Time.deltaTime), min_energy, max_energy);
+        if(m_status_effect == StatusEffect.None) 
         { 
-            return; 
+            return;
+        }
+
+        switch (m_status_effect)
+        {
+            case StatusEffect.ShortCircuit:
+            {
+
+            }break;
+            case StatusEffect.Burning:
+            {
+            }break;
+            default:
+            break;
         }
     }
 
-    void ApplyStatus(StatusEffect status)
+    private IEnumerator ShortCircuitEffect()
     {
-        m_status_effect |= status;
+        ApplyStatus(StatusEffect.ShortCircuit);
+
+        float start_speed = movement_speed;
+        movement_speed *= 0.25f;
+
+        short_circuit_particles.Play();
+
+        yield return new WaitForSeconds(1.5f);
+
+        short_circuit_particles.Stop();
+        movement_speed = start_speed;
+        RemoveStatus(StatusEffect.ShortCircuit);
+
+        m_short_circuit_routine = null;
     }
 
     private IEnumerator DefaultDamageEffect()
     {
         // TODO: Change to shader wipe
+        ApplyState(UnitState.TakingDamage);
         m_renderer.material.color = Color.white;
+
         yield return new WaitForSeconds(0.1f);
+
         m_renderer.material.color = m_start_color;
+        RemoveState(UnitState.TakingDamage);
 
         m_damage_effect_routine = null;
     }
@@ -102,8 +186,13 @@ public class Unit : MonoBehaviour
 
     // ~ State
 
-    // Status
-    private StatusEffect m_status_effect = StatusEffect.Clean;
+    // ~ Status
+    [SerializeField]
+    private UnitState m_state = UnitState.None;
+
+    private StatusEffect m_status_effect = StatusEffect.None;
+    private float m_last_damage = 0;
+    private Coroutine m_short_circuit_routine = null;
 
     // ~ Handles
     private Renderer m_renderer;
