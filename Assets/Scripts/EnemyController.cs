@@ -42,7 +42,7 @@ public class EnemyController : MonoBehaviour
     {
         // Drop modifier
         float will_drop = Random.Range(-1.0f, 1f);
-        if (will_drop > 0.5f)
+        if (will_drop > 0.0f)
         {
             Instantiate(drop, transform.position, Quaternion.identity);
         }

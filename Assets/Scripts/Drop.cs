@@ -20,7 +20,7 @@ public class Drop : MonoBehaviour
     {
         if (drop_type == DropType.None)
         {
-            //drop_type = Random.Range(1, 3) as DropType;
+            drop_type = (DropType)(Random.Range(1, 3));
         }
         Color drop_color = Color.white;
         switch (drop_type)

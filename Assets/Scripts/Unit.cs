@@ -25,8 +25,14 @@ public enum StatusEffect
     Armored = 1 << 2,
 };
 
-public delegate void UnitDeathCallback();
+// Called whenever the unit is damaged
 public delegate void UnitDamagedCallback(float damage);
+
+// Called when a status is applied to the unity
+public delegate void UnitStatusCallback(StatusEffect status_effects);
+
+// Called before the unit dies
+public delegate void UnitDeathCallback();
 
 public class Unit : MonoBehaviour
 {
@@ -54,6 +60,7 @@ public class Unit : MonoBehaviour
     // Callbacks
     public UnitDeathCallback death_callback;
     public UnitDamagedCallback damaged_callback;
+    public UnitStatusCallback status_callback;
 
     // Status Effect Handles
     public ParticleSystem short_circuit_particles;
@@ -65,7 +72,11 @@ public class Unit : MonoBehaviour
 
     // Status Flags Helpers
     public bool CheckStatus(StatusEffect status_flags){ return (m_status_effect & status_flags) == status_flags;}
-    public void ApplyStatus(StatusEffect status_flags){ m_status_effect |= status_flags;}
+    public void ApplyStatus(StatusEffect status_flags) 
+    {
+        m_status_effect |= status_flags;
+        status_callback?.Invoke(status_flags);
+    }
     public void RemoveStatus(StatusEffect status_flags) { m_status_effect &= ~status_flags; }
 
     // Returns whether or not there was enough energy
@@ -80,11 +91,15 @@ public class Unit : MonoBehaviour
         // Barrow but short circuit
         if (energy - amount < 0.0f)
         {
-            if (m_short_circuit_routine == null)
+            // Reset if already short circuited
+            if (m_short_circuit_routine != null)
             {
-                m_short_circuit_routine = StartCoroutine(ShortCircuitEffect());
-                return true;
+                StopCoroutine(m_short_circuit_routine);
+                m_short_circuit_routine = null;
             }
+            ApplyStatus(StatusEffect.ShortCircuit);
+            m_short_circuit_routine = StartCoroutine(ShortCircuitEffect());
+            return true;
         }
 
         energy -= amount;
@@ -136,7 +151,6 @@ public class Unit : MonoBehaviour
         {
             case StatusEffect.ShortCircuit:
             {
-
             }break;
             case StatusEffect.Burning:
             {
@@ -148,17 +162,19 @@ public class Unit : MonoBehaviour
 
     private IEnumerator ShortCircuitEffect()
     {
-        ApplyStatus(StatusEffect.ShortCircuit);
-
         float start_speed = movement_speed;
+        float start_aglity = agility;
         movement_speed *= 0.25f;
+        agility *= 0.25f;
 
         short_circuit_particles.Play();
 
-        yield return new WaitForSeconds(1.5f);
+        yield return new WaitForSeconds(3.0f);
 
         short_circuit_particles.Stop();
         movement_speed = start_speed;
+        agility = start_aglity;
+
         RemoveStatus(StatusEffect.ShortCircuit);
 
         m_short_circuit_routine = null;
@@ -185,12 +201,13 @@ public class Unit : MonoBehaviour
     private Coroutine m_damage_effect_routine;
 
     // ~ State
-
-    // ~ Status
     [SerializeField]
     private UnitState m_state = UnitState.None;
 
+    // ~ Status
+    [SerializeField]
     private StatusEffect m_status_effect = StatusEffect.None;
+
     private float m_last_damage = 0;
     private Coroutine m_short_circuit_routine = null;
 

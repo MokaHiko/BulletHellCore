@@ -36,6 +36,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     public float dash_duration;
 
+    [SerializeField]
+    public float dash_cost = 15.0f;
+
     public bool IsBurst()
     {
         return burst;
@@ -75,7 +78,7 @@ public class PlayerController : MonoBehaviour
         bool with_burst = false;
         if (with_burst = IsBurst())
         {
-            // Add modofier to dash
+            // Add modifier to dash
             AbortBurst();
         }
 
@@ -109,10 +112,7 @@ public class PlayerController : MonoBehaviour
 
         // Subscribe to callbacks
         m_unit.damaged_callback += (float damage) => { AbortBurst(); };
-
-        // Movement defaults
-        m_start_speed = m_unit.movement_speed;
-        m_start_agility = m_unit.agility;
+        m_unit.status_callback += OnStatusEffect;
     }
     void Update()
     {
@@ -183,7 +183,7 @@ public class PlayerController : MonoBehaviour
                 return;
             }
 
-            if (m_unit.SpendEnergy(25.0f))
+            if (m_unit.SpendEnergy(dash_cost))
             {
                 Dash();
                 return;
@@ -229,6 +229,13 @@ public class PlayerController : MonoBehaviour
         burst = false;
         m_burst_routine = null;
     }
+
+    private void OnStatusEffect(StatusEffect status_effect_flags)
+    {
+        if ((status_effect_flags & StatusEffect.ShortCircuit) == StatusEffect.ShortCircuit)
+        {
+        }
+    }
     public void AbortBurst()
     {
         if(m_burst_routine != null)
@@ -237,10 +244,13 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    IEnumerator DashEffect(bool burst = false)
+    private IEnumerator DashEffect(bool burst = false)
     {
-        m_unit.movement_speed = m_start_speed * dash_multiplier;
-        m_unit.agility = m_start_agility * dash_multiplier;
+        float start_speed = m_unit.movement_speed;
+        float start_agility = m_unit.agility;
+
+        m_unit.movement_speed =  start_speed * dash_multiplier;
+        m_unit.agility = start_agility * dash_multiplier;
 
         if (burst)
         {
@@ -251,8 +261,8 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(dash_duration);
 
         m_unit.RemoveStatus(StatusEffect.Armored);
-        m_unit.movement_speed = m_start_speed;
-        m_unit.agility = m_start_agility;
+        m_unit.movement_speed = start_speed;
+        m_unit.agility = start_agility;
 
         m_dash_routine = null;
     }
@@ -271,6 +281,4 @@ public class PlayerController : MonoBehaviour
 
     // ~ Movement Abilities
     private Coroutine m_dash_routine;
-    float m_start_speed;
-    float m_start_agility;
 }

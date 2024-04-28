@@ -12,7 +12,9 @@ public class ProjectileSpawner : MonoBehaviour
 {
     [Header("Emission")]
     public float spawn_rate = 1f;
-    public float radius = 2.0f;
+    public bool random_spawn_rate = false;
+    public float radius = 1.0f;
+    public int steps = 20;
     public SpawnerEmissionShape shape;
 
     private const float min = 1;
@@ -22,6 +24,7 @@ public class ProjectileSpawner : MonoBehaviour
     [Range(min, max)]
     public float scale;
     public bool random_scale;
+    public float speed;
 
     public List<GameObject> projectile_types;
 
@@ -31,7 +34,6 @@ public class ProjectileSpawner : MonoBehaviour
         Debug.Assert(spawn_rate > 0f);
         Debug.Assert(projectile_types.Count > 0);
 
-        int steps = 6;
         float theta = 0.0f;
 
         float step_size = 2 * Mathf.PI / steps;
@@ -49,20 +51,28 @@ public class ProjectileSpawner : MonoBehaviour
         { 
             foreach(Vector3 point in m_points)
             {
-                var projectile = Instantiate(projectile_types[0], transform.position + (radius * point), Quaternion.LookRotation(point, Vector3.up));
-
+                float scale_value = scale;
                 if (random_scale)
                 {
-                    float scale_value = Random.Range(min, scale);
-                    projectile.transform.localScale *= scale_value;
+                    scale_value = Random.Range(min, scale); 
                 }
-                projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * 15.0f;
+
+                Vector3 rotated_point = Vector3.Normalize(transform.rotation * point);
+                var projectile = Instantiate(projectile_types[0],transform.position + rotated_point, Quaternion.identity);
+                projectile.transform.localScale *= scale_value;
+
+                //projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * speed;
+                projectile.GetComponent<Rigidbody>().velocity = rotated_point * speed;
             }
 
             time_elapsed = 0.0f;
+            if(random_spawn_rate)
+            {
+                time_elapsed = Random.Range(0, (1.0f / spawn_rate) * 0.5f);
+            }
         }
 
-        transform.Rotate(new Vector3(0.0f, time_elapsed * (Mathf.PI / 2.0f), 0.0f));
+        transform.Rotate(new Vector3(0.0f, Mathf.PI * 100, 0.0f) * Time.deltaTime);
         time_elapsed += Time.deltaTime;
     }
 

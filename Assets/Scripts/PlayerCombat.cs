@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 [RequireComponent(typeof(Unit))]
@@ -35,6 +36,9 @@ public class PlayerCombat : MonoBehaviour
 
     // ~ Weapon Specific
     [SerializeField]
+    LayerMask damageable_layers;
+
+    [SerializeField]
     public float spread = 0.0f;
 
     [SerializeField]
@@ -64,7 +68,7 @@ public class PlayerCombat : MonoBehaviour
 
             if(collider.TryGetComponent<Projectile>(out Projectile projectile)) 
             {
-                Destroy(projectile.gameObject);
+                projectile.Die();
             }
         }
 
@@ -80,32 +84,70 @@ public class PlayerCombat : MonoBehaviour
             return;
         }
 
-        m_time_since_last_fire = 0;
-        muzzle_flash.Play();
-
-        Vector3 dir = m_fire_point.forward + new Vector3( UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
-        dir.Normalize();
-
-        // TODO : Add layer mask
-        TrailRenderer trail = Instantiate(bullet_trail, m_fire_point.position, Quaternion.identity);
-        if (Physics.SphereCast(transform.position, scan_radius, dir, out RaycastHit hit, range))
+        if (m_player_controller.IsBurst())
         {
-            // Stop bounce if doing damage
-            if (hit.collider.TryGetComponent<Unit>(out Unit unit))
+            for (int i = 0; i < 10; i++)
             {
-                unit.TakeDamage(base_damage);
-                StartCoroutine(SpawnTrail(trail, hit.point, hit.normal));
+                muzzle_flash.Play();
+                Vector3 dir = m_fire_point.forward + new Vector3( UnityEngine.Random.Range(-spread  * 5.0f, spread * 5.0f), 0, UnityEngine.Random.Range(-spread, spread));
+                dir.Normalize();
+
+                // TODO : Add layer mask
+                TrailRenderer trail = Instantiate(bullet_trail, m_fire_point.position, Quaternion.identity);
+                if (Physics.SphereCast(transform.position, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
+                {
+                    // Stop bounce if doing damage
+                    if (hit.collider.TryGetComponent<Unit>(out Unit unit))
+                    {
+                        unit.TakeDamage(base_damage);
+                        StartCoroutine(SpawnTrail(trail, hit.point, hit.normal));
+                    }
+                    else
+                    {
+                        // Bounce
+                        int bounces = m_player_controller.IsBurst() ? 3 : 1;
+                        StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, base_damage * 2.0f, bounces); }));
+                    }
+                }
+                else
+                {
+                    StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized));
+                }
+            }
+
+            m_player_controller.AbortBurst();
+            return;
+        }
+
+        m_time_since_last_fire = 0;
+
+        // Fire
+        {
+            muzzle_flash.Play();
+            Vector3 dir = m_fire_point.forward + new Vector3( UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
+            dir.Normalize();
+
+            // TODO : Add layer mask
+            TrailRenderer trail = Instantiate(bullet_trail, m_fire_point.position, Quaternion.identity);
+            if (Physics.SphereCast(transform.position, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
+            {
+                // Stop bounce if doing damage
+                if (hit.collider.TryGetComponent<Unit>(out Unit unit))
+                {
+                    unit.TakeDamage(base_damage);
+                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal));
+                }
+                else
+                {
+                    // Bounce
+                    int bounces = m_player_controller.IsBurst() ? 10 : 1;
+                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, base_damage * 2.0f, bounces); }));
+                }
             }
             else
             {
-                // Bounce
-                int bounces = m_player_controller.IsBurst() ? 10 : 1;
-                StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, base_damage * 2.0f, bounces); }));
+                StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized));
             }
-        }
-        else
-        {
-            StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized));
         }
 
         // Abort and use burst
@@ -117,7 +159,7 @@ public class PlayerCombat : MonoBehaviour
         bounce_count--;
 
         TrailRenderer trail = Instantiate(bullet_trail, spawn_point, Quaternion.identity);
-        if (Physics.SphereCast(spawn_point, scan_radius, dir, out RaycastHit hit, range))
+        if (Physics.SphereCast(spawn_point, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
         {
             // Stop bounce if doing damage
             if (hit.collider.TryGetComponent<Unit>(out Unit unit))
@@ -175,7 +217,6 @@ public class PlayerCombat : MonoBehaviour
     {
         Vector3 start_postion = trail.transform.position;
         Vector3 diff = (end_position - start_postion);
-        //Vector3 dir = diff.normalized;
 
         float time = 0;
         float travel_time = diff.magnitude / bullet_trail_speed;
