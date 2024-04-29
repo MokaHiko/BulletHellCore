@@ -1,5 +1,6 @@
 using System;
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
@@ -138,6 +139,17 @@ public class Unit : MonoBehaviour
             Destroy(gameObject);
         }
     }
+    public void UseAbility(uint index, bool burst = false)
+    {
+        if (index < abilities.Count)
+        {
+            abilities[(int)index].UseWithCost(burst);
+            return;
+        }
+
+        Debug.Log("Unit has no ability at index: " + index);
+    }
+    
     private void Start()
     {
         m_renderer = GetComponent<Renderer>();
@@ -153,8 +165,13 @@ public class Unit : MonoBehaviour
         movement_speed = m_base_stats.movement_speed;
         agility = m_base_stats.agility;
         damage_multiplier = m_base_stats.damage_multiplier;
-    }
 
+        // Get Ability Handles
+        foreach(Ability ability in GetComponents<Ability>())
+        {
+            abilities.Add(ability);
+        }
+    }
     void Update() 
     {
         energy = Mathf.Clamp(energy + (energy_gain_rate * Time.deltaTime), 0, m_base_stats.max_energy);
@@ -175,21 +192,19 @@ public class Unit : MonoBehaviour
             break;
         }
     }
-
     private IEnumerator ShortCircuitEffect()
     {
         float start_speed = movement_speed;
         float start_aglity = agility;
-        movement_speed *= 0.25f;
-        agility *= 0.25f;
+
+        movement_speed *= 0.15f;
 
         short_circuit_particles.Play();
 
-        yield return new WaitForSeconds(3.0f);
+        yield return new WaitForSeconds(2.0f);
 
         short_circuit_particles.Stop();
         movement_speed = start_speed;
-        agility = start_aglity;
 
         RemoveStatus(StatusEffect.ShortCircuit);
 
@@ -233,4 +248,8 @@ public class Unit : MonoBehaviour
 
     // ~ Handles
     private Renderer m_renderer;
+
+    // ~ Abilities
+    [SerializeField]
+    private List<Ability> abilities;
  }

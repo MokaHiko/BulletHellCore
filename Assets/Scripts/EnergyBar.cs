@@ -23,10 +23,12 @@ public class EnergyBar : MonoBehaviour
         if (energy < 0)
         {
             fill.color = short_circuit;
-            return;
+        }
+        else
+        {
+            fill.color = gradient.Evaluate(slider.value);
         }
 
         slider.value = energy / energy_max;
-        fill.color = gradient.Evaluate(slider.value);
     }
 }

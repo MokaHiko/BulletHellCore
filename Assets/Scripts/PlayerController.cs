@@ -10,6 +10,9 @@ public class PlayerController : MonoBehaviour
     [Header("HUD UI")]
     public EnergyBar energy_bar;
 
+    [Header("Camera")]
+    public float look_ahead_magnitude;
+
     [Header("Burst")]
     [SerializeField]
     public float burst_zoom = 10.0f;
@@ -29,15 +32,6 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     CinemachineVirtualCamera virtual_camera;
     CinemachineComponentBase cm_component_base;
-
-    [SerializeField]
-    public float dash_multiplier;
-
-    [SerializeField]
-    public float dash_duration;
-
-    [SerializeField]
-    public float dash_cost = 15.0f;
 
     public bool IsBurst()
     {
@@ -73,23 +67,6 @@ public class PlayerController : MonoBehaviour
         m_burst_routine = StartCoroutine(nameof(TriggerBurst));
     }
 
-    public void Dash()
-    {
-        bool with_burst = false;
-        if (with_burst = IsBurst())
-        {
-            AbortBurst();
-        }
-
-        if (m_dash_routine != null)
-        {
-            StopCoroutine(m_dash_routine);
-            m_dash_routine = null;
-        }
-
-        m_dash_routine = StartCoroutine(DashEffect(with_burst));
-    }
-
     void Start()
     {
         // TODO: Find in game 
@@ -113,6 +90,7 @@ public class PlayerController : MonoBehaviour
         m_unit.damaged_callback += (float damage) => { AbortBurst(); };
         m_unit.status_callback += OnStatusEffect;
     }
+
     void Update()
     {
         // ~ HUD UI
@@ -133,36 +111,24 @@ public class PlayerController : MonoBehaviour
                 m_player_combat.Perry();
                 AbortBurst();
             }
-
             return;
         }
 
         // Fire current weapon
         if (Input.GetMouseButton(0))
         {
-            m_player_combat.Fire();
+            m_player_combat.Attack();
         }
 
         // ~ Movement
 
-        // Look at mouose position
-        Debug.Assert(Camera.main, "Game running without main camera!");
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
-        {
-            Vector3 look_at = hit.point;
-            look_at.y = transform.position.y;
-
-            transform.LookAt(look_at, Vector3.up);
-        }
-
         // Move to input axis
         m_axis_input.x = Input.GetAxisRaw("Horizontal");
         m_axis_input.z = Input.GetAxisRaw("Vertical");
-        if (m_axis_input.magnitude == 0)
-        {
-            return;
-        }
+        //if (m_axis_input.magnitude == 0)
+        //{
+        //    return;
+        //}
 
         Vector3 camera_forward = Camera.main.transform.forward;
         Vector3 camera_right = Camera.main.transform.right;
@@ -173,20 +139,29 @@ public class PlayerController : MonoBehaviour
         Vector3 relative_forward = m_axis_input.z * Vector3.Normalize(camera_forward);
         Vector3 relative_right = m_axis_input.x * Vector3.Normalize(camera_right);
 
+        // Look at mouose position
+        Debug.Assert(Camera.main, "Game running without main camera!");
+        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out RaycastHit hit))
+        {
+            // Rotate character
+            Vector3 look_at = hit.point;
+            look_at.y = transform.position.y;
+            transform.LookAt(look_at, Vector3.up);
+
+            // Look ahead camera
+            Vector3 diff = hit.point - transform.position;
+            diff.y = 0;
+            Vector3 dir = diff.normalized;
+            //(cm_component_base as CinemachineFramingTransposer).m_TrackedObjectOffset = new Vector3(4.0f, 0.0f, 0.0f) * look_ahead_magnitude;
+        }
+
         // Dash
         if (Input.GetKeyDown(KeyCode.LeftShift))
         {
-            if(m_dash_routine != null) 
-            {
-                // TODO: Queue Ability
-                return;
-            }
-
-            if (m_unit.SpendEnergy(dash_cost))
-            {
-                Dash();
-                return;
-            }
+            m_unit.UseAbility(0, IsBurst());
+            AbortBurst();
+            return;
         }
 
         // Move
@@ -243,29 +218,6 @@ public class PlayerController : MonoBehaviour
         }
     }
 
-    private IEnumerator DashEffect(bool burst = false)
-    {
-        float start_speed = m_unit.BaseStats().movement_speed;
-        float start_agility = m_unit.BaseStats().agility;
-
-        m_unit.movement_speed =  start_speed * dash_multiplier;
-        m_unit.agility = start_agility * dash_multiplier;
-
-        if (burst)
-        {
-            m_player_combat.Perry();
-            m_unit.ApplyStatus(StatusEffect.Armored);
-        }
-
-        yield return new WaitForSeconds(dash_duration);
-
-        m_unit.RemoveStatus(StatusEffect.Armored);
-        m_unit.movement_speed = start_speed;
-        m_unit.agility = start_agility;
-
-        m_dash_routine = null;
-    }
-
     private Vector3 m_axis_input;
 
     // ~ Handles
@@ -277,7 +229,4 @@ public class PlayerController : MonoBehaviour
     float m_camera_start_distance;
     private Coroutine m_burst_routine;
     private bool m_abort_burst;
-
-    // ~ Movement Abilities
-    private Coroutine m_dash_routine;
 }

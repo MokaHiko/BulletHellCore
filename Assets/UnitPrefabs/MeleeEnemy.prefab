@@ -12,12 +12,13 @@ GameObject:
   - component: {fileID: 188919602377581210}
   - component: {fileID: 188919602377581211}
   - component: {fileID: 2701238270883824071}
+  - component: {fileID: 3288939130247344243}
   - component: {fileID: 188919602377581190}
   - component: {fileID: 188919602377581189}
   - component: {fileID: 188919602377581188}
   - component: {fileID: 188919602377581208}
   m_Layer: 0
-  m_Name: Enemy_Sample
+  m_Name: MeleeEnemy
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -51,22 +52,23 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b4cf56579e5abd4a85c1f1a3b0a01f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 100
-  energy: 15
+  health: 150
+  energy: 100
   energy_gain_rate: 3
   movement_speed: 5
   agility: 5
   damage_multiplier: 1
-  short_circuit_particles: {fileID: 0}
+  short_circuit_particles: {fileID: 3280973706206572117}
   m_base_stats:
     health: 30
     max_energy: 30
-    energy_gain_rate: 3
+    energy_gain_rate: 2
     movement_speed: 3
-    agility: 1
+    agility: 3
     damage_multiplier: 1
   m_state: 0
   m_status_effect: 0
+  abilities: []
 --- !u!114 &188919602377581211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -93,10 +95,25 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
-  dash_multiplier: 5
-  dash_duration: 1
-  dash_cost: 15
+  tick_rate: 0.75
   drop: {fileID: 6669471868696274685, guid: f2c6a1bf9f9b8504bb1734c6d752cf37, type: 3}
+--- !u!114 &3288939130247344243
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 188919602377581187}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b880bb2db1d5cd409fe36422a46d9f8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  duration: 0.25
+  energy_cost: 15
+  trail_renderer: {fileID: 2428749671714479871, guid: 452a1a6cbc452664bbd01b49a3f05e77, type: 3}
+  dash_multiplier: 10
+  dash_status: 0
 --- !u!33 &188919602377581190
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -368,5 +385,10 @@ PrefabInstance:
 --- !u!4 &3402757832592312305 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000014129045996, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
+  m_PrefabInstance: {fileID: 3402244966868968989}
+  m_PrefabAsset: {fileID: 0}
+--- !u!198 &3280973706206572117 stripped
+ParticleSystem:
+  m_CorrespondingSourceObject: {fileID: 198000012368742472, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
   m_PrefabInstance: {fileID: 3402244966868968989}
   m_PrefabAsset: {fileID: 0}

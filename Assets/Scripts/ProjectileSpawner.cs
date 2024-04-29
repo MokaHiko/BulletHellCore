@@ -58,7 +58,9 @@ public class ProjectileSpawner : MonoBehaviour
                 }
 
                 Vector3 rotated_point = Vector3.Normalize(transform.rotation * point);
-                var projectile = Instantiate(projectile_types[0],transform.position + rotated_point, Quaternion.identity);
+
+                int projectile_type_index = Random.Range(0, projectile_types.Count);
+                var projectile = Instantiate(projectile_types[projectile_type_index],transform.position + rotated_point, Quaternion.identity);
                 projectile.transform.localScale *= scale_value;
 
                 //projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * speed;

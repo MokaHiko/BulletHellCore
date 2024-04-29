@@ -10,6 +10,9 @@ public class EnemyController : MonoBehaviour
     [SerializeField]
     public Transform target;
 
+    [SerializeField]
+    public float tick_rate = 1.0f;
+
     // Drops
     [SerializeField]
     public GameObject drop;
@@ -17,6 +20,7 @@ public class EnemyController : MonoBehaviour
     void Start()
     {
         Debug.Assert(drop != null);
+        Debug.Assert(tick_rate > 0.0f, "Cannot have a tick rate of 0 or less!");
 
         // Handles
         m_unit = GetComponent<Unit>();
@@ -31,10 +35,24 @@ public class EnemyController : MonoBehaviour
 
     void Update()
     {
+        time_elapsed += Time.deltaTime;
+
         if (target != null)
         {
             m_unit_controller.GoTo(target.position);
             transform.LookAt(target, Vector3.up);
+
+            Vector3 diff = target.position - transform.position;
+            if (diff.magnitude > 10.0f) 
+            {
+                return;
+            }
+
+            if (time_elapsed > 1.0f / tick_rate)
+            {
+                m_unit.UseAbility(0);
+                time_elapsed = 0.0f;
+            }
         }
     }
 
@@ -48,6 +66,17 @@ public class EnemyController : MonoBehaviour
         }
     }
 
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.TryGetComponent<PlayerController>(out PlayerController player_controller))
+        {
+            player_controller.GetComponent<Unit>().TakeDamage(10.0f);
+        }
+    }
+
+    // ~ AI
+    float time_elapsed = 0.0f;
+   
     // ~ Handles
     private Unit m_unit;
     private UnitController m_unit_controller;
