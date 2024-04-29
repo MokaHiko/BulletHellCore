@@ -53,12 +53,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   health: 100
   energy: 100
-  energy_gain_rate: 1
-  movement_speed: 3
-  agility: 0.5
+  energy_gain_rate: 3
+  movement_speed: 5
+  agility: 5
   damage_multiplier: 1
-  short_circuit_particles: {fileID: 3280973706206572117}
+  short_circuit_particles: {fileID: 0}
+  m_base_stats:
+    health: 30
+    max_energy: 100
+    energy_gain_rate: 3
+    movement_speed: 3
+    agility: 1
+    damage_multiplier: 1
   m_state: 0
+  m_status_effect: 0
 --- !u!114 &188919602377581211
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -85,6 +93,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   target: {fileID: 0}
+  drop: {fileID: 6669471868696274685, guid: f2c6a1bf9f9b8504bb1734c6d752cf37, type: 3}
 --- !u!33 &188919602377581190
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -370,10 +379,5 @@ PrefabInstance:
 --- !u!4 &3402757832592312305 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4000014129045996, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
-  m_PrefabInstance: {fileID: 3402244966868968989}
-  m_PrefabAsset: {fileID: 0}
---- !u!198 &3280973706206572117 stripped
-ParticleSystem:
-  m_CorrespondingSourceObject: {fileID: 198000012368742472, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
   m_PrefabInstance: {fileID: 3402244966868968989}
   m_PrefabAsset: {fileID: 0}

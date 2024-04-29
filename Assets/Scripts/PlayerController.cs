@@ -78,7 +78,6 @@ public class PlayerController : MonoBehaviour
         bool with_burst = false;
         if (with_burst = IsBurst())
         {
-            // Add modifier to dash
             AbortBurst();
         }
 
@@ -171,8 +170,8 @@ public class PlayerController : MonoBehaviour
         camera_forward.y = 0;
         camera_right.y = 0;
 
-        Vector3 relative_forward = m_axis_input.z * camera_forward;
-        Vector3 relative_right = m_axis_input.x * camera_right;
+        Vector3 relative_forward = m_axis_input.z * Vector3.Normalize(camera_forward);
+        Vector3 relative_right = m_axis_input.x * Vector3.Normalize(camera_right);
 
         // Dash
         if (Input.GetKeyDown(KeyCode.LeftShift))
@@ -246,8 +245,8 @@ public class PlayerController : MonoBehaviour
 
     private IEnumerator DashEffect(bool burst = false)
     {
-        float start_speed = m_unit.movement_speed;
-        float start_agility = m_unit.agility;
+        float start_speed = m_unit.BaseStats().movement_speed;
+        float start_agility = m_unit.BaseStats().agility;
 
         m_unit.movement_speed =  start_speed * dash_multiplier;
         m_unit.agility = start_agility * dash_multiplier;

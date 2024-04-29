@@ -25,6 +25,17 @@ public enum StatusEffect
     Armored = 1 << 2,
 };
 
+[System.Serializable]
+public struct UnitStats
+{
+    public float health;
+    public float max_energy;
+    public float energy_gain_rate;
+    public float movement_speed;
+    public float agility;
+    public float damage_multiplier;
+};
+
 // Called whenever the unit is damaged
 public delegate void UnitDamagedCallback(float damage);
 
@@ -36,14 +47,11 @@ public delegate void UnitDeathCallback();
 
 public class Unit : MonoBehaviour
 {
-    const float min_energy = 0.0f;
-    const float max_energy = 100.0f;
-
     [SerializeField]
     public float health = 0.0f;
 
     [SerializeField]
-    public float energy = max_energy;
+    public float energy = 0.0f;
 
     [SerializeField]
     public float energy_gain_rate = 1.0f;
@@ -64,6 +72,9 @@ public class Unit : MonoBehaviour
 
     // Status Effect Handles
     public ParticleSystem short_circuit_particles;
+
+    // Getters
+    public UnitStats BaseStats() { return m_base_stats; }
 
     // State Flags Helpers
     public bool CheckState(UnitState state_flags){ return (m_state & state_flags) == state_flags;}
@@ -105,7 +116,6 @@ public class Unit : MonoBehaviour
         energy -= amount;
         return true;
     }
-
     public void TakeDamage(float damage, StatusEffect status_effect = StatusEffect.None)
     {
         ApplyStatus(status_effect);
@@ -128,20 +138,26 @@ public class Unit : MonoBehaviour
             Destroy(gameObject);
         }
     }
-
     private void Start()
     {
         m_renderer = GetComponent<Renderer>();
         m_start_color = m_renderer.material.color;
 
-        // Defaults
+        // Defaults Values
         m_state = UnitState.None;
         m_status_effect = StatusEffect.None;
+
+        health = m_base_stats.health;
+        energy = m_base_stats.max_energy;
+        energy_gain_rate = m_base_stats.energy_gain_rate;
+        movement_speed = m_base_stats.movement_speed;
+        agility = m_base_stats.agility;
+        damage_multiplier = m_base_stats.damage_multiplier;
     }
 
     void Update() 
     {
-        energy = Mathf.Clamp(energy + (energy_gain_rate * Time.deltaTime), min_energy, max_energy);
+        energy = Mathf.Clamp(energy + (energy_gain_rate * Time.deltaTime), 0, m_base_stats.max_energy);
         if(m_status_effect == StatusEffect.None) 
         { 
             return;
@@ -193,6 +209,10 @@ public class Unit : MonoBehaviour
 
         m_damage_effect_routine = null;
     }
+
+    // Stats
+    [SerializeField]
+    private UnitStats m_base_stats;
 
     // ~ Effects
 

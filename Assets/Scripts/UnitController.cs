@@ -54,11 +54,13 @@ public class UnitController : MonoBehaviour
         Vector3 forward = Vector3.forward * dir.z * m_unit.agility; forward.y = 0;
         Vector3 right = Vector3.right * dir.x * m_unit.agility; right.y = 0;
 
+        Debug.DrawLine(m_target_location, transform.position, Color.red);
+
         m_rb.AddForce(forward, ForceMode.Impulse);
         m_rb.AddForce(right, ForceMode.Impulse);
-        if (m_rb.velocity.magnitude > m_unit.movement_speed)
+        if (m_rb.velocity.magnitude > m_unit.agility)
         {
-            m_rb.velocity = m_rb.velocity.normalized * m_unit.movement_speed;
+            m_rb.velocity = m_rb.velocity.normalized * m_unit.BaseStats().agility;
         }
     }
 

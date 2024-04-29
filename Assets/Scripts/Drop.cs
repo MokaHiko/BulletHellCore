@@ -51,7 +51,7 @@ public class Drop : MonoBehaviour
             {
                 case DropType.Energy:
                 {
-                    player_controller.GetComponent<Unit>().energy += 20.0f;
+                    player_controller.GetComponent<Unit>().energy += 50.0f;
                 }break;
                 case DropType.Burst:
                 {

@@ -86,7 +86,7 @@ public class PlayerCombat : MonoBehaviour
 
         if (m_player_controller.IsBurst())
         {
-            for (int i = 0; i < 10; i++)
+            for (int i = 0; i < 8; i++)
             {
                 muzzle_flash.Play();
                 Vector3 dir = m_fire_point.forward + new Vector3( UnityEngine.Random.Range(-spread  * 5.0f, spread * 5.0f), 0, UnityEngine.Random.Range(-spread, spread));
@@ -105,7 +105,7 @@ public class PlayerCombat : MonoBehaviour
                     else
                     {
                         // Bounce
-                        int bounces = m_player_controller.IsBurst() ? 3 : 1;
+                        int bounces = m_player_controller.IsBurst() ? 5 : 1;
                         StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, base_damage * 2.0f, bounces); }));
                     }
                 }
@@ -113,12 +113,10 @@ public class PlayerCombat : MonoBehaviour
                 {
                     StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized));
                 }
+                m_player_controller.AbortBurst();
             }
-
-            m_player_controller.AbortBurst();
             return;
         }
-
         m_time_since_last_fire = 0;
 
         // Fire
@@ -148,10 +146,10 @@ public class PlayerCombat : MonoBehaviour
             {
                 StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized));
             }
-        }
 
-        // Abort and use burst
-        m_player_controller.AbortBurst();
+            // Abort or use burst
+            m_player_controller.AbortBurst();
+        }
     }
     private void Bounce(Vector3 spawn_point, Vector3 dir, float damage, int bounce_count = 0)
     {
