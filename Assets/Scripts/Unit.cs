@@ -23,7 +23,8 @@ public enum StatusEffect
     None = 0,
     Burning = 1 << 0, 
     ShortCircuit = 1 << 1,
-    Armored = 1 << 2,
+    Corrosion = 1 << 2,
+    Armored = 1 << 3,
 };
 
 [System.Serializable]
@@ -66,6 +67,10 @@ public class Unit : MonoBehaviour
     [SerializeField]
     public float damage_multiplier = 1.0f;
 
+    // Unit UI
+    public PropertyBar health_bar;
+    public PropertyBar energy_bar;
+
     // Callbacks
     public UnitDeathCallback death_callback;
     public UnitDamagedCallback damaged_callback;
@@ -73,9 +78,11 @@ public class Unit : MonoBehaviour
 
     // Status Effect Handles
     public ParticleSystem short_circuit_particles;
+    public GameObject floating_text;
 
     // Getters
     public UnitStats BaseStats() { return m_base_stats; }
+    public float LastDamage() { return m_last_damage; }
 
     // State Flags Helpers
     public bool CheckState(UnitState state_flags){ return (m_state & state_flags) == state_flags;}
@@ -88,6 +95,15 @@ public class Unit : MonoBehaviour
     {
         m_status_effect |= status_flags;
         status_callback?.Invoke(status_flags);
+
+        if ((status_flags & StatusEffect.Corrosion) == StatusEffect.Corrosion)
+        {
+            if (m_corossion_routine != null)
+            {
+                StopCoroutine(m_corossion_routine);
+            }
+            m_corossion_routine = StartCoroutine(CorossionEffect());
+        }
     }
     public void RemoveStatus(StatusEffect status_flags) { m_status_effect &= ~status_flags; }
 
@@ -117,18 +133,52 @@ public class Unit : MonoBehaviour
         energy -= amount;
         return true;
     }
-    public void TakeDamage(float damage, StatusEffect status_effect = StatusEffect.None)
+    public void TakeDamage(float damage, StatusEffect damage_type = StatusEffect.None, float crit_roll = 0.0f)
     {
-        ApplyStatus(status_effect);
-        
         if(m_damage_effect_routine == null) 
         {
             m_damage_effect_routine = StartCoroutine(nameof(DefaultDamageEffect));
         }
+        else
+        {
+            StopCoroutine(m_damage_effect_routine);
+            m_damage_effect_routine = StartCoroutine(nameof(DefaultDamageEffect));
+        }
+
+        // Check for crit
+        Color damage_color = Color.white;
+        if (damage_type == StatusEffect.Corrosion)
+        {
+            damage_color = Color.green;
+        }
+        else if (crit_roll > 0.90f)
+        {
+            damage *= UnityEngine.Random.Range(2.0f, 4.0f);
+            damage_color = Color.red;
+        }
+        else if(crit_roll > 0.80f)
+        {
+            damage *= UnityEngine.Random.Range(1.5f, 2.0f);
+            damage_color = Color.yellow;
+        }
+        else
+        {
+            damage *= UnityEngine.Random.Range(0.8f, 1.2f);
+        }
+        damage = (int)damage;
+
         m_last_damage = damage * damage_multiplier;
         health -= damage * damage_multiplier;
+        health_bar.SetValue(health, m_base_stats.health);
 
         damaged_callback?.Invoke(m_last_damage);
+
+        // Effect
+        Vector3 start_pos = transform.position + new Vector3(0.0f, 10.0f, 0.0f);
+        var damage_number = Instantiate(floating_text, start_pos, Quaternion.identity, transform);
+        TextMesh text_mesh = damage_number.GetComponent<TextMesh>();
+        text_mesh.text = damage.ToString();
+        text_mesh.color = damage_color;
 
         if (health < 0.0f)
         {
@@ -139,19 +189,36 @@ public class Unit : MonoBehaviour
             Destroy(gameObject);
         }
     }
-    public void UseAbility(uint index, bool burst = false)
+    public void UseAbility(AbilityType type, bool burst = false)
     {
-        if (index < abilities.Count)
+        int type_index = (int)type;
+        if (type_index < abilities.Count)
         {
-            abilities[(int)index].UseWithCost(burst);
+            abilities[type_index].UseWithCost(burst);
             return;
         }
 
-        Debug.Log("Unit has no ability at index: " + index);
+        Debug.Log("Unit has no ability at index: " + type_index);
+    }
+    public void IncrementAblilityStack(AbilityType type)
+    {
+        int type_index = (int)type;
+        if (type_index < abilities.Count)
+        {
+            abilities[type_index].IncrementStack();
+            return;
+        }
+
+        Debug.Log("Unit has no ability at index: " + type_index);
     }
     
     private void Start()
     {
+        // Effect asserts
+        Debug.Assert(floating_text != null);;
+        Debug.Assert(health_bar != null);;
+        Debug.Assert(energy_bar != null);;
+
         m_renderer = GetComponent<Renderer>();
         m_start_color = m_renderer.material.color;
 
@@ -160,11 +227,14 @@ public class Unit : MonoBehaviour
         m_status_effect = StatusEffect.None;
 
         health = m_base_stats.health;
-        energy = m_base_stats.max_energy;
+        energy = m_base_stats.max_energy / 2.0f;
         energy_gain_rate = m_base_stats.energy_gain_rate;
         movement_speed = m_base_stats.movement_speed;
         agility = m_base_stats.agility;
         damage_multiplier = m_base_stats.damage_multiplier;
+
+        health_bar.SetValue(health, m_base_stats.health);
+        energy_bar.SetValue(energy, m_base_stats.max_energy);
 
         // Get Ability Handles
         foreach(Ability ability in GetComponents<Ability>())
@@ -175,6 +245,11 @@ public class Unit : MonoBehaviour
     void Update() 
     {
         energy = Mathf.Clamp(energy + (energy_gain_rate * Time.deltaTime), 0, m_base_stats.max_energy);
+
+        // Set UI
+        energy_bar.SetValue(energy, m_base_stats.max_energy);
+        health_bar.SetValue(health, m_base_stats.health);
+
         if(m_status_effect == StatusEffect.None) 
         { 
             return;
@@ -183,6 +258,9 @@ public class Unit : MonoBehaviour
         switch (m_status_effect)
         {
             case StatusEffect.ShortCircuit:
+            {
+            }break;
+            case StatusEffect.Corrosion:
             {
             }break;
             case StatusEffect.Burning:
@@ -211,9 +289,33 @@ public class Unit : MonoBehaviour
         m_short_circuit_routine = null;
     }
 
+    private IEnumerator CorossionEffect()
+    {
+        float time = 0.0f;
+
+        float interval_timer = 0.0f;
+        while (time < 10.0f)
+        {
+            time += Time.deltaTime;
+            interval_timer += Time.deltaTime;
+
+            if (interval_timer > 0.5f)
+            {
+                TakeDamage(2.5f, StatusEffect.Corrosion);
+                interval_timer = 0.0f;
+            }
+
+            yield return null;
+        }
+
+        RemoveStatus(StatusEffect.Corrosion);
+        m_short_circuit_routine = null;
+    }
     private IEnumerator DefaultDamageEffect()
     {
         // TODO: Change to shader wipe
+
+        // Flash white
         ApplyState(UnitState.TakingDamage);
         m_renderer.material.color = Color.white;
 
@@ -221,6 +323,15 @@ public class Unit : MonoBehaviour
 
         m_renderer.material.color = m_start_color;
         RemoveState(UnitState.TakingDamage);
+
+        // Stop movement
+        movement_speed = 0.0f;
+        agility = 0.0f;
+
+        yield return new WaitForSeconds(0.15f);
+
+        movement_speed = m_base_stats.movement_speed;
+        agility = m_base_stats.agility;
 
         m_damage_effect_routine = null;
     }
@@ -245,6 +356,7 @@ public class Unit : MonoBehaviour
 
     private float m_last_damage = 0;
     private Coroutine m_short_circuit_routine = null;
+    private Coroutine m_corossion_routine = null;
 
     // ~ Handles
     private Renderer m_renderer;

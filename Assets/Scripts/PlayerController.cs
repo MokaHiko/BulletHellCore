@@ -1,6 +1,7 @@
 using System.Collections;
 using Cinemachine;
 using UnityEngine;
+using UnityEngine.UIElements;
 
 [RequireComponent(typeof(Unit))]
 [RequireComponent(typeof(UnitController))]
@@ -8,7 +9,7 @@ using UnityEngine;
 public class PlayerController : MonoBehaviour
 {
     [Header("HUD UI")]
-    public EnergyBar energy_bar;
+    public PropertyBar energy_bar;
 
     [Header("Camera")]
     public float look_ahead_magnitude;
@@ -96,11 +97,11 @@ public class PlayerController : MonoBehaviour
         // ~ HUD UI
         if (m_unit.CheckStatus(StatusEffect.ShortCircuit))
         {
-            energy_bar.SetValue(-1.0f);
+            energy_bar.SetValue(-1.0f, m_unit.BaseStats().max_energy);
         }
         else
         {
-            energy_bar.SetValue(m_unit.energy);
+            energy_bar.SetValue(m_unit.energy, m_unit.BaseStats().max_energy);
         }
 
         // ~ Combat
@@ -157,9 +158,9 @@ public class PlayerController : MonoBehaviour
         }
 
         // Dash
-        if (Input.GetKeyDown(KeyCode.LeftShift))
+        if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
         {
-            m_unit.UseAbility(0, IsBurst());
+            m_unit.UseAbility(AbilityType.Movement, IsBurst());
             AbortBurst();
             return;
         }

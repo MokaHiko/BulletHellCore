@@ -12,7 +12,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField] 
     float perry_force = 100.0f;
 
-    [SerializeField] 
+    [SerializeField]
     ParticleSystem perry_particles;
 
     [SerializeField]
@@ -21,8 +21,8 @@ public class PlayerCombat : MonoBehaviour
     public void Perry()
     {
         // Steal kennetic energy
-        m_unit.health += 10.0f;
-        m_unit.energy += 10.0f;
+        m_unit.health += m_unit.LastDamage() * 0.5f;
+        m_unit.energy += 5.0f;
 
         Collider[] hit_colliders = Physics.OverlapSphere(transform.position, perry_radius);
         foreach (Collider collider in hit_colliders)
@@ -31,9 +31,10 @@ public class PlayerCombat : MonoBehaviour
             if (collider.gameObject == gameObject) continue;
 
             if(collider.TryGetComponent<Unit>(out Unit unit)) 
-            { 
+            {
                 // TODO: Push Back Coroutine
                 Vector3 dir = Vector3.Normalize(collider.transform.position - transform.position);
+                dir.y = 0;
                 unit.GetComponent<Rigidbody>().AddForce(dir * perry_force, ForceMode.Impulse);
             }
 

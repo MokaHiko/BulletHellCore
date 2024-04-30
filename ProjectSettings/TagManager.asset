@@ -14,8 +14,8 @@ TagManager:
   - Enemy
   - Cover
   - Projectile
-  - 
-  - 
+  - Walkable
+  - Drops
   - 
   - 
   - 

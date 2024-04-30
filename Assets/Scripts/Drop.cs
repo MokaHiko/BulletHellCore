@@ -17,12 +17,19 @@ public class Drop : MonoBehaviour
     [SerializeField]
     public DropType drop_type = DropType.None;
 
+    [SerializeField]
+    public float magnetic_radius = 0;
+
+    [SerializeField]
+    public float magnetic_ms = 1.0f;
+
     private void Start()
     {
         if (drop_type == DropType.None)
         {
             drop_type = (DropType)(1 << Random.Range(0, 3));
         }
+
         Color drop_color = Color.white;
         switch (drop_type)
         {
@@ -41,6 +48,27 @@ public class Drop : MonoBehaviour
         };
 
         GetComponent<Renderer>().material.color = drop_color;
+
+        // Magnetic Defaults
+        start_position = transform.position;
+    }
+
+    private void Update()
+    {
+        if (target != null)
+        {
+            transform.position = Vector3.Slerp(start_position, target.position, time_elapsed);
+            time_elapsed += Time.deltaTime * magnetic_ms;
+            return;
+        }
+
+        foreach(Collider col in Physics.OverlapSphere(transform.position, magnetic_radius, LayerMask.GetMask("Player")))
+        {
+            if(col.TryGetComponent(out PlayerController player_controller))
+            {
+                target = col.transform;
+            }
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -55,8 +83,7 @@ public class Drop : MonoBehaviour
 
             if((drop_type & DropType.Dash) == DropType.Dash)
             {
-                //player_controller.GetComponent<Unit>().UseAbility(Dash);
-                player_controller.GetComponent<Unit>().UseAbility(0, true);
+                player_controller.GetComponent<Unit>().IncrementAblilityStack(AbilityType.Movement);
             }
 
             if((drop_type & DropType.Burst) == DropType.Burst)
@@ -68,4 +95,9 @@ public class Drop : MonoBehaviour
             Destroy(gameObject);
         }
     }
+
+    // ~ Magnet
+    Vector3 start_position;
+    float time_elapsed = 0;
+    Transform target;
 }

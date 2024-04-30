@@ -70,7 +70,7 @@ public class EnemyController : MonoBehaviour
     {
         if (collision.gameObject.TryGetComponent<PlayerController>(out PlayerController player_controller))
         {
-            player_controller.GetComponent<Unit>().TakeDamage(10.0f);
+            player_controller.GetComponent<Unit>().TakeDamage(35.0f);
         }
     }
 

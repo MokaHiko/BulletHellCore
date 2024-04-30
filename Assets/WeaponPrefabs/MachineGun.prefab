@@ -45,19 +45,23 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   base_damage: 15
-  attack_speed: 4
+  attack_speed: 12.5
   scan_radius: 1
   range: 100
   damageable_layers:
     serializedVersion: 2
     m_Bits: 193
+  m_cinemachine_camera: {fileID: 0}
   impact_particle_system: {fileID: 198220379293217532, guid: ad3fdd3b35b0bf04db6f76282a484906, type: 3}
   spread: 0.05
   muzzle_flash: {fileID: 4805880017770381985}
   bullet_trail: {fileID: 5113547844858984007, guid: 6368f56043e3c894f89080b7d534b3f7, type: 3}
   bullet_trail_speed: 50
+  regular_fire_shake: 2
   bounce_count: 10
-  bounce_damage_multipler: 1.15
+  bounce_damage_multipler: 0.85
+  burst_fire_shake: 5
+  burst_impact_particle_system: {fileID: 7017294773630732249, guid: b1e15e49e7825114d8040c8460244bab, type: 3}
   m_fire_point: {fileID: 4643685652382954745}
 --- !u!1001 &4643685652139974651
 PrefabInstance:

@@ -1,6 +1,7 @@
 using System.Collections;
 using System;
 using UnityEngine;
+using Cinemachine;
 
 public class MachineGun : Weapon
 {
@@ -18,9 +19,16 @@ public class MachineGun : Weapon
     public TrailRenderer bullet_trail;
     public float bullet_trail_speed = 100.0f;
 
+    [SerializeField]
+    public float regular_fire_shake = 2.0f;
+
     [Header("Burst fire")]
     public int bounce_count = 5;
     public float bounce_damage_multipler = 1.15f;
+    public float burst_fire_shake = 5.0f;
+
+    [SerializeField]
+    public ParticleSystem burst_impact_particle_system;
 
     public void Start()
     {
@@ -28,6 +36,7 @@ public class MachineGun : Weapon
         Debug.Assert(attack_speed != 0);
         Debug.Assert(m_fire_point != null);
         Debug.Assert(impact_particle_system != null);
+        Debug.Assert(burst_impact_particle_system != null);
 
         // Weapon specific asserts
         Debug.Assert(bullet_trail_speed != 0);
@@ -39,7 +48,7 @@ public class MachineGun : Weapon
 
     private void Update()
     {
-        m_time_since_last_fire += Time.deltaTime;
+        m_time_since_last_fire += Time.deltaTime * Mathf.Clamp(1 - (m_unit.energy / m_unit.BaseStats().max_energy), 0, 1);
     }
     public override void Attack()
     {
@@ -56,9 +65,13 @@ public class MachineGun : Weapon
 
         if (m_player_controller.IsBurst())
         {
-            for (int i = 0; i < 8; i++)
+            Shake(burst_fire_shake, muzzle_flash.main.duration);
+
+            // TODO: Play different muzzle
+            muzzle_flash.Play();
+
+            for (int i = 0; i < 12; i++)
             {
-                muzzle_flash.Play();
                 Vector3 dir = m_fire_point.forward + new Vector3( UnityEngine.Random.Range(-spread  * 2.0f, spread * 2.0f), 0, UnityEngine.Random.Range(-spread * 2.0f, spread * 2.0f));
                 dir.Normalize();
 
@@ -66,27 +79,30 @@ public class MachineGun : Weapon
                 TrailRenderer trail = Instantiate(bullet_trail, m_fire_point.position, Quaternion.identity);
                 if (Physics.SphereCast(transform.position, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
                 {
-                    // Stop bounce if doing damage
                     if (hit.collider.TryGetComponent<Unit>(out Unit unit))
                     {
-                        unit.TakeDamage(base_damage);
+                        float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
+                        unit.TakeDamage(base_damage, StatusEffect.None, crit_roll);
                     }
 
-                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, base_damage * bounce_damage_multipler, bounce_count); }));
+                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, burst_impact_particle_system, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, base_damage, bounce_count); }));
                 }
                 else
                 {
-                    StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized));
+                    StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized, burst_impact_particle_system));
                 }
             }
             return;
         }
+
         m_time_since_last_fire = 0;
 
         // Fire
         {
             muzzle_flash.Play();
-            Vector3 dir = m_fire_point.forward + new Vector3( UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
+            Shake(regular_fire_shake, muzzle_flash.main.duration);
+
+            Vector3 dir = transform.forward + new Vector3( UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
             dir.Normalize();
 
             // TODO : Add layer mask
@@ -95,24 +111,22 @@ public class MachineGun : Weapon
             {
                 if (hit.collider.TryGetComponent<Unit>(out Unit unit))
                 {
-                    unit.TakeDamage(base_damage);
-                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal));
-
-                    // Sap energy on hit
-                    if (unit.SpendEnergy(2.5f))
-                    {
-                        m_unit.energy += 2.5f;
-                    }
+                    float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
+                    unit.TakeDamage(base_damage, StatusEffect.None, crit_roll);
+                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, impact_particle_system));
                 }
                 else
                 {
-                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal));
+                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, impact_particle_system));
                 }
             }
             else
             {
-                StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized));
+                StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized,impact_particle_system));
             }
+
+            // Sap energy on hit
+            m_unit.energy += 2.0f;
         }
     }
     private void Bounce(Vector3 spawn_point, Vector3 dir, float damage, int bounce_count = 0)
@@ -125,26 +139,27 @@ public class MachineGun : Weapon
         {
             if (hit.collider.TryGetComponent<Unit>(out Unit unit))
             {
-                unit.TakeDamage(damage);
+                float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
+                unit.TakeDamage(damage, StatusEffect.None, crit_roll);
             }
 
             // Stop bounce if count reached
             if (bounce_count <= 0) 
             { 
-                StartCoroutine(SpawnTrail(trail, hit.point, hit.normal));
+                StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, impact_particle_system));
                 return;
             }
 
             // Bounce again
-            StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, damage * bounce_damage_multipler, bounce_count); }));
+            StartCoroutine(SpawnTrail(trail, hit.point, hit.normal,impact_particle_system, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, damage * bounce_damage_multipler, bounce_count); }));
         }
         else
         {
             // Stop bounce if nothing hit
-            StartCoroutine(SpawnTrail(trail, spawn_point + (dir * range), -dir.normalized));
+            StartCoroutine(SpawnTrail(trail, spawn_point + (dir * range), -dir.normalized, impact_particle_system));
         }
     }
-    private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 end_position, Vector3 normal, Action action = null)
+    private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 end_position, Vector3 normal, ParticleSystem impact_effect, Action action = null)
     {
         Vector3 start_postion = trail.transform.position;
         Vector3 diff = (end_position - start_postion);
@@ -162,7 +177,7 @@ public class MachineGun : Weapon
         trail.transform.position = end_position;
 
         Destroy(trail.gameObject, trail.time);
-        ParticleSystem impact_particles = Instantiate(impact_particle_system, end_position, Quaternion.LookRotation(normal));
+        ParticleSystem impact_particles = Instantiate(impact_effect, end_position, Quaternion.LookRotation(normal));
         Destroy(impact_particles.gameObject, impact_particles.main.duration);
 
         // Invoke call back 

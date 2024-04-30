@@ -249,7 +249,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8671e953f5468ce4f8186f70f1a5c952, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 15
+  damage: 35
   life_span: 5
   impact_effect: {fileID: 2112495976316861479, guid: ec66736dcde14be4bab6f214c4563d1d, type: 3}
   immune_layers:
