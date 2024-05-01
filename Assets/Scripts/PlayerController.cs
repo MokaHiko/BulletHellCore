@@ -3,6 +3,7 @@ using Cinemachine;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+
 [RequireComponent(typeof(Unit))]
 [RequireComponent(typeof(UnitController))]
 [RequireComponent(typeof(PlayerCombat))]
@@ -33,6 +34,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     CinemachineVirtualCamera virtual_camera;
     CinemachineComponentBase cm_component_base;
+
+    //fmod variables
+    private FMOD.Studio.EventInstance burstAudio;
+    public FMODUnity.EventReference burstAudioReference;
+    
 
     public bool IsBurst()
     {
@@ -90,6 +96,9 @@ public class PlayerController : MonoBehaviour
         // Subscribe to callbacks
         m_unit.damaged_callback += (float damage) => { AbortBurst(); };
         m_unit.status_callback += OnStatusEffect;
+
+        //fmod set instance
+        burstAudio = FMODUnity.RuntimeManager.CreateInstance(burstAudioReference);
     }
 
     void Update()
@@ -174,6 +183,9 @@ public class PlayerController : MonoBehaviour
         burst_particle_system.Play();
         burst = true;
 
+        //fmod burst audio
+        burstAudio.start();
+
         // Slow time
         Time.timeScale = 0.5f;
         Time.fixedDeltaTime = Time.timeScale * 0.02f;
@@ -203,6 +215,9 @@ public class PlayerController : MonoBehaviour
         Time.timeScale = 1.0f;
         burst = false;
         m_burst_routine = null;
+
+        //stop fmod audio
+        burstAudio.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     private void OnStatusEffect(StatusEffect status_effect_flags)
