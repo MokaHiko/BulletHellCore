@@ -13,10 +13,15 @@ public class Dash : Ability
     [SerializeField]
     public StatusEffect dash_status = StatusEffect.None;
 
+    //fmod audio reference
+    public FMODUnity.EventReference dashAudio;
+    public FMODUnity.EventReference teleportAudio;
+
     public void Start()
     {
         // Handles
         Debug.Assert(trail_renderer != null);
+
     }
     public override void Use(bool burst) 
     {
@@ -63,6 +68,8 @@ public class Dash : Ability
             {
                 combat.Perry();
             }
+            //fmod teleport audio
+            //FMODUnity.RuntimeManager.PlayOneShotAttached(teleportAudio, gameObject);
         }
         else
         {
@@ -71,6 +78,12 @@ public class Dash : Ability
             Rigidbody rb = m_unit.GetComponent<Rigidbody>();
             rb.velocity = rb.velocity.normalized * start_speed;
             rb.AddForce(m_unit.transform.forward * dash_multiplier, ForceMode.Impulse);
+
+            //fmod dash audio
+            //FMODUnity.RuntimeManager.PlayOneShot(dashAudio,transform.position);
+            FMODUnity.RuntimeManager.PlayOneShotAttached(dashAudio, gameObject);
+            
+            
         }
 
         yield return new WaitForSeconds(duration);

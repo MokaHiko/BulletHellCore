@@ -759,6 +759,20 @@ MonoBehaviour:
   trail_renderer: {fileID: 2428749671714479871, guid: 452a1a6cbc452664bbd01b49a3f05e77, type: 3}
   dash_multiplier: 150
   dash_status: 0
+  dashAudio:
+    Guid:
+      Data1: -588259360
+      Data2: 1084471605
+      Data3: -1858399341
+      Data4: 162702567
+    Path: event:/Player/Player Dash
+  teleportAudio:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!137 &5745492573006927482
 SkinnedMeshRenderer:
   m_ObjectHideFlags: 0

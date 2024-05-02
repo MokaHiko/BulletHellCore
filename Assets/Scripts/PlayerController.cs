@@ -1,5 +1,6 @@
 using System.Collections;
 using Cinemachine;
+using FMODUnity;
 using UnityEngine;
 using UnityEngine.UIElements;
 
