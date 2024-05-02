@@ -30,14 +30,15 @@ public class UnitSpawner : MonoBehaviour
         {
             return;
         }
-        max_units--;
+
         time_elapsed += Time.deltaTime;
         if (time_elapsed > spawn_interval)
         {
             int unit_index = Random.Range(0, units.Count);
             Vector3 location = transform.position + new Vector3(Random.Range(5, spawn_radius), 0, Random.Range(5, spawn_radius));
-            Instantiate(units[unit_index], location, Quaternion.identity);
+            Instantiate(units[unit_index], location, Quaternion.identity, GetComponentInParent<Room>().transform);
             time_elapsed = 0.0f;
+            max_units--;
         }
     }
 
