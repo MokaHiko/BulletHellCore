@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Dash : Ability
@@ -9,6 +8,9 @@ public class Dash : Ability
 
     [SerializeField]
     public float dash_multiplier;
+
+    [SerializeField]
+    public float teleport_distance;
 
     [SerializeField]
     public StatusEffect dash_status = StatusEffect.None;
@@ -23,7 +25,7 @@ public class Dash : Ability
         Debug.Assert(trail_renderer != null);
 
     }
-    public override void Use(bool burst) 
+    public override void Use(bool burst, Vector3 direction)
     {
         if (m_dash_routine != null)
         {
@@ -50,7 +52,6 @@ public class Dash : Ability
     private IEnumerator DashEffect(bool burst = false)
     {
         float start_speed = m_unit.BaseStats().movement_speed;
-        float start_agility = m_unit.BaseStats().agility;
 
         if (m_trail == null)
         {
@@ -63,16 +64,22 @@ public class Dash : Ability
             m_unit.ApplyStatus(dash_status);
 
             // TP
-            m_unit.transform.position += m_unit.transform.forward * 10.0f;
+            m_unit.transform.position += m_unit.transform.forward * teleport_distance;
             if (m_unit.TryGetComponent(out PlayerCombat combat))
             {
-                combat.Perry();
+                ability_end_callback?.Invoke();
+                // TODO: Make parry modifier
+                //combat.Parry();
             }
             //fmod teleport audio
             //FMODUnity.RuntimeManager.PlayOneShotAttached(teleportAudio, gameObject);
+
+            yield return new WaitForSeconds(duration);
+            AbortDash();
         }
         else
         {
+            m_unit.animator.SetTrigger("dash");
             m_unit.ApplyState(UnitState.ManagedMovement);
 
             Rigidbody rb = m_unit.GetComponent<Rigidbody>();
@@ -84,11 +91,9 @@ public class Dash : Ability
             FMODUnity.RuntimeManager.PlayOneShotAttached(dashAudio, gameObject);
             
             
+            yield return new WaitForSeconds(duration);
+            AbortDash();
         }
-
-        yield return new WaitForSeconds(duration);
-
-        AbortDash();
     }
 
     // ~ Handles

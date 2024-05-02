@@ -1,6 +1,6 @@
 using System.Collections;
 using Cinemachine;
-using FMODUnity;
+using Cinemachine.Utility;
 using UnityEngine;
 using UnityEngine.UIElements;
 
@@ -10,11 +10,17 @@ using UnityEngine.UIElements;
 [RequireComponent(typeof(PlayerCombat))]
 public class PlayerController : MonoBehaviour
 {
+    [SerializeField]
+    private float experience = 0.0f;
+
+    [SerializeField]
+    private int credits = 0;
+
     [Header("HUD UI")]
-    public PropertyBar energy_bar;
+    public PropertyBar exp_bar;
 
     [Header("Camera")]
-    public float look_ahead_magnitude;
+    public LayerMask targetable;
 
     [Header("Burst")]
     [SerializeField]
@@ -71,16 +77,17 @@ public class PlayerController : MonoBehaviour
             StopCoroutine(m_burst_routine);
             m_burst_routine = null;
         }
-
         m_burst_routine = StartCoroutine(nameof(TriggerBurst));
     }
 
     void Start()
     {
         // TODO: Find in game 
+
         // World handles
+        Debug.Assert(Camera.main, "Game running without main camera!");
         Debug.Assert(virtual_camera != null);
-        Debug.Assert(energy_bar != null);
+        Debug.Assert(exp_bar != null);
 
         // Handles
         m_unit = GetComponent<Unit>();
@@ -105,41 +112,13 @@ public class PlayerController : MonoBehaviour
     void Update()
     {
         // ~ HUD UI
-        if (m_unit.CheckStatus(StatusEffect.ShortCircuit))
-        {
-            energy_bar.SetValue(-1.0f, m_unit.BaseStats().max_energy);
-        }
-        else
-        {
-            energy_bar.SetValue(m_unit.energy, m_unit.BaseStats().max_energy);
-        }
-
-        // ~ Combat
-        if (Input.GetKeyDown(KeyCode.Space))
-        {
-            if (RequestBurst() && m_unit.CheckState(UnitState.TakingDamage))
-            {
-                m_player_combat.Perry();
-                AbortBurst();
-            }
-            return;
-        }
-
-        // Fire current weapon
-        if (Input.GetMouseButton(0))
-        {
-            m_player_combat.Attack();
-        }
+        exp_bar.SetValue(experience, 100.0f);
 
         // ~ Movement
 
         // Move to input axis
         m_axis_input.x = Input.GetAxisRaw("Horizontal");
         m_axis_input.z = Input.GetAxisRaw("Vertical");
-        //if (m_axis_input.magnitude == 0)
-        //{
-        //    return;
-        //}
 
         Vector3 camera_forward = Camera.main.transform.forward;
         Vector3 camera_right = Camera.main.transform.right;
@@ -150,39 +129,82 @@ public class PlayerController : MonoBehaviour
         Vector3 relative_forward = m_axis_input.z * Vector3.Normalize(camera_forward);
         Vector3 relative_right = m_axis_input.x * Vector3.Normalize(camera_right);
 
-        // Look at mouose position
-        Debug.Assert(Camera.main, "Game running without main camera!");
-        var ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-        if (Physics.Raycast(ray, out RaycastHit hit))
+        // Look at mouse position
+        Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (!Physics.Raycast(ray, out RaycastHit hit, 1000.0f, targetable))
         {
-            // Rotate character
+            return;
+        }
+
+        // Rotate character
+        if (!m_unit.CheckState(UnitState.ManagedMovement))
+        {
             Vector3 look_at = hit.point;
             look_at.y = transform.position.y;
             transform.LookAt(look_at, Vector3.up);
-
-            // Look ahead camera
-            Vector3 diff = hit.point - transform.position;
-            diff.y = 0;
-            Vector3 dir = diff.normalized;
-            //(cm_component_base as CinemachineFramingTransposer).m_TrackedObjectOffset = new Vector3(4.0f, 0.0f, 0.0f) * look_ahead_magnitude;
         }
 
         // Dash
         if (Input.GetMouseButtonDown((int)MouseButton.RightMouse))
         {
-            m_unit.UseAbility(AbilityType.Movement, IsBurst());
+            m_unit.UseAbility(AbilityType.Movement, IsBurst(), Vector3.Normalize(relative_forward + relative_right));
             AbortBurst();
-            return;
+        }
+        else
+        {
+            // Move
+            Vector3 target_pos = transform.position + Vector3.Normalize(relative_forward + relative_right);
+            m_unit_controller.GoTo(target_pos);
         }
 
-        // Move
-        Vector3 target_pos = transform.position + Vector3.Normalize(relative_forward + relative_right);
-        m_unit_controller.GoTo(target_pos);
+        // ~ Combat
+
+        // Parry
+        if (Input.GetKeyDown(KeyCode.Space))
+        {
+            if (RequestBurst() && m_unit.CheckState(UnitState.TakingDamage))
+            {
+                m_player_combat.Parry();
+                AbortBurst();
+            }
+        }
+
+        // Fire current weapon
+        if (Input.GetMouseButton(0))
+        {
+            m_player_combat.Attack(hit.point);
+        }
     }
+
+    public void OnParticleEnter(ParticleType type)
+    {
+        switch (type) 
+        {
+            case (ParticleType.Exp):
+            {
+                experience = (experience + 1.0f) % 100;
+
+                // TODO: Level up
+                //experience = Mathf.Clamp(experience + 1.0f, 0.0f, 100.0f);
+            }break;
+            case (ParticleType.Money):
+            {
+                credits += 1;
+            }break;
+            case (ParticleType.Energy):
+            {
+                m_unit.energy += 1.0f;
+            }break;
+            default:
+                break;
+        }
+    }
+
     private IEnumerator TriggerBurst()
     {
         burst_particle_system.Play();
         burst = true;
+        GetComponentInChildren<Animator>().SetTrigger("burst");
 
         //fmod burst audio
         burstAudio.start();

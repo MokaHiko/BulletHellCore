@@ -15,9 +15,6 @@ public class PropertyBar: MonoBehaviour
     [SerializeField]
     private Image fill;
 
-    [SerializeField]
-    private bool billboard = false;
-
     public void SetValue(float energy, float energy_max)
     {
         if (energy < 0)

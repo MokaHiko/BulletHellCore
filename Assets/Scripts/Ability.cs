@@ -6,6 +6,8 @@ public enum AbilityType
     Offensive,
 }
 
+public delegate void AbilityCallback();
+
 [RequireComponent(typeof(Unit))]
 [RequireComponent(typeof(UnitController))]
 public class Ability : MonoBehaviour
@@ -25,6 +27,8 @@ public class Ability : MonoBehaviour
     [SerializeField]
     private int max_stacks = 1;
 
+    public AbilityCallback ability_begin_callback;
+    public AbilityCallback ability_end_callback;
     void Awake()
     {
         m_unit = GetComponent<Unit>(); 
@@ -37,7 +41,7 @@ public class Ability : MonoBehaviour
     }
 
     // Returns whether ability was used succesefully
-    public bool UseWithCost(bool burst)
+    public bool UseWithCost(bool burst, Vector3 direction)
     {
         // Burst overrides cooldowns
         if (!burst)
@@ -59,7 +63,7 @@ public class Ability : MonoBehaviour
 
         if (m_unit.SpendEnergy(energy_cost))
         {
-            Use(burst);
+            Use(burst, direction);
             return true;
         }
 
@@ -76,7 +80,7 @@ public class Ability : MonoBehaviour
         }
     }
 
-    public virtual void Use(bool burst) { }
+    public virtual void Use(bool burst = false, Vector3 direction = new Vector3()) { }
 
     // ~ Cooldowns
     protected float time_elapsed;
@@ -84,5 +88,4 @@ public class Ability : MonoBehaviour
     // ~ Handles
     protected Unit m_unit;
     protected UnitController m_unit_controller;
-
 }

@@ -18,7 +18,7 @@ public class PlayerCombat : MonoBehaviour
     [SerializeField]
     public List<Weapon> weapons;
 
-    public void Perry()
+    public void Parry()
     {
         // Steal kennetic energy
         m_unit.health += m_unit.LastDamage() * 0.5f;
@@ -48,11 +48,12 @@ public class PlayerCombat : MonoBehaviour
         perry_particles.Play();
     }
 
-    public void Attack()
+    // Attack and target location
+    public void Attack(Vector3 world_location)
     {
         if(equiped_weapon != null)
         {
-            equiped_weapon.Attack();
+            equiped_weapon.Attack(world_location);
             m_player_controller.AbortBurst();
         }
     }
