@@ -92,3 +92,4 @@ fmod_editor.log
 /Assets/Plugins/FMOD
 .DS_Store
 /.tmp.driveupload
+/.tmp.drivedownload

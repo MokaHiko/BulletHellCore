@@ -70,9 +70,11 @@ public class Dash : Ability
                 ability_end_callback?.Invoke();
                 // TODO: Make parry modifier
                 //combat.Parry();
+
+                //fmod teleport audio
+                FMODUnity.RuntimeManager.PlayOneShotAttached(teleportAudio, gameObject);
             }
-            //fmod teleport audio
-            //FMODUnity.RuntimeManager.PlayOneShotAttached(teleportAudio, gameObject);
+            
 
             yield return new WaitForSeconds(duration);
             AbortDash();
@@ -87,7 +89,7 @@ public class Dash : Ability
             rb.AddForce(m_unit.transform.forward * dash_multiplier, ForceMode.Impulse);
 
             //fmod dash audio
-            //FMODUnity.RuntimeManager.PlayOneShot(dashAudio,transform.position);
+            
             FMODUnity.RuntimeManager.PlayOneShotAttached(dashAudio, gameObject);
             
             
