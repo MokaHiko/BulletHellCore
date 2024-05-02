@@ -15,6 +15,7 @@ public class UnitCanvas : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-         transform.rotation = start_rotation * Camera.main.transform.rotation;
+        //transform.rotation = start_rotation * Camera.main.transform.rotation;
+        transform.LookAt(Camera.main.transform.position);
     }
 }

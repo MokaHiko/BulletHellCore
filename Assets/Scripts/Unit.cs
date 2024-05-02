@@ -56,6 +56,15 @@ public class Unit : MonoBehaviour
     public float energy = 0.0f;
 
     [SerializeField]
+    public float fossil = 0.0f;
+
+    [SerializeField]
+    public float nuclear = 0.0f;
+
+    [SerializeField]
+    public float solar = 0.0f;
+
+    [SerializeField]
     public float energy_gain_rate = 1.0f;
 
     [SerializeField]
@@ -66,6 +75,10 @@ public class Unit : MonoBehaviour
 
     [SerializeField]
     public float damage_multiplier = 1.0f;
+
+    // ~ Handles
+    public Renderer unit_renderer;
+    public Animator animator;
 
     // Unit UI
     public PropertyBar health_bar;
@@ -151,12 +164,12 @@ public class Unit : MonoBehaviour
         {
             damage_color = Color.green;
         }
-        else if (crit_roll > 0.90f)
+        else if (crit_roll > 0.95f)
         {
-            damage *= UnityEngine.Random.Range(2.0f, 4.0f);
+            damage *= UnityEngine.Random.Range(2.0f, 3.0f);
             damage_color = Color.red;
         }
-        else if(crit_roll > 0.80f)
+        else if(crit_roll > 0.85f)
         {
             damage *= UnityEngine.Random.Range(1.5f, 2.0f);
             damage_color = Color.yellow;
@@ -180,21 +193,31 @@ public class Unit : MonoBehaviour
         text_mesh.text = damage.ToString();
         text_mesh.color = damage_color;
 
-        if (health < 0.0f)
+        if (health <= 0.0f)
         {
             // Invoke callbacks
             death_callback?.Invoke();
+            death_callback = null;
+
+            if (m_death_effect)
+            {
+                ParticleSystem death_effect = Instantiate(m_death_effect, transform.position + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity);
+                Destroy(death_effect.gameObject, death_effect.main.duration);
+
+                // De parent effects
+                damage_number.transform.SetParent(death_effect.transform);
+            }
 
             // Clean up
             Destroy(gameObject);
         }
     }
-    public void UseAbility(AbilityType type, bool burst = false)
+    public void UseAbility(AbilityType type, bool burst = false, Vector3 direction = new Vector3())
     {
         int type_index = (int)type;
         if (type_index < abilities.Count)
         {
-            abilities[type_index].UseWithCost(burst);
+            abilities[type_index].UseWithCost(burst, direction);
             return;
         }
 
@@ -212,22 +235,43 @@ public class Unit : MonoBehaviour
         Debug.Log("Unit has no ability at index: " + type_index);
     }
     
-    private void Start()
+    private void Awake()
     {
         // Effect asserts
+        Debug.Assert(m_damaged_material != null);
         Debug.Assert(floating_text != null);;
         Debug.Assert(health_bar != null);;
         Debug.Assert(energy_bar != null);;
 
-        m_renderer = GetComponent<Renderer>();
-        m_start_color = m_renderer.material.color;
+        // Get Renderable Components
+        if(TryGetComponent<Renderer>(out Renderer r))
+        {
+            unit_renderer = r; 
+        }
+        else
+        {
+            unit_renderer = GetComponentInChildren<Renderer>();
+        }
+
+        m_start_material = unit_renderer.material;
+        m_start_color = unit_renderer.material.color;
+
+        // Get Renderable Components
+        if(TryGetComponent<Animator>(out Animator anim))
+        {
+            animator = anim;
+        }
+        else
+        {
+            animator = GetComponentInChildren<Animator>();
+        }
 
         // Defaults Values
         m_state = UnitState.None;
         m_status_effect = StatusEffect.None;
 
         health = m_base_stats.health;
-        energy = m_base_stats.max_energy / 2.0f;
+        energy = m_base_stats.max_energy * 0.75f;
         energy_gain_rate = m_base_stats.energy_gain_rate;
         movement_speed = m_base_stats.movement_speed;
         agility = m_base_stats.agility;
@@ -249,6 +293,11 @@ public class Unit : MonoBehaviour
         // Set UI
         energy_bar.SetValue(energy, m_base_stats.max_energy);
         health_bar.SetValue(health, m_base_stats.health);
+
+        if (animator)
+        {
+            animator.SetFloat("normalized_ms", GetComponent<Rigidbody>().velocity.magnitude / m_base_stats.movement_speed);
+        }
 
         if(m_status_effect == StatusEffect.None) 
         { 
@@ -275,7 +324,7 @@ public class Unit : MonoBehaviour
         float start_speed = movement_speed;
         float start_aglity = agility;
 
-        movement_speed *= 0.15f;
+        movement_speed *= 0.5f;
 
         short_circuit_particles.Play();
 
@@ -288,7 +337,6 @@ public class Unit : MonoBehaviour
 
         m_short_circuit_routine = null;
     }
-
     private IEnumerator CorossionEffect()
     {
         float time = 0.0f;
@@ -313,15 +361,13 @@ public class Unit : MonoBehaviour
     }
     private IEnumerator DefaultDamageEffect()
     {
-        // TODO: Change to shader wipe
-
         // Flash white
         ApplyState(UnitState.TakingDamage);
-        m_renderer.material.color = Color.white;
+        unit_renderer.material = m_damaged_material;
 
         yield return new WaitForSeconds(0.1f);
 
-        m_renderer.material.color = m_start_color;
+        unit_renderer.material = m_start_material;
         RemoveState(UnitState.TakingDamage);
 
         // Stop movement
@@ -341,8 +387,14 @@ public class Unit : MonoBehaviour
     private UnitStats m_base_stats;
 
     // ~ Effects
+    private Material m_start_material;
 
     // Damaged
+    [SerializeField]
+    private Material m_damaged_material;
+    [SerializeField]
+    private ParticleSystem m_death_effect;
+
     private Color m_start_color;
     private Coroutine m_damage_effect_routine;
 
@@ -358,10 +410,7 @@ public class Unit : MonoBehaviour
     private Coroutine m_short_circuit_routine = null;
     private Coroutine m_corossion_routine = null;
 
-    // ~ Handles
-    private Renderer m_renderer;
-
     // ~ Abilities
     [SerializeField]
-    private List<Ability> abilities;
+    public List<Ability> abilities;
  }

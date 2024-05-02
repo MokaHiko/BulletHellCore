@@ -11,17 +11,26 @@ public class UnitSpawner : MonoBehaviour
     float spawn_radius = 0.0f;
 
     [SerializeField]
+    int max_units = 1;
+
+    [SerializeField]
     List<GameObject> units;
 
     // Start is called before the first frame update
     void Start()
     {
         Debug.Assert(units.Count > 0);
+        time_elapsed = spawn_interval;
     }
 
     // Update is called once per frame
     void Update()
     {
+        if (max_units <= 0)
+        {
+            return;
+        }
+        max_units--;
         time_elapsed += Time.deltaTime;
         if (time_elapsed > spawn_interval)
         {

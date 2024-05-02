@@ -2,6 +2,7 @@ using System.Collections;
 using System;
 using UnityEngine;
 using Cinemachine;
+using Unity.Profiling;
 
 public class MachineGun : Weapon
 {
@@ -23,9 +24,9 @@ public class MachineGun : Weapon
     public float regular_fire_shake = 2.0f;
 
     [Header("Burst fire")]
-    public int bounce_count = 5;
-    public float bounce_damage_multipler = 1.15f;
     public float burst_fire_shake = 5.0f;
+    public float burst_spread = 20.0f;
+    public int shots = 4;
 
     [SerializeField]
     public ParticleSystem burst_impact_particle_system;
@@ -34,7 +35,6 @@ public class MachineGun : Weapon
     {
         // Weapon asserts
         Debug.Assert(attack_speed != 0);
-        Debug.Assert(m_fire_point != null);
         Debug.Assert(impact_particle_system != null);
         Debug.Assert(burst_impact_particle_system != null);
 
@@ -42,123 +42,98 @@ public class MachineGun : Weapon
         Debug.Assert(bullet_trail_speed != 0);
         Debug.Assert(bullet_trail != null);
         Debug.Assert(muzzle_flash != null);
-
-        m_time_since_last_fire = 0.0f;
     }
 
-    private void Update()
+    public override void AttackImpl(Vector3 fire_point, Vector3 target_position, bool is_burst)
     {
-        m_time_since_last_fire += Time.deltaTime * Mathf.Clamp(1 - (m_unit.energy / m_unit.BaseStats().max_energy), 0, 1);
-    }
-    public override void Attack()
-    {
-        Fire();
+        // TODO: Up gas to increase fire rate
+        Fire(fire_point, target_position, is_burst);
     }
 
-    public void Fire()
+    public void Fire(Vector3 fire_point, Vector3 taget_position, bool is_burst)
     {
-        if (m_time_since_last_fire <= (1.0f / attack_speed) )
+        if (is_burst)
         {
-            // TODO: Jammed sound effect
-            return;
-        }
-
-        if (m_player_controller.IsBurst())
-        {
-            Shake(burst_fire_shake, muzzle_flash.main.duration);
-
             // TODO: Play different muzzle
+            Shake(burst_fire_shake, muzzle_flash.main.duration);
             muzzle_flash.Play();
 
-            for (int i = 0; i < 12; i++)
+            float theta = Mathf.Deg2Rad * (90 - burst_spread);
+            for (int i = 0; i < shots; i++)
             {
-                Vector3 dir = m_fire_point.forward + new Vector3( UnityEngine.Random.Range(-spread  * 2.0f, spread * 2.0f), 0, UnityEngine.Random.Range(-spread * 2.0f, spread * 2.0f));
+                // Recoil
+                theta += Mathf.Deg2Rad * burst_spread / shots;
+                Vector3 dir = m_unit.transform.rotation * new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta));
                 dir.Normalize();
 
-                // TODO : Add layer mask
-                TrailRenderer trail = Instantiate(bullet_trail, m_fire_point.position, Quaternion.identity);
+                TrailRenderer trail = Instantiate(bullet_trail, fire_point, Quaternion.identity);
                 if (Physics.SphereCast(transform.position, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
                 {
-                    if (hit.collider.TryGetComponent<Unit>(out Unit unit))
+                    hit.collider.TryGetComponent<Unit>(out Unit unit);
+                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, burst_impact_particle_system, () =>
                     {
-                        float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
-                        unit.TakeDamage(base_damage, StatusEffect.None, crit_roll);
-                    }
+                        if (unit)
+                        {
+                            float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
+                            unit.TakeDamage(base_damage, StatusEffect.None, crit_roll);
+                        }
 
-                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, burst_impact_particle_system, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, base_damage, bounce_count); }));
+                        on_hit?.Invoke(hit.point, dir, hit.normal);
+                        on_fire?.Invoke(taget_position);
+                    }));
                 }
                 else
                 {
-                    StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized, burst_impact_particle_system));
+                    StartCoroutine(SpawnTrail(trail, fire_point + (dir * range), -dir.normalized, burst_impact_particle_system));
                 }
             }
             return;
         }
-
-        m_time_since_last_fire = 0;
 
         // Fire
         {
+            Vector3 diff = taget_position - fire_point;
+            Vector3 dir = diff.normalized;
+
+            // Recoil
+            dir += new Vector3(UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
+            dir.y = Mathf.Clamp(dir.y, 0, dir.y);
+            dir.Normalize();
+
             muzzle_flash.Play();
             Shake(regular_fire_shake, muzzle_flash.main.duration);
 
-            Vector3 dir = transform.forward + new Vector3( UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
-            dir.Normalize();
-
-            // TODO : Add layer mask
-            TrailRenderer trail = Instantiate(bullet_trail, m_fire_point.position, Quaternion.identity);
+            TrailRenderer trail = Instantiate(bullet_trail, fire_point, Quaternion.identity);
             if (Physics.SphereCast(transform.position, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
             {
-                if (hit.collider.TryGetComponent<Unit>(out Unit unit))
+                hit.collider.TryGetComponent<Unit>(out Unit unit);
+                float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
+
+                if (hit.collider.tag == "CritPoint")
                 {
-                    float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
-                    unit.TakeDamage(base_damage, StatusEffect.None, crit_roll);
-                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, impact_particle_system));
+                    unit = hit.collider.GetComponentInParent<Unit>();
+                    crit_roll = 1.0f;
                 }
-                else
+
+                StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, impact_particle_system, () =>
                 {
-                    StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, impact_particle_system));
-                }
+                    if (unit)
+                    {
+                        unit.TakeDamage(base_damage, StatusEffect.None, crit_roll);
+                    }
+                    on_hit?.Invoke(hit.point, dir, hit.normal);
+                }));
             }
             else
             {
-                StartCoroutine(SpawnTrail(trail, m_fire_point.position + (dir * range), -dir.normalized,impact_particle_system));
+                StartCoroutine(SpawnTrail(trail, fire_point + (dir * range), -dir.normalized,impact_particle_system));
             }
 
             // Sap energy on hit
-            m_unit.energy += 2.0f;
+            m_unit.energy += 4.0f;
         }
     }
-    private void Bounce(Vector3 spawn_point, Vector3 dir, float damage, int bounce_count = 0)
-    {
-        // Decrement bounce
-        bounce_count--;
 
-        TrailRenderer trail = Instantiate(bullet_trail, spawn_point, Quaternion.identity);
-        if (Physics.SphereCast(spawn_point, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
-        {
-            if (hit.collider.TryGetComponent<Unit>(out Unit unit))
-            {
-                float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
-                unit.TakeDamage(damage, StatusEffect.None, crit_roll);
-            }
-
-            // Stop bounce if count reached
-            if (bounce_count <= 0) 
-            { 
-                StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, impact_particle_system));
-                return;
-            }
-
-            // Bounce again
-            StartCoroutine(SpawnTrail(trail, hit.point, hit.normal,impact_particle_system, () => { Bounce(hit.point, Vector3.Reflect(dir, hit.normal).normalized, damage * bounce_damage_multipler, bounce_count); }));
-        }
-        else
-        {
-            // Stop bounce if nothing hit
-            StartCoroutine(SpawnTrail(trail, spawn_point + (dir * range), -dir.normalized, impact_particle_system));
-        }
-    }
     private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 end_position, Vector3 normal, ParticleSystem impact_effect, Action action = null)
     {
         Vector3 start_postion = trail.transform.position;
@@ -185,10 +160,4 @@ public class MachineGun : Weapon
 
         yield return null;
     }
-
-    // ~ Combat
-    private float m_time_since_last_fire;
-
-    [SerializeField]
-    private Transform m_fire_point;
 }

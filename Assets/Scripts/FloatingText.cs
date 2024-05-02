@@ -1,10 +1,13 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using static UnityEditor.Experimental.GraphView.GraphView;
 
 public class FloatingText : MonoBehaviour
 {
+    [SerializeField]
+    public Color CorossionColor;
+
+    [SerializeField]
+    public Color CriticalColor;
+
     private void SetGlobalScale(Vector3 global_scale)
     {
         transform.localScale = Vector3.one;
