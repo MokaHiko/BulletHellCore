@@ -38,7 +38,7 @@ public class UnitSpawner : MonoBehaviour
             Vector3 location = transform.position + new Vector3(Random.Range(5, spawn_radius), 0, Random.Range(5, spawn_radius));
             Instantiate(units[unit_index], location, Quaternion.identity, GetComponentInParent<Room>().transform);
             time_elapsed = 0.0f;
-            max_units--;
+            max_units--; 
         }
     }
 

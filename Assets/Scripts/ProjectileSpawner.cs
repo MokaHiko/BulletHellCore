@@ -107,7 +107,6 @@ public class ProjectileSpawner : MonoBehaviour
             var projectile = Instantiate(projectile_types[projectile_type_index], transform.position + rotated_point + Vector3.up, Quaternion.identity);
             projectile.transform.localScale *= scale_value;
 
-            //projectile.GetComponent<Rigidbody>().velocity = projectile.transform.forward * speed;
             projectile.GetComponent<Rigidbody>().velocity = rotated_point * speed;
         }
 

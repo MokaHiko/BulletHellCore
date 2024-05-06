@@ -14,6 +14,9 @@ public class MachineGun : Weapon
     public float spread = 0.0f;
 
     [SerializeField]
+    public float charge_rate = 0.35f;
+
+    [SerializeField]
     public ParticleSystem muzzle_flash;
 
     [SerializeField]
@@ -26,6 +29,7 @@ public class MachineGun : Weapon
     [Header("Burst fire")]
     public float burst_fire_shake = 5.0f;
     public float burst_spread = 20.0f;
+    public float burst_multiplier = 20.0f;
     public int shots = 4;
 
     [SerializeField]
@@ -46,7 +50,20 @@ public class MachineGun : Weapon
 
     public override void AttackImpl(Vector3 fire_point, Vector3 target_position, bool is_burst)
     {
-        // TODO: Up gas to increase fire rate
+        // TODO: oUp gas to increase fire rate
+
+        if (is_burst)
+        {
+            // TODO: Play different muzzle
+            Shake(burst_fire_shake * shots, muzzle_flash.main.duration);
+            muzzle_flash.Play();
+        }
+        else
+        {
+            muzzle_flash.Play();
+            Shake(regular_fire_shake, muzzle_flash.main.duration);
+        }
+
         Fire(fire_point, target_position, is_burst);
     }
 
@@ -54,20 +71,20 @@ public class MachineGun : Weapon
     {
         if (is_burst)
         {
-            // TODO: Play different muzzle
-            Shake(burst_fire_shake, muzzle_flash.main.duration);
-            muzzle_flash.Play();
+            owner.energy -= 50.0f;
+            Vector3 diff = taget_position - fire_point;
+            Vector3 dir = diff.normalized;
 
             float theta = Mathf.Deg2Rad * (90 - burst_spread);
             for (int i = 0; i < shots; i++)
             {
                 // Recoil
                 theta += Mathf.Deg2Rad * burst_spread / shots;
-                Vector3 dir = m_unit.transform.rotation * new Vector3(Mathf.Cos(theta), 0, Mathf.Sin(theta));
+                dir += owner.transform.rotation * new Vector3(Mathf.Cos(theta), UnityEngine.Random.Range(0.0f, 0.25f), Mathf.Sin(theta));
                 dir.Normalize();
 
                 TrailRenderer trail = Instantiate(bullet_trail, fire_point, Quaternion.identity);
-                if (Physics.SphereCast(transform.position, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
+                if (Physics.SphereCast(fire_point, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
                 {
                     hit.collider.TryGetComponent<Unit>(out Unit unit);
                     StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, burst_impact_particle_system, () =>
@@ -75,7 +92,7 @@ public class MachineGun : Weapon
                         if (unit)
                         {
                             float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
-                            unit.TakeDamage(base_damage, StatusEffect.None, crit_roll);
+                            unit.TakeDamage(base_damage * burst_multiplier, StatusEffect.None, crit_roll, hit.point);
                         }
 
                         on_hit?.Invoke(hit.point, dir, hit.normal);
@@ -100,11 +117,8 @@ public class MachineGun : Weapon
             dir.y = Mathf.Clamp(dir.y, 0, dir.y);
             dir.Normalize();
 
-            muzzle_flash.Play();
-            Shake(regular_fire_shake, muzzle_flash.main.duration);
-
             TrailRenderer trail = Instantiate(bullet_trail, fire_point, Quaternion.identity);
-            if (Physics.SphereCast(transform.position, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
+            if (Physics.SphereCast(fire_point, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
             {
                 hit.collider.TryGetComponent<Unit>(out Unit unit);
                 float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
@@ -119,7 +133,11 @@ public class MachineGun : Weapon
                 {
                     if (unit)
                     {
-                        unit.TakeDamage(base_damage, StatusEffect.None, crit_roll);
+                        unit.TakeDamage(base_damage, StatusEffect.None, crit_roll, hit.point);
+
+                        // ~ Property:
+                        // Sap energy on hit
+                        owner.energy += charge_rate * base_damage;
                     }
                     on_hit?.Invoke(hit.point, dir, hit.normal);
                 }));
@@ -128,9 +146,6 @@ public class MachineGun : Weapon
             {
                 StartCoroutine(SpawnTrail(trail, fire_point + (dir * range), -dir.normalized,impact_particle_system));
             }
-
-            // Sap energy on hit
-            m_unit.energy += 4.0f;
         }
     }
 

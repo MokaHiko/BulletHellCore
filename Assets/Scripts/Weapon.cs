@@ -21,10 +21,17 @@ public class Weapon : MonoBehaviour
     public float range = 1000.0f;
 
     [SerializeField]
-    public LayerMask damageable_layers;
+    public int max_bullets = 32;
 
     [SerializeField]
-    private Cinemachine.CinemachineVirtualCamera m_cinemachine_camera;
+    public float reload_time = 1.0f;
+
+    [SerializeField]
+    public LayerMask damageable_layers;
+
+    // ~ Handles
+    public Unit owner;
+    public PlayerController player_controller;
 
     // ~ Callbacks
 
@@ -37,24 +44,23 @@ public class Weapon : MonoBehaviour
 
     protected void Shake(float intensity, float time)
     {
-        if (m_shake_routine != null)
-        {
-            StopCoroutine(m_shake_routine);
-            m_shake_routine = null;
-        }
-
-        m_shake_routine = StartCoroutine(ShakeEffect(intensity, time));
+        player_controller.RequestShake(intensity, time);
     }
 
     void Awake()
     {
+        bullets = max_bullets;
         OnEquip();
-
-        // TODO: Look for cinemachine camera
     }
 
     public void Attack(Vector3 target_position)
     {
+        if (bullets < 0)
+        {
+            Reload();
+            return;
+        }
+
         if(m_time_since_last_fire <= (1.0f / attack_speed))
         {
             return;
@@ -62,11 +68,28 @@ public class Weapon : MonoBehaviour
 
         m_time_since_last_fire = 0.0f;
 
-        AttackImpl(transform.position, target_position, m_player_controller.IsBurst());
+        bullets--;
+        // On reload
+        AttackImpl(transform.position, target_position, player_controller.IsBurst());
         on_fire?.Invoke(target_position);
     }
 
     public virtual void AttackImpl(Vector3 fire_point, Vector3 target_position, bool is_burst = false) { }
+
+    public void Reload()
+    {
+        if (m_reload_coroutine == null)
+        {
+            m_reload_coroutine = StartCoroutine(ReloadEffect());
+        }
+    }
+
+    public IEnumerator ReloadEffect()
+    {
+        yield return new WaitForSeconds(reload_time);
+        bullets = max_bullets;
+        m_reload_coroutine = null;
+    }
 
     public void Update()
     {
@@ -75,35 +98,15 @@ public class Weapon : MonoBehaviour
 
     void OnEquip()
     {
-        m_unit = GetComponentInParent<Unit>();
-        m_player_controller = GetComponentInParent<PlayerController>();
-    }
-
-    // Effects
-    IEnumerator ShakeEffect(float intensity, float shake_time)
-    {
-        var cinemachine_perlin = m_cinemachine_camera.GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
-        cinemachine_perlin.m_AmplitudeGain = intensity;
-
-        float time = 0.0f;
-        while(time < shake_time) 
-        {
-            time += Time.deltaTime;
-            yield return null;
-        }
-
-        cinemachine_perlin.m_AmplitudeGain = 0;
-        m_shake_routine = null;
+        owner = GetComponentInParent<Unit>();
+        player_controller = GetComponentInParent<PlayerController>();
     }
     
     // ~ Weapon Common
     protected float m_time_since_last_fire = 0.0f;
+    [SerializeField]
+    protected int bullets = 0;
 
-    // ~ Effects
-    Coroutine m_shake_routine;
-
-    // ~ Handles
-    protected Unit m_unit;
-    protected PlayerController m_player_controller;
+    Coroutine m_reload_coroutine = null;
 }
 

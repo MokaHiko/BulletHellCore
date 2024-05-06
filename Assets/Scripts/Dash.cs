@@ -28,25 +28,25 @@ public class Dash : Ability
             AbortDash();
         }
 
-        m_dash_routine = StartCoroutine(DashEffect(burst));
+        m_dash_routine = StartCoroutine(DashEffect(burst, direction));
     }
 
     void AbortDash()
     {
         m_unit.RemoveStatus(dash_status);
-        m_unit.RemoveState(UnitState.ManagedMovement);
+        m_unit.RemoveState(UnitStateFlags.ManagedMovement);
 
-        float start_speed = m_unit.BaseStats().movement_speed;
-        float start_agility = m_unit.BaseStats().agility;
+        float start_speed = m_unit.BaseStats.movement_speed;
+        float start_agility = m_unit.BaseStats.agility;
         m_unit.movement_speed = start_speed;
         m_unit.agility = start_agility;
 
         m_dash_routine = null;
     }
 
-    private IEnumerator DashEffect(bool burst = false)
+    private IEnumerator DashEffect(bool burst = false, Vector3 direction = new Vector3())
     {
-        float start_speed = m_unit.BaseStats().movement_speed;
+        float start_speed = m_unit.BaseStats.movement_speed;
 
         if (m_trail == null)
         {
@@ -72,14 +72,14 @@ public class Dash : Ability
         }
         else
         {
-            m_unit.animator.SetTrigger("dash");
-            m_unit.ApplyState(UnitState.ManagedMovement);
+            //m_unit.ApplyState(UnitStateFlags.ManagedMovement);
 
             Rigidbody rb = m_unit.GetComponent<Rigidbody>();
-            rb.velocity = rb.velocity.normalized * start_speed;
-            rb.AddForce(m_unit.transform.forward * dash_multiplier, ForceMode.Impulse);
+            rb.AddForce(direction * dash_multiplier, ForceMode.Impulse);
+            m_unit.movement_speed *= dash_multiplier;
 
             yield return new WaitForSeconds(duration);
+
             AbortDash();
         }
     }

@@ -254,7 +254,7 @@ MonoBehaviour:
   impact_effect: {fileID: 2508025987354659167, guid: ec66736dcde14be4bab6f214c4563d1d, type: 3}
   immune_layers:
     serializedVersion: 2
-    m_Bits: 1857
+    m_Bits: 1345
 --- !u!54 &8790266443572329201
 Rigidbody:
   m_ObjectHideFlags: 0

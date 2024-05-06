@@ -4,7 +4,7 @@ using UnityEngine;
 public class Slide : Ability
 {
     [SerializeField]
-    public float slide_multiplier;
+    public float slide_multiplier = 1.15f;
 
     [SerializeField]
     public StatusEffect slide_status = StatusEffect.None;
@@ -15,6 +15,7 @@ public class Slide : Ability
     public override void Use(bool burst, Vector3 direction) 
     {
         dir = direction;
+        dir.Normalize();
 
         m_unit.animator.SetTrigger("dash");
         m_unit.animator.GetComponent<AnimationSignalHandler>().begin_callback += () =>
@@ -29,9 +30,6 @@ public class Slide : Ability
         {
             ability_end_callback?.Invoke();
         };
-
-        //AbortSlide();
-        //m_slide_routine = StartCoroutine(SlideEffect(burst, direction));
     }
 
     void AbortSlide()
@@ -43,22 +41,28 @@ public class Slide : Ability
         }
 
         m_unit.RemoveStatus(slide_status);
-        m_unit.RemoveState(UnitState.ManagedMovement);
+        m_unit.RemoveState(UnitStateFlags.ManagedMovement);
+        m_unit_controller.GoTo(transform.position);
     }
 
     private IEnumerator SlideEffect(bool burst = false, Vector3 direction = new Vector3())
     {
-        //m_unit.animator.SetTrigger("dash");
-        m_unit.ApplyState(UnitState.ManagedMovement);
+        m_unit.ApplyState(UnitStateFlags.ManagedMovement);
 
         Rigidbody rb = m_unit.GetComponent<Rigidbody>();
+        rb.velocity = Vector3.zero;
 
-        direction = m_unit.transform.forward;
+        if (direction.magnitude == 0)
+        {
+            direction = transform.forward;
+        }
 
         float time = 0.0f;
         while (time < duration / 2.0f)
         {
-            rb.AddForce(direction * slide_multiplier, ForceMode.Impulse);
+            //m_unit.transform.forward = rb.velocity.normalized;
+            m_unit.transform.LookAt(m_unit.transform.position + rb.velocity.normalized);
+            rb.velocity = direction * slide_multiplier;
             time += Time.deltaTime;
             yield return null;
         }
@@ -66,7 +70,8 @@ public class Slide : Ability
         time = 0.0f;
         while (time < duration / 2.0f)
         {
-            rb.velocity = Vector3.Lerp(rb.velocity, direction * m_unit.BaseStats().movement_speed, time / (duration / 2.0f));
+            m_unit.transform.LookAt(m_unit.transform.position + rb.velocity.normalized);
+            rb.velocity = Vector3.Lerp(rb.velocity, rb.velocity.normalized * m_unit.BaseStats.movement_speed, time / (duration / 2.0f));
             time += Time.deltaTime;
             yield return null;
         }
