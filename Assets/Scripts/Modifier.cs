@@ -57,16 +57,17 @@ public class Modifier : MonoBehaviour
 
         if(CheckModifier(WeaponModifiers.Bounce))
         {
+            int n_bounces = bounces;
             m_weapon.on_hit += (Vector3 point, Vector3 dir, Vector3 normal) =>
             {
-                if(bounces > 0) 
-                { 
-                    Bounce(point, dir, normal);
-                }
-                else
+                if (n_bounces <= 0)
                 {
-                    bounces = 1;
+                    n_bounces = bounces;
+                    return;
                 }
+
+                Bounce(point, dir, normal);
+                n_bounces--;
             };
         }
 
@@ -74,7 +75,6 @@ public class Modifier : MonoBehaviour
         {
             m_weapon.on_hit += (Vector3 point, Vector3 dir, Vector3 normal) =>
             {
-                //m_weapon.m_unit
             };
         }
     }
@@ -94,14 +94,7 @@ public class Modifier : MonoBehaviour
         {
             m_weapon.on_hit += (Vector3 point, Vector3 dir, Vector3 normal) =>
             {
-                if(bounces > 0) 
-                { 
-                    Bounce(point, dir, normal);
-                }
-                else
-                {
-                    bounces = 1;
-                }
+                Bounce(point, dir, normal);
             };
         }
 
@@ -109,7 +102,6 @@ public class Modifier : MonoBehaviour
         {
             m_weapon.on_hit += (Vector3 point, Vector3 dir, Vector3 normal) =>
             {
-                //m_weapon.m_unit
             };
         }
     }
@@ -146,12 +138,12 @@ public class Modifier : MonoBehaviour
     }
     private void Bounce(Vector3 point, Vector3 dir, Vector3 normal)
     {
-        // Decrement bounce
-        bounces--;
-
         float start_damage = m_weapon.base_damage;
         m_weapon.base_damage *= bounce_multiplier;
-        m_weapon.AttackImpl(point, Vector3.Reflect(dir, normal).normalized * m_weapon.range, false);
+
+        dir.y = 0;
+        dir.Normalize();
+        m_weapon.AttackImpl(point, Vector3.Reflect(dir, normal).normalized * m_weapon.range);
         m_weapon.base_damage = start_damage;
     }
 

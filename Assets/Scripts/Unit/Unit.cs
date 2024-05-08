@@ -18,7 +18,6 @@ public enum UnitStateFlags
     Dead = 1 << 3,
 };
 
-
 [RequireComponent(typeof(Rigidbody))]
 public class Unit : IDamageable
 {
@@ -30,6 +29,10 @@ public class Unit : IDamageable
     public float energy_gain_rate = 1.0f;
     public float movement_speed = 0.0f;
     public float agility = 0.0f;
+
+    [Header("Combat")]
+    [SerializeField]
+    public List<Weapon> weapons;
 
     [Header("Unit Handles")]
     public Animator animator;
@@ -44,6 +47,7 @@ public class Unit : IDamageable
     // Getters
     public UnitStats BaseStats {get { return m_base_stats; }}
     public Rigidbody GetRigidbody {get {return m_rigidbody;}}
+    public Weapon EquipedWeapon {get {return weapons.Count > 0 ? weapons[0] : null;}}
 
     // State Flags Helpers
     public bool CheckState(UnitStateFlags state_flags){ return (m_state & state_flags) == state_flags;}
@@ -183,6 +187,8 @@ public class Unit : IDamageable
     // ~ Abilities
     [SerializeField]
     public List<Ability> abilities;
+
+    bool m_burst = false;
 
     // ~ Handles
     public Rigidbody m_rigidbody;

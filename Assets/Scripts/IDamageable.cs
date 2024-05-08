@@ -90,7 +90,8 @@ public class IDamageable : MonoBehaviour
             start_pos = hit_position;
         }
 
-        var damage_number = Instantiate(damageable_resources.floating_text, hit_position, Quaternion.identity, transform);
+        //var damage_number = Instantiate(damageable_resources.floating_text, hit_position, Quaternion.identity, transform);
+        var damage_number = Instantiate(damageable_resources.floating_text, hit_position, Quaternion.identity);
         TMP_Text tmp_text = damage_number.GetComponent<TMP_Text>();
         tmp_text.text = (damage * 10).ToString();
         tmp_text.color = damage_color;
@@ -176,19 +177,21 @@ public class IDamageable : MonoBehaviour
     }
     private IEnumerator DefaultDamageEffect()
     {
-        Material start_material = damageable_renderer.material;
+        if(m_start_material == null)
+        {
+            m_start_material = damageable_renderer.material;
+        }
 
         // Flash white
         damageable_renderer.material = damageable_resources.damaged_material;
         yield return new WaitForSeconds(0.1f);
-        damageable_renderer.material = start_material;
-
-        yield return new WaitForSeconds(0.15f);
+        damageable_renderer.material = m_start_material;
     }
 
     // ~ Status
     [SerializeField]
     private StatusEffect m_status_effect = StatusEffect.None;
+    Material m_start_material;
 
     // ~ Effect Coroutines
     private Coroutine m_short_circuit_routine = null;

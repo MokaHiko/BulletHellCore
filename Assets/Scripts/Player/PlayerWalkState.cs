@@ -26,30 +26,6 @@ public class PlayerWalkState : UnitWalkState
         // Move
         Vector3 target_pos = unit.transform.position + m_player_controller.RelativeAxisInput;
         GoTo(unit, target_pos);
-
-        // Dash
-        // if (Input.GetMouseButtonDown((int)MouseButton.RightMouse) || Input.GetKeyDown(KeyCode.LeftShift))
-        // {
-        //     unit.UseAbility(AbilityType.Movement, m_player_controller.IsBurst(), m_player_controller.RelativeAxisInput);
-        //     m_player_controller.AbortBurst();
-        // }
-
-        // ~ Combat
-        // Parry
-        // if (Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     if (RequestBurst() && m_unit.CheckState(UnitState.TakingDamage))
-        //     {
-        //         m_player_combat.Parry();
-        //         AbortBurst();
-        //     }
-        // }
-
-
-        // if (Input.GetKeyDown(KeyCode.R))
-        // {
-        //     m_player_combat.Reload();
-        // }
     }
 
     PlayerController m_player_controller;

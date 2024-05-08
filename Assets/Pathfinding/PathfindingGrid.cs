@@ -110,5 +110,11 @@ public class PathfindingGrid : MonoBehaviour
     {
         node_diameter = node_radius * 2.0f;
         grid_dimensions = Vector2Int.RoundToInt(world_dimensions / node_diameter);
+
+        if (regenerate_grid)
+        {
+            GenerateGrid();
+            regenerate_grid = false;
+        }
     }
 }

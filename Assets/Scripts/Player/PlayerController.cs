@@ -1,15 +1,13 @@
 using System.Collections;
 using Cinemachine;
 using Cinemachine.Utility;
+using UnityEditor.PackageManager.Requests;
 using UnityEngine;
 using UnityEngine.UIElements;
 
 public delegate void PlayerLevelUpBack();
 
 [RequireComponent(typeof(Unit))]
-[RequireComponent(typeof(UnitMovement))]
-[RequireComponent(typeof(PlayerCombat))]
-[RequireComponent(typeof(CameraTarget))]
 public class PlayerController : MonoBehaviour
 {
     [SerializeField]
@@ -39,7 +37,7 @@ public class PlayerController : MonoBehaviour
     public float burst_cost = 25.0f;
 
     [SerializeField]
-    public float burst_duration = 0.75f;
+    public float burst_duration = 2.0f;
 
     [SerializeField]
     CinemachineComponentBase cm_component_base;
@@ -110,7 +108,6 @@ public class PlayerController : MonoBehaviour
         // Handles
         m_unit = GetComponent<Unit>();
         m_unit_controller = GetComponent<UnitMovement>();
-        m_player_combat = GetComponent<PlayerCombat>();
 
         // Effects
         if (cm_component_base == null)
@@ -159,48 +156,39 @@ public class PlayerController : MonoBehaviour
             unit_state_machine.QueueAddState(unit_state_machine.AttackState);
         }
 
-        return;
-
-        // Rotate character
-        if (!m_unit.CheckState(UnitStateFlags.ManagedMovement))
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            // Vector3 look_at = hit.point;
-            // look_at.y = transform.position.y;
-            // transform.LookAt(look_at, Vector3.up);
+            RequestBurst();
         }
 
-        // Dash
+        // Movement ability
         if (Input.GetMouseButtonDown((int)MouseButton.RightMouse) || Input.GetKeyDown(KeyCode.LeftShift))
         {
-            // m_unit.UseAbility(AbilityType.Movement, IsBurst(), Vector3.Normalize(relative_forward + relative_right));
-            // AbortBurst();
+            if (IsBurst())
+            {
+                unit_state_machine.QueueAddState(unit_state_machine.EmpoweredMovementAbilityState);
+            }
+            else
+            {
+                unit_state_machine.QueueAddState(unit_state_machine.MovementAbilityState);
+            }
+            AbortBurst();
         }
-        else
+
+        // Parry
+        if (Input.GetKeyDown(KeyCode.Space))
         {
+            // if (RequestBurst() && m_unit.CheckState(UnitStateFlags.TakingDamage))
+            // {
+            //     m_player_combat.Parry();
+            //     AbortBurst();
+            // }
         }
 
-        // // ~ Combat
-
-        // // Parry
-        // if (Input.GetKeyDown(KeyCode.Space))
-        // {
-        //     if (RequestBurst() && m_unit.CheckState(UnitStateFlags.TakingDamage))
-        //     {
-        //         m_player_combat.Parry();
-        //         AbortBurst();
-        //     }
-        // }
-
-        // if (Input.GetKeyDown(KeyCode.R))
-        // {
-        //     m_player_combat.Reload();
-        // }
-
-        // // Fire current weapon
-        // if (Input.GetMouseButton(0))
-        // {
-        //     m_player_combat.Attack(hit.point);
-        // }
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            //m_player_combat.Reload();
+        }
     }
     public void OnRoomComplete()
     {
@@ -327,7 +315,6 @@ public class PlayerController : MonoBehaviour
     // ~ Handles
     private Unit m_unit;
     private UnitMovement m_unit_controller;
-    private PlayerCombat m_player_combat;
 
     // ~ Burst
     float m_camera_start_distance;

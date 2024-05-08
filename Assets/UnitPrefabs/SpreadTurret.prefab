@@ -18499,8 +18499,8 @@ Rigidbody:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8793034584482050738}
   serializedVersion: 2
-  m_Mass: 1.5
-  m_Drag: 10
+  m_Mass: 1
+  m_Drag: 0
   m_AngularDrag: 0.05
   m_UseGravity: 1
   m_IsKinematic: 0
@@ -18544,6 +18544,7 @@ MonoBehaviour:
   energy_gain_rate: 0
   movement_speed: 0
   agility: 0
+  weapons: []
   animator: {fileID: 0}
   health_bar: {fileID: 5843225292546830179}
   energy_bar: {fileID: 6206212690517322453}

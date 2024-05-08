@@ -75,9 +75,9 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Generate level
-        Debug.Log("Generating Dungeons...");
-        dungeon_generator.Generate();
-        Debug.Log("Complete!...");
+        //Debug.Log("Generating Dungeons...");
+        //dungeon_generator.Generate();
+        //Debug.Log("Complete!...");
 
         // Find Room
         Room start_room = dungeon_generator.rooms[0];

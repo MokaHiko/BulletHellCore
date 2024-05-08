@@ -116,7 +116,7 @@ public class RewardUI : MonoBehaviour
         PlayerController player = GameManager.Instance.GetPlayer();
         if (player)
         {
-            Weapon weapon = player.GetComponent<PlayerCombat>().GetEquipedWeapon();
+            Weapon weapon = player.GetComponent<Unit>().EquipedWeapon;
             Modifier modifier = weapon.GetComponent<Modifier>();
 
             switch (modifier_flags)
@@ -153,7 +153,7 @@ public class RewardUI : MonoBehaviour
             if ((stat_modifiers & WeaponStatModifiers.ReloadSpeed) == WeaponStatModifiers.ReloadSpeed)
             {
                 description.text += "\n Decreased reload speed!";
-                weapon.reload_time *= 0.15f;
+                weapon.reload_time *= 1 - 0.15f;
             }
         }
 

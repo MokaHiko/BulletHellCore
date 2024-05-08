@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f95003db13c57cb468d73c122a0d4486, type: 3}
+  m_Name: DashState
+  m_EditorClassIdentifier: 
+  duration: 0.2
+  cooldown: 1.15
+  energy_cost: 0
+  stacks: 1
+  max_stacks: 1
+  trail_renderer: {fileID: 5113547844858984007, guid: 6368f56043e3c894f89080b7d534b3f7, type: 3}
+  dash_multiplier: 4
+  teleport_distance: 7.5
+  dash_status: 0

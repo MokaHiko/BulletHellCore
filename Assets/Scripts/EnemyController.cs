@@ -47,7 +47,6 @@ public class EnemyController : MonoBehaviour
         path_finding.seeker_transform = transform;
         path_finding.target_transform = target.transform;
 
-        // TODO: Make child of room
         path_finding.grid = GetComponentInParent<Room>().GetComponent<PathfindingGrid>();
 
         // Ability Chains

@@ -12,11 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ada1f7bb538ab1e4bb5e01568e919914, type: 3}
   m_Name: PlayerAttackState
   m_EditorClassIdentifier: 
-  sub_states:
-  - {fileID: 11400000, guid: 3551978c143d30348b2eb5c8cc52496c, type: 2}
+  substate: {fileID: 0}
+  superstate: {fileID: 0}
   weapons: []
   target_radius: 1
   targetable:
     serializedVersion: 2
     m_Bits: 64
+  hold_time: 0.25
   m_equiped_weapon: {fileID: 0}

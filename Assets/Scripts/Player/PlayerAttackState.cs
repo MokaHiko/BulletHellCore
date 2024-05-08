@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UIElements;
 
-[RequireComponent(typeof(PlayerController))]
 [CreateAssetMenu(fileName = "PlayerAttackState", menuName = "PlayerUnitAttackState")]
 public class PlayerAttackState : UnitAttackState
 {
@@ -17,10 +17,7 @@ public class PlayerAttackState : UnitAttackState
     public override void OnEnter(Unit unit)
     {
         m_player_controller = unit.GetComponent<PlayerController>();
-        m_state_machine = unit.GetComponent<UnitStateMachine>();
-
-        // TODO: Turn into combat scriptable object
-        m_equiped_weapon = m_player_controller.GetComponent<PlayerCombat>().GetEquipedWeapon();
+        m_equiped_weapon = unit.EquipedWeapon;
     }
 
     public override void OnExit(Unit unit)
@@ -46,17 +43,64 @@ public class PlayerAttackState : UnitAttackState
         }
     }
 
+    public override void AltAttack(Vector3 world_location)
+    {
+        if(m_equiped_weapon != null)
+        {
+            m_equiped_weapon.Attack(world_location, true);
+            m_player_controller.AbortBurst();
+        }
+    }
+
+    [SerializeField]
+    float hold_time = 0.5f;
+    float time_held = 0.0f;
+
+    void Release()
+    {
+        if(time_held > hold_time) 
+        {
+            AltAttack(m_player_controller.WorldMousePoint);
+        }
+        time_held = 0.0f;
+    }
     public override void OnFrameTick(Unit unit, float dt)
     {
         // Fire current weapon
-        if (Input.GetMouseButton(0))
+        if(Input.GetMouseButton(0)) 
         {
-            Attack(m_player_controller.WorldMousePoint);
+            if (m_player_controller.IsBurst())
+            {
+                time_held += Time.deltaTime;
+                if (time_held > hold_time)
+                {
+                    Release();
+                }
+            }
+            else
+            {
+                Attack(m_player_controller.WorldMousePoint);
+            }
         }
-        else
+
+        if (Input.GetMouseButtonUp(0))
         {
-            m_state_machine.QueueRemoveState(this);
+            Release();
         }
+
+        //if (Input.GetMouseButton(0))
+        //{
+        //    if(m_player_controller.IsBurst())
+        //    {
+        //        AltAttack(m_player_controller.WorldMousePoint);
+        //    }
+        //    else
+        //    {
+        //        Attack(m_player_controller.WorldMousePoint);
+        //    }
+        //}
+
+        StateMachine.QueueRemoveState(this);
     }
 
     // ~ Weapons
@@ -65,6 +109,5 @@ public class PlayerAttackState : UnitAttackState
 
     // ~ Handles
     private PlayerController m_player_controller;
-    private UnitStateMachine m_state_machine;
 }
 
