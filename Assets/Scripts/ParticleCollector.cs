@@ -15,6 +15,9 @@ public class ParticleCollector : MonoBehaviour
     ParticleSystem particle_system;
 
     [SerializeField]
+    float life_time = 5.0f;
+
+    [SerializeField]
     ParticleType particle_type;
 
     List<ParticleSystem.Particle> particles = new List<ParticleSystem.Particle>();
@@ -30,6 +33,8 @@ public class ParticleCollector : MonoBehaviour
         particle_system.trigger.AddCollider(player.GetComponent<Collider>());
 
         particle_entered_callback += player.OnParticleEnter;
+
+        Destroy(gameObject, life_time);
     }
 
     private void OnParticleTrigger()

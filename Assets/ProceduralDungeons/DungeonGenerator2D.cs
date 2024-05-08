@@ -28,9 +28,12 @@ public class DungeonGenerator2D : MonoBehaviour
     List<Room> room_types;
 
     [SerializeField]
+    List<GameObject> hallway_types;
+
+    [SerializeField]
     public Material line_material;
 
-    private List<Room> rooms = new List<Room>();
+    public List<Room> rooms = new List<Room>();
 
     [SerializeField]
     private Transform triangles_container;
@@ -52,15 +55,17 @@ public class DungeonGenerator2D : MonoBehaviour
     private List<Edge> free_edges;
     private int free_edge_step_ctr = 0;
 
-    void Generate()
+    public void Generate()
     {
         Clear();
 
         var sampler = UniformPoissonDiskSampler.SampleRectangle(Vector2.zero, map_size, min_room_size);
-        points = sampler.Select(point => new Vector2(point.x, point.y)).ToPoints().ToList();
-        Debug.Log($"Generated Points Count {points.Count}");
-
-        if (points.Count < 3) return;
+        points = sampler.Select(point => new Vector2(point.x - map_size.x / 2.0f, point.y - map_size.y / 2.0f)).ToPoints().ToList();
+        if (points.Count < 3)
+        {
+            Debug.Log($"Failed to generate points, count {points.Count}");
+            return;
+        };
 
         delaunator = new Delaunator(points.ToArray());
         CreateTriangle();
@@ -85,6 +90,95 @@ public class DungeonGenerator2D : MonoBehaviour
 
         // Get free edges
         free_edges = GetNonMSTEdges(graph, mst_edges);
+
+        GenerateHallways();
+    }
+
+    public void GenerateHallways()
+    {
+        foreach(Edge edge in mst_edges)
+        {
+            Vector3 position_p = new Vector3(points[edge.A].ToVector3().x, 0, points[edge.A].ToVector3().y);
+            Vector3 position_q = new Vector3(points[edge.B].ToVector3().x, 0, points[edge.B].ToVector3().y);
+            Vector3 mid_point = (position_p + position_q) / 2.0f;
+
+            // Hook up teleporters
+            {
+                Teleporter a = null;
+                Teleporter b = null;
+
+                float min_midpoint_distance = float.MaxValue;
+                foreach(Teleporter teleporter in rooms[edge.A].teleporters)
+                {
+                    float mid_point_distance = (mid_point - teleporter.transform.position).magnitude;
+                    if (mid_point_distance < min_midpoint_distance)
+                    {
+                        if (teleporter.destination != null) continue;
+                        a = teleporter;
+                    }
+                }
+
+                min_midpoint_distance = float.MaxValue;
+                foreach(Teleporter teleporter in rooms[edge.B].teleporters)
+                {
+                    float mid_point_distance = (mid_point - teleporter.transform.position).magnitude;
+                    if (mid_point_distance < min_midpoint_distance)
+                    {
+                        if (teleporter.destination != null) continue;
+                        b = teleporter;
+                    }
+                }
+
+                if (a != null && b != null)
+                {
+                    Color color = UnityEngine.Random.ColorHSV(0f, 1f, 1f, 1f, 0.5f, 1f);
+                    a.GetComponent<Renderer>().material.color = color;
+                    b.GetComponent<Renderer>().material.color = color;
+
+                    a.destination = b;
+                    b.destination = a;
+                }
+            }
+
+            //PathfindingGrid grid = GetComponent<PathfindingGrid>();
+            //grid.GenerateGrid();
+
+            //Pathfinding pathfinding = GetComponent<Pathfinding>();
+
+            //// Find Closest entrance
+            //{
+            //    float min_midpoint_distance = float.MaxValue;
+            //    foreach(RoomEntrance entrance in rooms[edge.A].entrances)
+            //    {
+            //        float mid_point_distance = (mid_point - entrance.transform.position).magnitude;
+            //        if (mid_point_distance < min_midpoint_distance)
+            //        {
+            //            pathfinding.seeker_transform = entrance.transform;
+            //        }
+            //    }
+            //}
+
+            //{
+            //    float min_midpoint_distance = float.MaxValue;
+            //    foreach(RoomEntrance entrance in rooms[edge.B].entrances)
+            //    {
+            //        float mid_point_distance = (mid_point - entrance.transform.position).magnitude;
+            //        if (mid_point_distance < min_midpoint_distance)
+            //        {
+            //            pathfinding.target_transform = entrance.transform;
+            //        }
+            //    }
+            //}
+
+            //pathfinding.FindPath();
+            //Debug.Assert(pathfinding.path.Count > 0, "Path between dungeons failed!");
+            //var hallway = new GameObject($"from {edge.A} to {edge.B} ({grid.NodeFromWorldPoint(position_p).Cell()} to {grid.NodeFromWorldPoint(position_q).Cell()} )");
+            //hallway.transform.SetPositionAndRotation((position_p + position_q) / 2.0f, Quaternion.identity);
+            //foreach (Node node in pathfinding.path)
+            //{
+            //    Instantiate(hallway_types[0], node.world_position, Quaternion.identity, hallway.transform);
+            //}
+        }
     }
 
     void Step()
@@ -108,10 +202,8 @@ public class DungeonGenerator2D : MonoBehaviour
             Vector3 spawn_position_q = new Vector3(points[free_edge.B].ToVector3().x, 0, points[free_edge.B].ToVector3().y);
             CreateLine(triangles_container, "{edge.A} to {edge.B}", new Vector3[] { spawn_position_p, spawn_position_q }, Color.yellow, 2.0f);
         }
-        else
-        {
-            Debug.Log("COMPLETE!");
-        }
+
+        Debug.Log("No more edges!");
     }
 
     // Update is called once per frame
@@ -123,10 +215,10 @@ public class DungeonGenerator2D : MonoBehaviour
             regenerate = false;
         }
 
-        if(Input.GetKeyDown(KeyCode.Space)) 
-        {
-            Step();
-        }
+        //if(Input.GetKeyDown(KeyCode.Space)) 
+        //{
+        //    Step();
+        //}
     }
 
     void Clear()
@@ -165,24 +257,27 @@ public class DungeonGenerator2D : MonoBehaviour
 
         delaunator.ForEachTriangleEdge(edge =>
         {
-            //if (drawTriangleEdges)
             if (true)
             {
                 Vector3 spawn_position_p = new Vector3(edge.P.ToVector3().x, 0, edge.P.ToVector3().y);
                 Vector3 spawn_position_q = new Vector3(edge.P.ToVector3().x, 0, edge.P.ToVector3().y);
                 CreateLine(triangles_container, $"TriangleEdge - {edge.Index}", new Vector3[] { spawn_position_p, spawn_position_q }, triangle_edge_color, triangle_edge_width, 1);
             }
-
-            //if (drawTrianglePoints)
-            if (true)
-            {
-                var room = Instantiate(room_types[0], rooms_container);
-                Vector3 spawn_position = new Vector3(edge.P.ToVector3().x, 0, edge.P.ToVector3().y);
-                room.transform.SetPositionAndRotation(spawn_position, Quaternion.identity);
-                room.Init();
-                rooms.Add(room);
-            }
         });
+
+        foreach (IPoint point in points)
+        {
+            int room_type_index = UnityEngine.Random.Range(0, room_types.Count);
+            Vector3 spawn_position = new Vector3((float)point.X, 0, (float)point.Y);
+
+            Vector3 euler_rotation = Vector3.zero;
+
+            float[] angles = new float[]{ 0, 90, 180, 270 };
+            euler_rotation.y = angles[UnityEngine.Random.Range(0, 3)];
+            var room = Instantiate(room_types[room_type_index],spawn_position, Quaternion.Euler(euler_rotation), rooms_container);
+            rooms.Add(room);
+        }
+
     }
     private class Edge
     {
