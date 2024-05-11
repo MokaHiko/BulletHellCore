@@ -23,6 +23,17 @@ public class UnitStateMachine : MonoBehaviour
     {
         if (m_activation_queue.Contains(state)) return;
         m_activation_queue.Add(state);
+
+        foreach (UnitState top_state in m_top_level_states)
+        {
+            if(top_state == state) continue;  
+
+            // Interrupt exclusive states
+            if (top_state.Exclusive)
+            {
+                QueueRemoveState(top_state);
+            }
+        }
     }
 
     public void QueueRemoveState(UnitState state)
@@ -31,31 +42,30 @@ public class UnitStateMachine : MonoBehaviour
         m_deactivation_queue.Add(state);
     }
 
-    // Activates a state and its substates
+    // Activates a state and its SubStates
     private void AddState(UnitState state, bool deactivate_others = false)
     {
         Debug.Assert(state != null, "Cannot activate null state!");
-
         if (m_active_states.Contains(state))
         {
             return;
         }
 
         // Check if top level state
-        if (state.substate == null && state.superstate == null)
+        if (state.SubState == null && state.SuperState == null)
         {
             m_top_level_states.Add(state);
         }
         state.OnEnter(m_unit);
         m_active_states.Add(state);
 
-        // Activate all substates
-        UnitState substate = state.substate;
-        while(substate != null)
+        // Activate all SubStates
+        UnitState SubState = state.SubState;
+        while(SubState != null)
         {
-            substate.OnEnter(m_unit);
-            m_active_states.Add(substate);
-            substate = substate.substate;
+            SubState.OnEnter(m_unit);
+            m_active_states.Add(SubState);
+            SubState = SubState.SubState;
         }
 
         if (deactivate_others || state.Exclusive)
@@ -67,17 +77,11 @@ public class UnitStateMachine : MonoBehaviour
                 if (active_state == state) continue;
                 active_state.OnExit(m_unit);
                 QueueRemoveState(active_state);
-                //to_deactivate.Add(active_state);
             }
-
-            //foreach (UnitState active_state in m_active_states)
-            //{
-            //    m_active_states.Remove(active_state);
-            //}
         }
     }
 
-    // Removes a state and its substates
+    // Removes a state and its SubStates
     private void RemoveState(UnitState state)
     {
         Debug.Assert(state != null, "Cannot deactivate null state");
@@ -90,27 +94,27 @@ public class UnitStateMachine : MonoBehaviour
         }
 
         // Check if top level state
-        if (state.substate == null && state.superstate == null)
+        if (state.SubState == null && state.SuperState == null)
         {
             m_top_level_states.Remove(state);
         }
 
 		// Remove from parent
-        if(state.superstate != null)
+        if(state.SuperState != null)
         {
-            state.superstate.substate = null;
+            state.SuperState.SubState = null;
         }
 
-        // Remove all substates
-        UnitState substate = state.substate;
-        while(substate != null)
+        // Remove all SubStates
+        UnitState SubState = state.SubState;
+        while(SubState != null)
         {
-            substate.OnExit(m_unit);
-            if(!m_active_states.Remove(substate))
+            SubState.OnExit(m_unit);
+            if(!m_active_states.Remove(SubState))
             {
                 Debug.Assert(false, "Cannot remove state that is not active!");
             }
-            substate = substate.substate;
+            SubState = SubState.SubState;
         }
     }
 
@@ -124,6 +128,11 @@ public class UnitStateMachine : MonoBehaviour
 
         m_activation_queue = new HashSet<UnitState>();
         m_deactivation_queue = new HashSet<UnitState>();
+
+        if (idle_state)
+        {
+            m_idle_state_instance = UnitStateFactory.CreateUnitState(idle_state, this);
+        }
 
         if (walk_state)
         {
@@ -145,17 +154,11 @@ public class UnitStateMachine : MonoBehaviour
             m_empowered_movement_ability_state_instance = UnitStateFactory.CreateUnitState(empowered_movement_ability_state, this);
         }
 
-        QueueAddState(WalkState);
+        QueueAddState(IdleState);
     }
 
     void Update()
     {
-        if (m_top_level_states.Count <= 0)
-        {
-            // TODO: Decide state
-            QueueAddState(m_walk_state_instance);
-        }
-
         foreach (UnitState state in m_deactivation_queue)
         {
             RemoveState(state);
@@ -168,15 +171,21 @@ public class UnitStateMachine : MonoBehaviour
         }
         m_activation_queue.Clear();
 
+        // TODO: Decide which state if no active states
+        if (m_top_level_states.Count <= 0)
+        {
+            QueueAddState(m_idle_state_instance);
+        }
+
         foreach (UnitState state in m_top_level_states)
         {
             state.OnFrameTick(m_unit, Time.deltaTime);
 
             // Recursive call children
-            UnitState substate = state.substate;
-            while(substate != null)
+            UnitState SubState = state.SubState;
+            while(SubState != null)
             {
-                substate.OnFrameTick(m_unit, Time.deltaTime);
+                SubState.OnFrameTick(m_unit, Time.deltaTime);
             }
         }
     }
@@ -211,7 +220,7 @@ public class UnitStateMachine : MonoBehaviour
 
     public class UnitStateFactory
     {
-        // Creates a unit state and its substates to the state machine
+        // Creates a unit state and its SubStates to the state machine
         public static UnitState CreateUnitState(UnitState base_state, UnitStateMachine state_machine)
         {
             Debug.Assert(state_machine != null && base_state != null);
@@ -219,19 +228,19 @@ public class UnitStateMachine : MonoBehaviour
             UnitState new_state = UnitStateMachine.Instantiate(base_state);
             new_state.Init(state_machine);
 
-            UnitState prevsubstate = new_state;
-            UnitState substate = base_state.substate;
-            while(substate != null)
+            UnitState prevSubState = new_state;
+            UnitState SubState = base_state.SubState;
+            while(SubState != null)
             {
-                UnitState new_substate = UnitStateMachine.Instantiate(substate);
-                new_substate.Init(state_machine);
+                UnitState new_SubState = UnitStateMachine.Instantiate(SubState);
+                new_SubState.Init(state_machine);
 
                 // Parent
-                prevsubstate.substate = new_substate;
-                new_substate.superstate = prevsubstate;
+                prevSubState.SubState = new_SubState;
+                new_SubState.SuperState = prevSubState;
 
-                substate = substate.substate;
-                prevsubstate = new_substate;
+                SubState = SubState.SubState;
+                prevSubState = new_SubState;
             }
 
             return new_state;

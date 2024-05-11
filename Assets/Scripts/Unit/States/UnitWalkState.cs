@@ -3,14 +3,15 @@ using UnityEngine;
 public class UnitWalkState : UnitState
 {
     public Vector3 TargetLocation { get{return m_target_location;} set{m_target_location = value;}}
+
+    public override void OnExit(Unit unit) 
+    {
+        unit.GetRigidbody.velocity = new Vector3(0, unit.GetRigidbody.velocity.y, 0);
+    }
+
     protected void GoTo(Unit unit, Vector3 position)
     {
         if (unit == null)
-        {
-            return;
-        }
-
-        if (unit.CheckState(UnitStateFlags.ManagedMovement))
         {
             return;
         }
@@ -21,11 +22,6 @@ public class UnitWalkState : UnitState
 
     public sealed override void OnPhysicsTick(Unit unit, float dt) 
     {
-        if (unit.CheckState(UnitStateFlags.ManagedMovement))
-        {
-            return;
-        }
-
         Vector3 diff = (m_target_location - unit.transform.position);
         Debug.DrawLine(m_target_location, unit.transform.position, Color.red);
 

@@ -1,7 +1,5 @@
 using Cinemachine;
 using System.Collections;
-using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -13,13 +11,23 @@ public class GameManager : MonoBehaviour
     PlayerController player_prefab;
 
     [SerializeField]
-    PlayerHud player_hud_prefab;
-
-    [SerializeField]
     DungeonGenerator2D dungeon_generator;
 
     [SerializeField]
+    private PlayerHud player_hud;
+
+    [SerializeField]
     int room_count = 0;
+    public void RequestShake(float intensity, float time)
+    {
+        if (m_shake_routine != null)
+        {
+            StopCoroutine(m_shake_routine);
+            m_shake_routine = null;
+        }
+
+        m_shake_routine = StartCoroutine(ShakeEffect(intensity, time));
+    }
 
     public CinemachineVirtualCamera GetVirtualCamera()
     {
@@ -39,12 +47,12 @@ public class GameManager : MonoBehaviour
 
     public PlayerHud GetPlayerHud()
     {
-        if (m_player_hud != null)
+        if (player_hud != null)
         {
-            return m_player_hud;
+            return player_hud;
         }
 
-        Debug.Assert(m_player_hud != null, "No Player Hud");
+        Debug.Assert(player_hud != null, "No Player Hud");
         return null;
     }
 
@@ -62,12 +70,9 @@ public class GameManager : MonoBehaviour
         m_virtual_camera = FindObjectOfType<CinemachineVirtualCamera>();
 
         Debug.Assert(player_prefab != null, "No player prefab");
-        Debug.Assert(player_hud_prefab != null, "No player hud prefab");
         Debug.Assert(m_virtual_camera != null, "No virttual camera");
+        Debug.Assert(player_hud != null, "No hud");
         Debug.Assert(dungeon_generator != null, "No dungeon generator ");
-
-        // Hud
-        m_player_hud = Instantiate(player_hud_prefab);
     }
 
     [SerializeField]
@@ -109,14 +114,21 @@ public class GameManager : MonoBehaviour
         start_room.Init();
 
         // Register player callbacks
-        m_player.GetComponent<Unit>().death_callback += () => { 
-            SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
-        };
+        //m_player.GetComponent<Unit>().death_callback += () =>
+        //{
+        //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
+        //};
 
-        m_player.player_level_up_callback += () =>
-        {
-            m_player_hud.Reward();
-        };
+        // TODO: Move to individual party members
+        //m_player.player_level_up_callback += () =>
+        //{
+        //    player_hud.Reward();
+        //};
+    }
+
+    public void GameOver()
+    {
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
     private void GenerateModifier()
@@ -124,11 +136,32 @@ public class GameManager : MonoBehaviour
 
     }
 
+    // ~ Camera Effects
+    IEnumerator ShakeEffect(float intensity, float shake_time)
+    {
+        var cinemachine_perlin = GameManager.Instance.GetVirtualCamera().GetCinemachineComponent<CinemachineBasicMultiChannelPerlin>();
+        cinemachine_perlin.m_AmplitudeGain = intensity;
+
+        float time = 0.0f;
+        while(time < shake_time) 
+        {
+            time += Time.deltaTime;
+            yield return null;
+        }
+
+        cinemachine_perlin.m_AmplitudeGain = 0;
+        m_shake_routine = null;
+    }
+
+
     // ~ Handles
     [SerializeField]
     private PlayerController m_player;
-    private PlayerHud m_player_hud;
 
     [SerializeField]
     CinemachineVirtualCamera m_virtual_camera;
+
+    // ~ Camera Effects
+    Coroutine m_shake_routine;
+    float m_current_shake;
 }

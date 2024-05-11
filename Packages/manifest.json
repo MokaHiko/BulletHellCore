@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "com.nol1fe.delaunator": "https://github.com/nol1fe/delaunator-sharp.git?path=DelaunatorSharp.Unity",
+    "com.unity.2d.sprite": "1.0.0",
     "com.unity.cinemachine": "2.6.17",
     "com.unity.collab-proxy": "1.15.7",
     "com.unity.ide.rider": "2.0.7",

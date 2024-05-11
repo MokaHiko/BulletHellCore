@@ -23,6 +23,16 @@ public class UnitAbilityState : UnitState
     public Vector3 Direction { get {return m_direction; }  set { m_direction = value; } }
     public bool IsBurst { get {return m_is_burst; }  set { m_is_burst = value; } }
 
+    // Default skill tick
+    public override void OnFrameTick(Unit unit, float dt)
+    {
+        TimeElapsed += dt;
+        if (TimeElapsed >= duration)
+        {
+            StateMachine.QueueRemoveState(this);
+        }
+    }
+
     protected float TimeElapsed { get { return m_time_elapsed; } set { m_time_elapsed = value; } }
     public void IncrementStack()
     {

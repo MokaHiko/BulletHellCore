@@ -31,13 +31,6 @@ public class BlinkState : UnitAbilityState
 
     public override void Use(bool burst, Vector3 direction)
     {
-        //if (m_trail == null)
-        //{
-        //    m_trail = Instantiate(trail_renderer, Owner.transform);
-        //    Destroy(m_trail.gameObject, duration);
-        //}
-        //Owner.transform.position += Owner.transform.forward * teleport_distance;
-
         Owner.StartCoroutine(BlinkEffect());
     }
 
@@ -75,19 +68,6 @@ public class BlinkState : UnitAbilityState
     {
         Owner.movement_speed = Owner.BaseStats.movement_speed;
     }
-
-    public override void OnFrameTick(Unit unit, float dt)
-    {
-        TimeElapsed += dt;
-        if (TimeElapsed >= duration)
-        {
-            StateMachine.QueueRemoveState(this);
-        }
-    }
-
-    // ~ Handles
-    //private Coroutine m_dash_routine;
-    private TrailRenderer m_trail;
 }
 
 

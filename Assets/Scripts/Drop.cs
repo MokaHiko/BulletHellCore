@@ -86,11 +86,6 @@ public class Drop : MonoBehaviour
                 player_controller.GetComponent<Unit>().IncrementAblilityStack(AbilityType.Movement);
             }
 
-            if((drop_type & DropType.Burst) == DropType.Burst)
-            {
-                player_controller.Burst();
-            }
-
             // Use up effect
             Destroy(gameObject);
         }

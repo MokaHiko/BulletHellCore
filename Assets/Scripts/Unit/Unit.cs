@@ -5,6 +5,8 @@ using TMPro;
 using UnityEngine;
 using static Unity.IO.LowLevel.Unsafe.AsyncReadManagerMetrics;
 
+public delegate void WeaponEquipCallback(Weapon weapon);
+
 [Flags]
 public enum UnitStateFlags
 {
@@ -37,22 +39,33 @@ public class Unit : IDamageable
     [Header("Unit Handles")]
     public Animator animator;
 
-    // Unit UI
+    // ~ Unit callbacks
+    public WeaponEquipCallback weapon_equip_callback;
+
+    // ~ Unit UI
     public PropertyBar health_bar;
     public PropertyBar energy_bar;
 
-    // Status Effect Handles
+    // ~ Status Effect Handles
     public ParticleSystem short_circuit_particles;
 
-    // Getters
+    // ~ Getters
     public UnitStats BaseStats {get { return m_base_stats; }}
     public Rigidbody GetRigidbody {get {return m_rigidbody;}}
     public Weapon EquipedWeapon {get {return weapons.Count > 0 ? weapons[0] : null;}}
 
-    // State Flags Helpers
+    //  ~ State Flags Helpers
     public bool CheckState(UnitStateFlags state_flags){ return (m_state & state_flags) == state_flags;}
     public void ApplyState(UnitStateFlags state_flags){ m_state |= state_flags;}
     public void RemoveState(UnitStateFlags state_flags) { m_state &= ~state_flags; }
+    public void EquipWeapon(int index)
+    {
+        if (weapons.Count > index)
+        {
+            (weapons[0], weapons[index]) = (weapons[index], weapons[0]);
+            weapon_equip_callback?.Invoke(weapons[0]);
+        }
+    }
 
     // Returns whether or not there was enough energy
     public bool SpendEnergy(float amount)
@@ -75,7 +88,7 @@ public class Unit : IDamageable
 
             // ApplyStatus(StatusEffect.ShortCircuit);
             // m_short_circuit_routine = StartCoroutine(ShortCircuitEffect());
-            return true;
+            return false;
         }
 
         energy -= amount;
@@ -90,7 +103,7 @@ public class Unit : IDamageable
             return;
         }
 
-        //Debug.Log("Unit has no ability at index: " + type_index);
+        Debug.Log("Unit has no ability at index: " + type_index);
     }
     public void IncrementAblilityStack(AbilityType type)
     {
@@ -101,7 +114,7 @@ public class Unit : IDamageable
             return;
         }
 
-        //Debug.Log("Unit has no ability at index: " + type_index);
+        Debug.Log("Unit has no ability at index: " + type_index);
     }
     
     private void Awake()
@@ -187,8 +200,6 @@ public class Unit : IDamageable
     // ~ Abilities
     [SerializeField]
     public List<Ability> abilities;
-
-    bool m_burst = false;
 
     // ~ Handles
     public Rigidbody m_rigidbody;
