@@ -22,6 +22,9 @@ public class Room : MonoBehaviour
     float seed;
 
     [SerializeField]
+    float rarity = 1.0f;
+
+    [SerializeField]
     RectTransform room_intro_prefab;
 
     [SerializeField]
@@ -40,10 +43,17 @@ public class Room : MonoBehaviour
     [SerializeField]
     public List<ParticleCollector> drop_particles;
     [SerializeField]
-    public Weapon drop_weapon;
+    public List<Weapon> weapon_drops;
+    [SerializeField]
+    public List<Merc> merc;
 
     public RoomComplete room_complete_calblack;
     public bool IsActivated() { return activated; }
+
+    public int difficulty_level = 0;
+
+    // ~ Getters
+    public bool IsComplete { get { return is_complete; } }
 
     private void Start()
     {
@@ -71,6 +81,18 @@ public class Room : MonoBehaviour
             child.gameObject.SetActive(true);
         }
 
+        for(int i = 0; i < enemy_types.Count;  i++)
+        {
+            EnemySpawnData spawn_data = enemy_types[i];
+            spawn_data.count += difficulty_level;
+
+            // Modify spawn times
+
+            // Spawn new enemies
+
+            enemy_types[i] = spawn_data;
+        }
+
         foreach (EnemySpawnData enemy_data in enemy_types)
         {
             enemy_count += enemy_data.count;
@@ -88,6 +110,12 @@ public class Room : MonoBehaviour
         room_complete_calblack += ()=> room_complete_calblack -= GameManager.Instance.GetPlayer().OnRoomComplete;
     }
 
+    // TODO: Change to modify room
+    public void GenerateRoom()
+    {
+        difficulty_level++;
+    }
+
     IEnumerator PrimeEnemySpawn(EnemySpawnData enemy_data)
     {
         yield return new WaitForSeconds(enemy_data.spawn_time);
@@ -99,12 +127,20 @@ public class Room : MonoBehaviour
             enemy.GetComponent<Unit>().death_callback += () =>
             {
                 --enemy_count;
+
+                // Drop rewards if final enemy
                 if (enemy_count <= 0)
                 {
                     foreach (ParticleCollector drop in drop_particles)
                     {
                         Instantiate(drop, enemy.transform.position, Quaternion.identity);
                     }
+
+                    foreach (Weapon weapon in weapon_drops)
+                    {
+                        Instantiate(weapon, enemy.transform.position, Quaternion.identity);
+                    }
+
                     Complete();
                 }
             };
@@ -113,7 +149,7 @@ public class Room : MonoBehaviour
         yield return null;
     }
 
-    void Complete()
+    public void Complete()
     {
         room_complete_calblack?.Invoke();
 
@@ -124,6 +160,8 @@ public class Room : MonoBehaviour
                 teleporter.gameObject.SetActive(true);
             }
         }
+
+        is_complete = true;
     }
 
     public void Update()
@@ -134,4 +172,5 @@ public class Room : MonoBehaviour
     private float time_elapsed = 0.0f;
     private int enemy_count = 0;
     private bool activated = false;
+    private bool is_complete = false;
 }

@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4643685652382954745}
   - component: {fileID: 4692509919438955288}
+  - component: {fileID: 1656145316569427640}
   m_Layer: 3
   m_Name: MachineGun
   m_TagString: Untagged
@@ -45,30 +46,50 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resource: {fileID: 11400000, guid: 210caa32d53cece439c762af97bc293e, type: 2}
-  base_damage: 15
-  attack_speed: 15
-  scan_radius: 0.15
-  range: 100
-  max_bullets: 32
+  base_damage: 8
+  attack_speed: 10
+  scan_radius: 0.5
+  range: 500
+  max_bullets: 16
   reload_time: 1
-  hold_threshold: 1
+  hold_threshold: 0.25
   damageable_layers:
     serializedVersion: 2
-    m_Bits: 705
+    m_Bits: 6848
   owner: {fileID: 0}
   bullets: 0
-  impact_particle_system: {fileID: 198220379293217532, guid: ad3fdd3b35b0bf04db6f76282a484906, type: 3}
-  spread: 0.05
+  impact_particle_system: {fileID: 74078499623404260, guid: d8b19b0e18bc7fc4280b801faa3feedf, type: 3}
+  spread: 0.1
   charge_rate: 0.35
   muzzle_flash: {fileID: 4805880017770381985}
   bullet_trail: {fileID: 5113547844858984007, guid: 6368f56043e3c894f89080b7d534b3f7, type: 3}
-  bullet_trail_speed: 50
-  regular_fire_shake: 1.5
-  burst_fire_shake: 25
+  bullet_trail_speed: 60
+  regular_fire_shake: 1
+  regular_fire_shake_time: 0.1
+  alt_fire_hit_stop: 0.015
+  burst_fire_shake: 1
   burst_spread: 20
-  burst_multiplier: 20
-  shots: 4
+  burst_multiplier: 3
+  shots: 3
   burst_impact_particle_system: {fileID: 7017294773630732249, guid: b1e15e49e7825114d8040c8460244bab, type: 3}
+--- !u!114 &1656145316569427640
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4643685652382954744}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f4f84425007ecb4eae9c3358504f1f4, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  on_fire_abilities: []
+  modifiers: 0
+  echo_delay: 1
+  echo_count: 0
+  bounce_multiplier: 0.5
+  bounces: 0
 --- !u!1001 &4643685652139974651
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -110,27 +131,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 0
+      value: -0.111
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 1.057
+      value: 0.307
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalRotation.w
-      value: 0.99701357
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalRotation.x
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalRotation.y
-      value: -0.0772269
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalRotation.z
-      value: -0
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -138,7 +159,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalEulerAnglesHint.y
-      value: -8.858
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4300533007854612, guid: 68200d6e0e2ccdf4584dfd29eca108ee, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z

@@ -21,8 +21,12 @@ public class MachineGun : Weapon
     public TrailRenderer bullet_trail;
     public float bullet_trail_speed = 100.0f;
 
+    [Header("Effects")]
     [SerializeField]
     public float regular_fire_shake = 2.0f;
+    public float regular_fire_shake_time = 0.5f;
+    [SerializeField]
+    public float alt_fire_hit_stop = 0.1f;
 
     [Header("Burst fire")]
     public float burst_fire_shake = 5.0f;
@@ -56,6 +60,11 @@ public class MachineGun : Weapon
         Vector3 dir = diff.normalized;
 
         float theta = Mathf.Deg2Rad * (90 - burst_spread);
+
+        // One time effects
+        bool effect = false;
+        bool hit_stop = false;
+
         for (int i = 0; i < shots; i++)
         {
             // Recoil
@@ -67,6 +76,13 @@ public class MachineGun : Weapon
             if (Physics.SphereCast(fire_point, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
             {
                 hit.collider.TryGetComponent<Unit>(out Unit unit);
+
+                if (unit && !hit_stop && !effect)
+                {
+                    hit_stop = true;
+                    effect = true;
+                }
+
                 StartCoroutine(SpawnTrail(trail, hit.point, hit.normal, burst_impact_particle_system, () =>
                 {
                     if (unit)
@@ -77,27 +93,31 @@ public class MachineGun : Weapon
 
                     on_hit?.Invoke(hit.point, dir, hit.normal);
                     on_fire?.Invoke(target_position);
-                }));
+                }, hit_stop));
+
+                if (hit_stop && unit)
+                {
+                    hit_stop = false;
+                }
             }
             else
             {
                 StartCoroutine(SpawnTrail(trail, fire_point + (dir * range), -dir.normalized, burst_impact_particle_system));
             }
         }
-        return;
     }
     public override void AttackImpl(Vector3 fire_point, Vector3 target_position)
     {
-        Shake(regular_fire_shake, muzzle_flash.main.duration);
+        Shake(regular_fire_shake, regular_fire_shake_time);
         muzzle_flash.Play();
 
         Vector3 diff = target_position - fire_point;
         Vector3 dir = diff.normalized;
 
         // Recoil
-        //dir += new Vector3(UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
-        //dir.y = Mathf.Clamp(dir.y, 0, dir.y);
-        //dir.Normalize();
+        dir += new Vector3(UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
+        dir.y = Mathf.Clamp(dir.y, -0.05f, dir.y);
+        dir.Normalize();
 
         TrailRenderer trail = Instantiate(bullet_trail, fire_point, Quaternion.identity);
         if (Physics.SphereCast(fire_point, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
@@ -130,7 +150,7 @@ public class MachineGun : Weapon
         }
     }
 
-    private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 end_position, Vector3 normal, ParticleSystem impact_effect, Action action = null)
+    private IEnumerator SpawnTrail(TrailRenderer trail, Vector3 end_position, Vector3 normal, ParticleSystem impact_effect, Action action = null, bool hit_stop = false)
     {
         Vector3 start_postion = trail.transform.position;
         Vector3 diff = (end_position - start_postion);
@@ -151,8 +171,14 @@ public class MachineGun : Weapon
         ParticleSystem impact_particles = Instantiate(impact_effect, end_position, Quaternion.LookRotation(normal));
         Destroy(impact_particles.gameObject, impact_particles.main.duration);
 
+        if (hit_stop)
+        {
+            GameManager.Instance.RequestStop(alt_fire_hit_stop);
+        }
+
         // Invoke call back 
         action?.Invoke();
+
 
         yield return null;
     }

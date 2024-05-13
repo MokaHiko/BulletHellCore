@@ -1,5 +1,12 @@
 using UnityEngine;
 
+public enum MercType
+{
+    Gunner,
+    Pyro,
+    Vanguard,
+    Medic
+};
 
 public delegate void MercLevelUpCallback();
 

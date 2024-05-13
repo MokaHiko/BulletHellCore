@@ -7,6 +7,13 @@ using DelaunatorSharp.Unity.Extensions;
 using System;
 
 
+[Serializable]
+public class RoomGenerationInfo
+{
+    public Room room_type;
+    public float chance;
+};
+
 public class DungeonGenerator2D : MonoBehaviour
 {
     [SerializeField]
@@ -25,7 +32,7 @@ public class DungeonGenerator2D : MonoBehaviour
     public float min_room_size;
 
     [SerializeField]
-    List<Room> room_types;
+    List<RoomGenerationInfo> room_types;
 
     [SerializeField]
     List<GameObject> hallway_types;
@@ -268,13 +275,17 @@ public class DungeonGenerator2D : MonoBehaviour
         foreach (IPoint point in points)
         {
             int room_type_index = UnityEngine.Random.Range(0, room_types.Count);
-            Vector3 spawn_position = new Vector3((float)point.X, 0, (float)point.Y);
+            while (room_types[room_type_index].chance < UnityEngine.Random.Range(0.0f, 1.0f))
+            {
+                room_type_index = UnityEngine.Random.Range(0, room_types.Count);
+            }
 
+            Vector3 spawn_position = new Vector3((float)point.X, 0, (float)point.Y);
             Vector3 euler_rotation = Vector3.zero;
 
             float[] angles = new float[]{ 0, 90, 180, 270 };
             euler_rotation.y = angles[UnityEngine.Random.Range(0, 3)];
-            var room = Instantiate(room_types[room_type_index],spawn_position, Quaternion.Euler(euler_rotation), rooms_container);
+            var room = Instantiate(room_types[room_type_index].room_type,spawn_position, Quaternion.Euler(euler_rotation), rooms_container);
             rooms.Add(room);
         }
 

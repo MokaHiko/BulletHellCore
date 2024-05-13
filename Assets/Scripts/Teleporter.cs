@@ -25,31 +25,46 @@ public class Teleporter : MonoBehaviour
     IEnumerator TeleportEffect(Transform unit_transform, float duration)
     {
         //yield return new WaitForSeconds(duration);
+        // Send entire party
+
         unit_transform.position = destination.transform.position;
+        if (unit_transform.TryGetComponent<Merc>(out Merc leader))
+        {
+            foreach(PartySlot slot in leader.Party.party_slots)
+            {
+                if (slot.merc == null) continue;
+                if (slot.merc == leader) continue;
+                slot.merc.transform.position = destination.transform.position;
+            }
+        }
 
         // Sent
         sending = null;
-
         yield return null;
     }
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.TryGetComponent<PlayerController>(out PlayerController player_controller))
+        if (other.TryGetComponent<Merc>(out Merc merc))
         {
+            if (merc.Party.party_leader != merc.GetComponent<Unit>())
+            {
+                return;
+            }
+
             // Check if already sending
-            if(player_controller.transform == sending) 
+            if(merc.transform == sending) 
             {
                 return;
             }
 
-            if(player_controller.transform == receieving) 
+            if(merc.transform == receieving) 
             {
-                Receieve(player_controller.transform);
+                Receieve(merc.transform);
                 return;
             }
 
-            Send(player_controller.transform);
+            Send(merc.transform);
         }
     }
 

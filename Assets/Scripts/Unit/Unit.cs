@@ -129,8 +129,8 @@ public class Unit : IDamageable
         };
 
         // Effect asserts
-        Debug.Assert(health_bar != null);;
-        Debug.Assert(energy_bar != null);;
+        Debug.Assert(health_bar != null);
+        Debug.Assert(energy_bar != null);
 
         // Get Renderable Components
         if(TryGetComponent<Animator>(out Animator anim))
