@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5113547844858984004}
   - component: {fileID: 5113547844858984007}
+  - component: {fileID: 3635841028134875968}
   m_Layer: 0
   m_Name: BulletTrail
   m_TagString: Untagged
@@ -138,3 +139,34 @@ TrailRenderer:
   m_MinVertexDistance: 0.1
   m_Autodestruct: 0
   m_Emitting: 1
+--- !u!114 &3635841028134875968
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5113547844858984006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1766379252
+      Data2: 1328659614
+      Data3: -521870689
+      Data4: 680403877
+    Path: event:/Player/Weapons/Machine Gun/Player Machine Gun Fire
+  Event: 
+  PlayEvent: 1
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 10000
