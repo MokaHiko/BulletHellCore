@@ -3,9 +3,13 @@ using UnityEngine;
 
 public delegate void WeaponFireCallback(Vector3 world_position);
 public delegate void WeaponHitCallback(Vector3 point, Vector3 dir, Vector3 normal = new Vector3());
+public delegate void WeaponReloadCallback();
 
 public class Weapon : MonoBehaviour
 {
+    [SerializeField]
+    public WeaponResource resource;
+
     // ~ Weapon
     [SerializeField]
     public float base_damage;
@@ -26,24 +30,31 @@ public class Weapon : MonoBehaviour
     public float reload_time = 1.0f;
 
     [SerializeField]
+    public float hold_threshold = 1.0f;
+
+    [SerializeField]
     public LayerMask damageable_layers;
 
     // ~ Handles
     public Unit owner;
-    public PlayerController player_controller;
+    //public PlayerController player_controller;
 
     // ~ Callbacks
 
     // Guaranteed
-    public WeaponFireCallback on_fire; // On Fire
+    public WeaponFireCallback on_fire;
 
     // Conditional
-    public WeaponHitCallback on_hit; // On Hit
+    public WeaponHitCallback on_hit; 
+
+    public WeaponReloadCallback on_reload; 
+
     //public WeaponOverHeatCallback on_over_heat; // On Reload (ex. increase fire rate for 3.0f seconds)
 
+    // TODO: Move to callback
     protected void Shake(float intensity, float time)
     {
-        player_controller.RequestShake(intensity, time);
+        GameManager.Instance.RequestShake(intensity, time);
     }
 
     void Awake()
@@ -60,21 +71,18 @@ public class Weapon : MonoBehaviour
             return;
         }
 
-        if(m_time_since_last_fire <= (1.0f / attack_speed))
-        {
-            return;
-        }
-
-        m_time_since_last_fire = 0.0f;
-
-        bullets--;
-
         if(alt_attack)
         {
             AltAttackImpl(transform.position, target_position);
         }
         else
         {
+            if(m_time_since_last_fire <= (1.0f / attack_speed))
+            {
+                return;
+            }
+            m_time_since_last_fire = 0.0f;
+            bullets--;
             AttackImpl(transform.position, target_position);
         }
         on_fire?.Invoke(target_position);
@@ -85,7 +93,7 @@ public class Weapon : MonoBehaviour
 
     public void Reload()
     {
-        // TODO: On reload
+        on_reload?.Invoke();
         if (m_reload_coroutine == null)
         {
             m_reload_coroutine = StartCoroutine(ReloadEffect());
@@ -107,7 +115,6 @@ public class Weapon : MonoBehaviour
     void OnEquip()
     {
         owner = GetComponentInParent<Unit>();
-        player_controller = GetComponentInParent<PlayerController>();
     }
     
     // ~ Weapon Common

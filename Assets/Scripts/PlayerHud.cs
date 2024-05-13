@@ -12,6 +12,9 @@ public class PlayerHud : MonoBehaviour
     public PropertyBar exp_bar;
 
     [SerializeField]
+    public RectTransform weapons_container;
+
+    [SerializeField]
     public GameObject rewards;
 
     public void Reward()

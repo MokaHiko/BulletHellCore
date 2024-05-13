@@ -37,11 +37,6 @@ public class Pathfinding : MonoBehaviour
     }
     private void OnDrawGizmos()
     {
-        if (path == null || path.Count <= 0)
-        {
-            return;
-        }
-
         foreach (Node node in path)
         {
             Gizmos.color = Color.green * new Vector4(1.0f, 1.0f, 1.0f, 0.5f);

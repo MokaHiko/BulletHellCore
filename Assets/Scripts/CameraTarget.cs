@@ -1,7 +1,4 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-
 
 public class CameraTarget : MonoBehaviour
 { 
@@ -16,7 +13,6 @@ public class CameraTarget : MonoBehaviour
 
     private void Start()
     {
-        player = FindObjectOfType<PlayerController>().transform;
         Debug.Assert(player != null);
     }
 
