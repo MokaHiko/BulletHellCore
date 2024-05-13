@@ -1,6 +1,3 @@
-using System.Collections;
-using System.Net.Sockets;
-using System.Reflection;
 using UnityEngine;
 
 public class FlameThrower : Weapon

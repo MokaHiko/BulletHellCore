@@ -51,6 +51,15 @@ public class IDamageable : MonoBehaviour
             m_damage_effect_routine = StartCoroutine(nameof(DefaultDamageEffect));
         }
 
+        if (m_spring_effect_routine == null)
+        {
+            m_spring_effect_routine = StartCoroutine(nameof(SpringDampEffect));
+        }
+        else
+        {
+            m_spring_velocity += damageable_resources.start_velocity;
+        }
+
         // Check for crit
         Color damage_color = Color.white;
         if (damage_type == StatusEffect.Corrosion)
@@ -111,7 +120,11 @@ public class IDamageable : MonoBehaviour
                 damage_number.transform.SetParent(death_effect.transform);
             }
 
-            // Clean up
+            // ~ Clean up
+
+            // Spring effect
+            StopAllCoroutines();
+
             Destroy(gameObject);
         }
     }
@@ -182,10 +195,32 @@ public class IDamageable : MonoBehaviour
             m_start_material = damageable_renderer.material;
         }
 
-        // Flash white
         damageable_renderer.material = damageable_resources.damaged_material;
-        yield return new WaitForSeconds(0.1f);
+        yield return new WaitForSeconds(damageable_resources.damageable_duration);
         damageable_renderer.material = m_start_material;
+
+        m_damage_effect_routine = null;
+    }
+
+    private IEnumerator SpringDampEffect()
+    {
+        float start_displacement = damageable_renderer.transform.localScale.y;
+        float displacement = 0.0f;
+
+        m_spring_velocity = damageable_resources.start_velocity;
+
+        Vector3 deformed_scale;
+        while (true)
+        {
+            float force = -damageable_resources.spring * displacement - damageable_resources.damp * m_spring_velocity;
+            m_spring_velocity += force * Time.deltaTime;
+            displacement += m_spring_velocity * Time.deltaTime;
+
+            deformed_scale = Vector3.one * (start_displacement + displacement);
+            damageable_renderer.transform.localScale = deformed_scale;
+
+            yield return null;
+        }
     }
 
     // ~ Status
@@ -196,6 +231,10 @@ public class IDamageable : MonoBehaviour
     // ~ Effect Coroutines
     private Coroutine m_short_circuit_routine = null;
     private Coroutine m_corossion_routine = null;
+
+    // ~ Effects
+    float m_spring_velocity = 0.0f;
+    private Coroutine m_spring_effect_routine = null;
 
     // ~ State 
     public float m_health = 100.0f;

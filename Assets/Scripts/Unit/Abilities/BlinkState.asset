@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7c095b3897d85dd4984996e10c0a1490, type: 3}
   m_Name: BlinkState
   m_EditorClassIdentifier: 
-  substate: {fileID: 0}
-  superstate: {fileID: 0}
+  m_substate: {fileID: 0}
+  m_superstate: {fileID: 0}
   duration: 0.15
   cooldown: 1.5
   energy_cost: 15
@@ -21,5 +21,8 @@ MonoBehaviour:
   max_stacks: 1
   trail_renderer: {fileID: 2428749671714479871, guid: 452a1a6cbc452664bbd01b49a3f05e77, type: 3}
   teleport_distance: 7.5
+  none_passable:
+    serializedVersion: 2
+    m_Bits: 12929
   teleport_effect: {fileID: 8566745768604556195, guid: 376a12263d6002848b246e44fe2e9cfa, type: 3}
   dash_status: 0

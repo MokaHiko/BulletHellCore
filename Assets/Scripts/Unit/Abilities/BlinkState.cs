@@ -13,6 +13,9 @@ public class BlinkState : UnitAbilityState
     public float teleport_distance;
 
     [SerializeField]
+    public LayerMask none_passable;
+
+    [SerializeField]
     public VisualEffect teleport_effect;
 
     [SerializeField]
@@ -37,9 +40,18 @@ public class BlinkState : UnitAbilityState
     IEnumerator BlinkEffect()
     {
         float time = 0.0f;
-        Vector3 target_position = Owner.transform.position + Owner.transform.forward * teleport_distance;
-        Owner.damageable_renderer.enabled = false;
+        Vector3 dir = Owner.GetComponent<Merc>().Party.RelativeAxisInput;
+        Vector3 target_position = Owner.transform.position + dir * teleport_distance;
+        //Vector3 target_position = Owner.transform.position + Owner.transform.forward * teleport_distance;
 
+        // Do not pass through
+        //if (Physics.Raycast(Owner.transform.position, Owner.transform.forward, out RaycastHit hit, teleport_distance, none_passable))
+        if (Physics.Raycast(Owner.transform.position, dir, out RaycastHit hit, teleport_distance, none_passable))
+        {
+            target_position = hit.point;
+        }
+
+        Owner.damageable_renderer.enabled = false;
         {
             VisualEffect avatar = Instantiate(teleport_effect, Owner.transform);
             while (time < duration / 2.0f)

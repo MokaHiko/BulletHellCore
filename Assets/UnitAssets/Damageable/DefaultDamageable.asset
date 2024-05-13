@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2a9ae3978a3569649a2b7e1d5e46bec5, type: 3}
   m_Name: DefaultDamageable
   m_EditorClassIdentifier: 
+  damageable_duration: 0.15
   short_circuit_particles: {fileID: 198000012368742472, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
   death_particles: {fileID: 5601036089067188820, guid: 1f68f14ff517f8f4fb7583a1212c5570, type: 3}
   floating_text: {fileID: 8104941988737050853, guid: 9dcb30c29e9556b4885381d04dcde940, type: 3}
   damaged_material: {fileID: 2100000, guid: 549e86813947003418b541f55b61ad7d, type: 2}
+  start_velocity: 12
+  spring: 500
+  damp: 35

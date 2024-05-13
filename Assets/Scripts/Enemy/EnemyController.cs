@@ -90,6 +90,7 @@ public class EnemyController : MonoBehaviour
 
                 if (diff.magnitude < combat_distance)
                 {
+                    unit_state_machine.QueueRemoveState(unit_state_machine.WalkState);
                     unit_state_machine.QueueAddState(unit_state_machine.AttackState);
                     return;
                 }

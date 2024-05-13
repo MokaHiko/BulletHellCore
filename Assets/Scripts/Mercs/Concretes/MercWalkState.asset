@@ -15,4 +15,4 @@ MonoBehaviour:
   m_substate: {fileID: 0}
   m_superstate: {fileID: 0}
   m_target_location: {x: 0, y: 0, z: 0}
-  threshold: 0.1
+  threshold: 0.5
