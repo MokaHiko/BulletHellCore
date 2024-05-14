@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{aaf43a86-60c0-4f44-adb0-2d2614ed0e77}">
+		<property name="assetPath">
+			<value>AI Drum Kit 2 Kick 4.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>96</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>0.63697916666666665</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d28b04c0-540f-4140-b164-16a8a6d7f235}</destination>
+		</relationship>
+	</object>
+</objects>
