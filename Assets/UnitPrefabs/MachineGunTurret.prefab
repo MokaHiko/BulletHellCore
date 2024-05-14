@@ -15,6 +15,7 @@ GameObject:
   - component: {fileID: 1409853621}
   - component: {fileID: 113976352}
   - component: {fileID: 3344294727055201090}
+  - component: {fileID: 1072126119502555306}
   m_Layer: 6
   m_Name: MachineGunTurret
   m_TagString: Untagged
@@ -159,6 +160,37 @@ MonoBehaviour:
   combat_distance: 25
   drop_particles: {fileID: 6004998939752341139, guid: 6b4bc7843febb3e4a88403c7f7f828fa, type: 3}
   unit_state_machine: {fileID: 1409853621}
+--- !u!114 &1072126119502555306
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3344294727055201112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 510456643
+      Data2: 1182209558
+      Data3: 301365891
+      Data4: -2128318068
+    Path: event:/Enemies/Enemy Die
+  Event: 
+  PlayEvent: 2
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 10000
 --- !u!1001 &3344294725501809459
 PrefabInstance:
   m_ObjectHideFlags: 0

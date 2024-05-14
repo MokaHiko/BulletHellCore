@@ -16,6 +16,7 @@ GameObject:
   - component: {fileID: 113976352}
   - component: {fileID: 3344294727055201090}
   - component: {fileID: -1252386210091793944}
+  - component: {fileID: 160739286278310227}
   m_Layer: 6
   m_Name: ProjectileTurret
   m_TagString: Untagged
@@ -184,6 +185,37 @@ MonoBehaviour:
   speed: 8
   projectile_types:
   - {fileID: 8790266443572329207, guid: 0ddd8c304ddce32429aa8dccb6a97d60, type: 3}
+--- !u!114 &160739286278310227
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3344294727055201112}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 510456643
+      Data2: 1182209558
+      Data3: 301365891
+      Data4: -2128318068
+    Path: event:/Enemies/Enemy Die
+  Event: 
+  PlayEvent: 2
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 0
+  OverrideMaxDistance: 10000
 --- !u!1001 &3344294725501809459
 PrefabInstance:
   m_ObjectHideFlags: 0
