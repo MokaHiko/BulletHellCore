@@ -75,15 +75,17 @@ public class UIEffect : MonoBehaviour
     {
     }
 
-    void Die()
+    public void Die(GameObject root = null)
     {
+        GameObject destroyTarget = root ? root : gameObject;
+
         if ((animation_flags & ScriptedAnimation.FadeOut) == ScriptedAnimation.FadeOut)
         {
-            StartCoroutine(FadeOut(fade_out_duration, () => Destroy(gameObject)));
+            StartCoroutine(FadeOut(fade_out_duration, () => Destroy(destroyTarget)));
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(destroyTarget);
         }
     }
 
