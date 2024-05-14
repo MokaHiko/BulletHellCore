@@ -9598,6 +9598,7 @@ GameObject:
   - component: {fileID: 7183510426597631225}
   - component: {fileID: 7017294773630732249}
   - component: {fileID: 7018110870244884221}
+  - component: {fileID: 279032155344027451}
   m_Layer: 0
   m_Name: ShotGunBurst
   m_TagString: Untagged
@@ -14463,6 +14464,37 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &279032155344027451
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7180374887904171371}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1473321102
+      Data2: 1290930005
+      Data3: -268889725
+      Data4: -191759424
+    Path: event:/Player/Weapons/Player Shotgun Explosion
+  Event: 
+  PlayEvent: 1
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &7180700146449802301
 GameObject:
   m_ObjectHideFlags: 0

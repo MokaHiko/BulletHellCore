@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="MixerGroup" id="{f1a38225-9ced-43a9-8c80-619da0c07ae1}">
+		<property name="name">
+			<value>Grey Robot</value>
+		</property>
+		<relationship name="effectChain">
+			<destination>{ba502067-b87a-4f24-ae1d-41c41276319f}</destination>
+		</relationship>
+		<relationship name="panner">
+			<destination>{ca338d2a-38be-428e-935d-51fd9cff226b}</destination>
+		</relationship>
+		<relationship name="output">
+			<destination>{ba48b53f-ac28-4886-a74e-b6b6542628ec}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusEffectChain" id="{ba502067-b87a-4f24-ae1d-41c41276319f}">
+		<relationship name="effects">
+			<destination>{527506c3-4d82-4fa7-b4b0-dd1eed878956}</destination>
+		</relationship>
+	</object>
+	<object class="MixerBusPanner" id="{ca338d2a-38be-428e-935d-51fd9cff226b}" />
+	<object class="MixerBusFader" id="{527506c3-4d82-4fa7-b4b0-dd1eed878956}" />
+</objects>

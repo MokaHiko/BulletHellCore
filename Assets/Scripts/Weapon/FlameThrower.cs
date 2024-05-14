@@ -30,6 +30,9 @@ public class FlameThrower : Weapon
     [SerializeField]
     public ParticleSystem burst_impact_particle_system;
 
+    public FMODUnity.EventReference flamerSFX;
+    private FMOD.Studio.EventInstance flamerSFXInstance;
+
     public void Start()
     {
         // Weapon asserts
@@ -42,21 +45,30 @@ public class FlameThrower : Weapon
 
         particle_event_handler.particle_enter_callback += FlameThrowerDamage;
 
+        //fmodsfx
+        flamerSFXInstance = FMODUnity.RuntimeManager.CreateInstance(flamerSFX);
+        FMODUnity.RuntimeManager.AttachInstanceToGameObject(flamerSFXInstance, gameObject.transform);
+
         on_reload += () =>
         {
             flame_particles.Stop();
+            flamerSFXInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         };
+
+       
     }
 
     public override void AltAttackImpl(Vector3 fire_point, Vector3 target_position)
     {
         flame_particles.Stop();
+        flamerSFXInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     public override void AttackImpl(Vector3 fire_point, Vector3 target_position)
     {
         //Shake(regular_fire_shake, flame_particles.main.duration);
         flame_particles.Play();
+        flamerSFXInstance.start();
     }
 
     public void FlameThrowerDamage(GameObject other)
