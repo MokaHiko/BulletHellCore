@@ -65,6 +65,12 @@
 		<property name="dopplerEnabled">
 			<value>true</value>
 		</property>
+		<property name="minimumDistance">
+			<value>0</value>
+		</property>
+		<property name="maximumDistance">
+			<value>10000</value>
+		</property>
 	</object>
 	<object class="MarkerTrack" id="{ca00e3c6-447f-4896-886e-3024d25f05c7}" />
 	<object class="GroupTrack" id="{9d908da5-6ac2-403c-abcf-a8266b0def91}">
@@ -99,6 +105,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{245067d7-509c-4e05-9566-29d6e9df5f0b}">
+		<property name="volume">
+			<value>-12.5</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{d2605cab-8056-43a7-8f0d-3143e6e44a5c}</destination>
 		</relationship>
@@ -340,7 +349,14 @@
 	</object>
 	<object class="MixerBusFader" id="{58376103-a96d-4707-be7b-0e78a0d4098a}" />
 	<object class="Sidechain" id="{5c3e3647-9c0d-4bb3-9dd0-f6daf369359a}" />
-	<object class="SpatialiserEffect" id="{fe771bd8-a3b9-41fe-9c1e-3072625f4dd9}" />
+	<object class="SpatialiserEffect" id="{fe771bd8-a3b9-41fe-9c1e-3072625f4dd9}">
+		<property name="minimumDistance">
+			<value>0</value>
+		</property>
+		<property name="maximumDistance">
+			<value>10000</value>
+		</property>
+	</object>
 	<object class="AutomationPoint" id="{4913525b-259f-44ca-b792-e9ae29ac9366}">
 		<property name="position">
 			<value>0.045265022675736954</value>

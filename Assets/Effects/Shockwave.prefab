@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 8909881830218662624}
   - component: {fileID: 7157519944282681881}
   - component: {fileID: 8373977783857720836}
+  - component: {fileID: 1089142542944722038}
   m_Layer: 0
   m_Name: Shockwave
   m_TagString: Untagged
@@ -4875,6 +4876,37 @@ ParticleSystemRenderer:
   m_Mesh2: {fileID: 0}
   m_Mesh3: {fileID: 0}
   m_MaskInteraction: 0
+--- !u!114 &1089142542944722038
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8825775302829565854}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 1545707432
+      Data2: 1193582101
+      Data3: -1646265971
+      Data4: 1594505863
+    Path: event:/Enemies/Enemy Fire Shockwave
+  Event: 
+  PlayEvent: 1
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &4784184047977199628
 PrefabInstance:
   m_ObjectHideFlags: 0
