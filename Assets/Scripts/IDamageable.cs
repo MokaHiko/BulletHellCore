@@ -37,6 +37,8 @@ public class IDamageable : MonoBehaviour
     public DamagedCallback damaged_callback;
     public StatusCallback status_callback;
 
+    public FMODUnity.EventReference on_damage_sfx;
+
     // ~ IDamageable
     public float LastDamage() { return m_last_damage; }
     public void TakeDamage(float damage, StatusEffect damage_type = StatusEffect.None, float crit_roll = 0.0f, Vector3 hit_position = new Vector3())
@@ -200,6 +202,8 @@ public class IDamageable : MonoBehaviour
         damageable_renderer.material = m_start_material;
 
         m_damage_effect_routine = null;
+
+        FMODUnity.RuntimeManager.PlayOneShotAttached(on_damage_sfx, gameObject);
     }
 
     private IEnumerator SpringDampEffect()

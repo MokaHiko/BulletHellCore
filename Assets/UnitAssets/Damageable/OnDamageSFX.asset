@@ -1,0 +1,22 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a9ae3978a3569649a2b7e1d5e46bec5, type: 3}
+  m_Name: OnDamageSFX
+  m_EditorClassIdentifier: 
+  damageable_duration: 0.1
+  short_circuit_particles: {fileID: 0}
+  death_particles: {fileID: 0}
+  floating_text: {fileID: 0}
+  damaged_material: {fileID: 0}
+  start_velocity: 1
+  spring: 1
+  damp: 1
