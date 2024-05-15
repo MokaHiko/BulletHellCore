@@ -90,7 +90,7 @@ public class UnitStateMachine : MonoBehaviour
         state.OnExit(m_unit);
         if (!m_active_states.Remove(state))
         {
-            Debug.Log("Cannot remove state that is not in active list!");
+            //Debug.Log("Cannot remove state that is not in active list!");
         }
 
         // Check if top level state

@@ -1,46 +1,37 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void OnMenuOpen(Menu menu);
+public delegate void OnMenuClose(Menu menu);
+
 public class Menu : MonoBehaviour
 {
     [SerializeField]
     public new string name;
 
-    [SerializeField]
-    public List<Menu> sub_menu;
+    public OnMenuOpen menu_open_callback;
+    public OnMenuClose menu_close_callback;
 
     public void Activate()
     {
         if (isActiveAndEnabled)
         {
-            Debug.Log("Menu already active!");
             return;
         }
 
         OnActivate();
         gameObject.SetActive(true);
-
-        foreach(Menu menu in sub_menu)
-        {
-            menu.Activate();
-        }
     }
 
     public void Deactivate()
     {
         if (!isActiveAndEnabled)
         {
-            Debug.Log("Menu already deactive!");
             return;
         }
 
         OnDeactivate();
         gameObject.SetActive(false);
-
-        foreach(Menu menu in sub_menu)
-        {
-            menu.Deactivate();
-        }
     }
 
     protected virtual void OnActivate() { }

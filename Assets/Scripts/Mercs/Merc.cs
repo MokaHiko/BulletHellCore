@@ -2,10 +2,10 @@ using UnityEngine;
 
 public enum MercType
 {
-    Gunner,
-    Pyro,
-    Vanguard,
-    Medic
+    Gunner = 0,
+    Pyro = 1,
+    Vanguard = 2,
+    Medic = 3
 };
 
 public delegate void MercLevelUpCallback();
@@ -14,7 +14,10 @@ public delegate void MercLevelUpCallback();
 public class Merc : MonoBehaviour
 {
     [SerializeField]
-    private float experience = 0.0f;
+    public MercType type;
+
+    [SerializeField]
+    public float experience = 0.0f;
 
     //[Header("HUD UI")]
     //public PropertyBar exp_bar;
@@ -23,7 +26,7 @@ public class Merc : MonoBehaviour
     UnitStateMachine unit_state_machine;
 
     // Player events
-    public MercLevelUpCallback player_level_up_callback;
+    public MercLevelUpCallback merc_level_up_callback;
 
     // ~ Getters
     public PlayerController Party { get; set; }
@@ -71,11 +74,13 @@ public class Merc : MonoBehaviour
         }
     }
 
-    private void LevelUp()
+    public void LevelUp()
     {
-        player_level_up_callback?.Invoke();
+        // TODO: Level up effects
+        merc_level_up_callback?.Invoke();
+        GameManager.Instance.Reward();
     }
-
+ 
     private void OnStatusEffect(StatusEffect status_effect_flags)
     {
         if ((status_effect_flags & StatusEffect.ShortCircuit) == StatusEffect.ShortCircuit)

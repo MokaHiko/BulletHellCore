@@ -1,9 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
 using UnityEngine.UIElements;
-using static UnityEngine.UI.CanvasScaler;
 
 public enum PartySlotLocation
 {
@@ -38,7 +36,6 @@ public class PlayerController : MonoBehaviour
     public Vector2 AxisInput {get{return m_axis_input;}}
     public Vector3 RelativeAxisInput {get{return m_relative_axis_input;}}
     public Vector3 WorldMousePoint {get{return m_world_mouse_point;}}
-
     public void AddMember(Merc merc)
     {
         // Find slot
@@ -134,29 +131,6 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
-        // Equip default party members
-        //List<Merc> to_remove = new List<Merc>();
-        //foreach (PartySlot party in party_slots)
-        //{
-        //    if (party.merc == null)
-        //    {
-        //        continue;
-        //    }
-
-        //    if (!party.merc.isActiveAndEnabled)
-        //    {
-        //        to_remove.Add(party.merc);
-        //        continue;
-        //    }
-
-        //    AddMember(party.merc);
-        //}
-
-        //foreach(Merc merc  in to_remove) 
-        //{ 
-        //    RemoveMember(merc);
-        //}
-
         Debug.Assert(party_leader != null, "Party must have leader!");
     }
 
@@ -259,49 +233,8 @@ public class PlayerController : MonoBehaviour
         particle_field.endRange = start_radius;
     }
 
-    public void OnParticleEnter(ParticleType type)
-    {
-        switch (type)
-        {
-            //case (ParticleType.Exp):
-            //    {
-            //        float new_exp = experience + 1.0f;
-            //        experience = (new_exp) % 100;
-            //        if (new_exp >= 100)
-            //        {
-            //            LevelUp();
-            //        }
-            //    }
-            //    break;
-            //case (ParticleType.Money):
-            //    {
-            //        credits += 1;
-            //    }
-            //    break;
-            //case (ParticleType.Energy):
-            //    {
-            //        m_unit.energy += 1.0f;
-            //    }
-            //    break;
-            default:
-                break;
-        }
-    }
-
-    private void FixedUpdate()
-    {
-        // Part movement
-        if (m_axis_input.magnitude > 0)
-        {
-            // Move to fixed
-            //transform.position += RelativeAxisInput * party_slots[0].merc.GetComponent<Unit>().movement_speed * Time.deltaTime;  
-        }
-    }
-
     // ~ Input 
     private Vector2 m_axis_input;
     private Vector3 m_relative_axis_input;
     private Vector3 m_world_mouse_point;
-
-    private Vector3 m_last_world_mouse_point;
 }

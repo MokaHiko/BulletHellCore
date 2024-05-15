@@ -30,9 +30,8 @@ public class ParticleCollector : MonoBehaviour
     void Start()
     {
         PlayerController player = FindObjectOfType<PlayerController>();
-        particle_system.trigger.AddCollider(player.GetComponent<Collider>());
-
-        particle_entered_callback += player.OnParticleEnter;
+        particle_system.trigger.AddCollider(player.party_leader.GetComponent<Collider>());
+        particle_entered_callback += player.party_leader.GetComponent<Merc>().OnParticleEnter;
 
         Destroy(gameObject, life_time);
     }

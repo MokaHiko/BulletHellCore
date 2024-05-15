@@ -156,7 +156,7 @@ MonoBehaviour:
   path_finding: {fileID: 113976352}
   target: {fileID: 0}
   tick_rate: 1
-  combat_distance: 25
+  combat_distance: 15
   drop_particles: {fileID: 6004998939752341139, guid: 6b4bc7843febb3e4a88403c7f7f828fa, type: 3}
   unit_state_machine: {fileID: 1409853621}
 --- !u!1001 &3344294725501809459
