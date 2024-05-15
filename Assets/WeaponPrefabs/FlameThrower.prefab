@@ -45,7 +45,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a53bddbcc2f2a314f99d41a20a75d73d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  resource: {fileID: 0}
+  resource: {fileID: 11400000, guid: 11c605e3b745b1645835d06a2a682fa8, type: 2}
   base_damage: 15
   attack_speed: 15
   scan_radius: 1
@@ -59,23 +59,12 @@ MonoBehaviour:
   owner: {fileID: 0}
   bullets: 100
   impact_particle_system: {fileID: 74078499623404260, guid: d8b19b0e18bc7fc4280b801faa3feedf, type: 3}
-  particle_event_handler: {fileID: 919189870}
   spread: 5
   charge_rate: 0.35
   flame_particles: {fileID: 531284786571893558}
   regular_fire_shake: 2
-  burst_fire_shake: 5
-  burst_spread: 20
-  burst_multiplier: 20
-  shots: 4
   burst_impact_particle_system: {fileID: 74078499623404260, guid: d8b19b0e18bc7fc4280b801faa3feedf, type: 3}
-  flamerSFX:
-    Guid:
-      Data1: -451806605
-      Data2: 1153315619
-      Data3: -1616576888
-      Data4: -2030422600
-    Path: event:/Player/Weapons/Player Flamer ignite
+  particle_event_handler: {fileID: 919189870}
 --- !u!114 &6627961695947747091
 MonoBehaviour:
   m_ObjectHideFlags: 0

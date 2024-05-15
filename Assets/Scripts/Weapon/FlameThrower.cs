@@ -2,36 +2,26 @@ using UnityEngine;
 
 public class FlameThrower : Weapon
 {
-    [Header("Regular fire")]
+    [Header("Flamethrower")]
     [SerializeField]
     public ParticleSystem impact_particle_system;
-
-    [SerializeField]
-    ParticleEventHandler particle_event_handler;
-
     [SerializeField]
     public float spread = 0.0f;
-
     [SerializeField]
     public float charge_rate = 0.35f;
-
     [SerializeField]
     public ParticleSystem flame_particles;
-
     [SerializeField]
     public float regular_fire_shake = 2.0f;
-
-    [Header("Burst fire")]
-    public float burst_fire_shake = 5.0f;
-    public float burst_spread = 20.0f;
-    public float burst_multiplier = 20.0f;
-    public int shots = 4;
 
     [SerializeField]
     public ParticleSystem burst_impact_particle_system;
 
     public FMODUnity.EventReference flamerSFX;
     private FMOD.Studio.EventInstance flamerSFXInstance;
+
+    [SerializeField]
+    public ParticleEventHandler particle_event_handler;
 
     public void Start()
     {
@@ -51,7 +41,7 @@ public class FlameThrower : Weapon
 
         on_reload += () =>
         {
-            flame_particles.Stop();
+            StopFlameThrower();
             flamerSFXInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         };
 
@@ -60,15 +50,27 @@ public class FlameThrower : Weapon
 
     public override void AltAttackImpl(Vector3 fire_point, Vector3 target_position)
     {
-        flame_particles.Stop();
+        StopFlameThrower();
         flamerSFXInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
     }
 
     public override void AttackImpl(Vector3 fire_point, Vector3 target_position)
     {
-        //Shake(regular_fire_shake, flame_particles.main.duration);
-        flame_particles.Play();
+        if (!flame_particles.isPlaying)
+        {
+            Debug.Log("Play!");
+            flame_particles.Play();
         flamerSFXInstance.start();
+        }
+    }
+
+    private void StopFlameThrower()
+    {
+        if(flame_particles.isPlaying)
+        {
+            Debug.Log("STOP!");
+            flame_particles.Stop();
+        }
     }
 
     public void FlameThrowerDamage(GameObject other)
@@ -78,5 +80,4 @@ public class FlameThrower : Weapon
             unit.TakeDamage(base_damage, StatusEffect.Burning, 0, other.transform.position);
         }
     }
-
 }

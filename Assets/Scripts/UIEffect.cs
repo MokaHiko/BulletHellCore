@@ -26,6 +26,9 @@ public class UIEffect : MonoBehaviour
     [SerializeField]
     bool destroy_after_animation = false;
 
+    [SerializeField]
+    bool disable_after_animation = false;
+
     [Header("FadeIn")]
     [SerializeField]
     float fade_in_duration = 1.0f;
@@ -68,11 +71,14 @@ public class UIEffect : MonoBehaviour
         {
             Invoke(nameof(Die), duration);
         }
+        else if (disable_after_animation)
+        {
+            Invoke(nameof(Disable), duration);
+        }
     }
-
-    // Update is called once per frame
-    void Update()
+    void Disable()
     {
+        gameObject.SetActive(false);
     }
 
     void Die()

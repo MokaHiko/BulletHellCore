@@ -157,7 +157,7 @@ MonoBehaviour:
   path_finding: {fileID: 113976352}
   target: {fileID: 0}
   tick_rate: 1
-  combat_distance: 35
+  combat_distance: 20
   drop_particles: {fileID: 6004998939752341139, guid: 6b4bc7843febb3e4a88403c7f7f828fa, type: 3}
   unit_state_machine: {fileID: 1409853621}
 --- !u!114 &-1252386210091793944
@@ -175,12 +175,12 @@ MonoBehaviour:
   spawn_rate: 0.5
   random_spawn_rate: 1
   radius: 1
-  steps: 4
+  steps: 6
   shape: 0
   burst_count: 2
   burst_rate: 6
   burst: 1
-  scale: 2
+  scale: 1
   random_scale: 0
   speed: 8
   projectile_types:

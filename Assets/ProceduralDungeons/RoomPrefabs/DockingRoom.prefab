@@ -21719,7 +21719,7 @@ MonoBehaviour:
   enemy_types:
   - enemy: {fileID: 3344294727055201090, guid: 4f3afdd1f715874488e4eea59b0b639a, type: 3}
     spawn_time: 0.25
-    count: -2
+    count: -1
   - enemy: {fileID: 3344294727055201090, guid: 990f41b6999b592489255677c82bffeb, type: 3}
     spawn_time: 1
     count: 1
@@ -21728,7 +21728,7 @@ MonoBehaviour:
     count: 0
   - enemy: {fileID: 3344294727055201090, guid: 9c7899fbcfe9c274282e1b99ee32d5b9, type: 3}
     spawn_time: 4
-    count: 0
+    count: -2
   spawn_points:
   - {fileID: 6937151982338757316}
   - {fileID: 120168423396709354}
@@ -49047,7 +49047,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 652107f36a28e44479c0b827dee5852a, type: 2}
+  - {fileID: 2100000, guid: 8521b32b7fcd7ae41acc48012ada9ec0, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0

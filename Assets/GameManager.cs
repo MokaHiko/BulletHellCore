@@ -7,6 +7,10 @@ using UnityEngine.SceneManagement;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance { get; private set; }
+
+    [SerializeField]
+    bool generate_dungeons = false;
+
     [SerializeField]
     PlayerController player_prefab;
 
@@ -16,12 +20,25 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     DungeonGenerator2D dungeon_generator;
 
+    [Header("UI")]
     [SerializeField]
     private PlayerHud player_hud;
+    [SerializeField]
+    private MenuManager in_game_menu;
 
     [SerializeField]
     int room_count = 0;
 
+    public void Reward()
+    {
+        MenuManager menu_manager = in_game_menu.ActivateMenu("PartyLayoutMenu") as MenuManager;
+        (menu_manager.FindMenu("MercInspector") as MercInspector).SetReward();
+    }
+
+    public void ToggleGameMenu()
+    {
+        in_game_menu.ToggleMenu("GameMenu");
+    }
 
     // Requests a stop for the time of the game
     public void RequestStop(float duration)
@@ -56,7 +73,6 @@ public class GameManager : MonoBehaviour
     {
         return m_virtual_camera;
     }
-
     public PlayerController GetPlayer()
     {
         if (m_player != null)
@@ -89,9 +105,6 @@ public class GameManager : MonoBehaviour
 
         Instance = this;
 
-        // Camera
-        m_virtual_camera = FindObjectOfType<CinemachineVirtualCamera>();
-
         Debug.Assert(player_prefab != null, "No player prefab");
         Debug.Assert(m_virtual_camera != null, "No virttual camera");
         Debug.Assert(player_hud != null, "No hud");
@@ -103,12 +116,13 @@ public class GameManager : MonoBehaviour
     private void Start()
     {
         // Generate level
-        Debug.Log("Generating Dungeons...");
-        dungeon_generator.Generate();
-        Debug.Log("Finished Generating Dungeons!");
+        if (generate_dungeons)
+        {
+            Debug.Log("Generating Dungeons...");
+            dungeon_generator.Generate();
+            Debug.Log("Finished Generating Dungeons!");
+        }
 
-        // Find Room
-        Room start_room = dungeon_generator.rooms[0];
         foreach (Room room in dungeon_generator.rooms)
         {
             room.room_complete_calblack += () =>
@@ -127,6 +141,18 @@ public class GameManager : MonoBehaviour
         }
 
         // Init player and default character
+
+        // Find Room
+        Room start_room = null;
+        if (generate_dungeons)
+        {
+             start_room = dungeon_generator.rooms[0];
+        }
+        else
+        {
+            start_room = FindObjectOfType<Room>();
+        }
+
         m_player = FindObjectOfType<PlayerController>();
         if (!m_player)
         {
@@ -141,18 +167,6 @@ public class GameManager : MonoBehaviour
 
         // Init Room
         start_room.Init();
-
-        // Register player callbacks
-        //m_player.GetComponent<Unit>().death_callback += () =>
-        //{
-        //    SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
-        //};
-
-        // TODO: Move to individual party members
-        //m_player.player_level_up_callback += () =>
-        //{
-        //    player_hud.Reward();
-        //};
     }
 
     public void ModifyRooms()

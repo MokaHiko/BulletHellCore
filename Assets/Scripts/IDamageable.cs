@@ -87,7 +87,6 @@ public class IDamageable : MonoBehaviour
 
         m_last_damage = damage * damage_multiplier;
         m_health -= damage * damage_multiplier;
-        //m_health_bar.SetValue(m_health, m_base_stats.m_health);
 
         damaged_callback?.Invoke(m_last_damage);
 
@@ -113,6 +112,12 @@ public class IDamageable : MonoBehaviour
             // Invoke callbacks
             death_callback?.Invoke();
             death_callback = null;
+
+            // Check other death conditions
+            if (!ShouldDie())
+            {
+                return;
+            }
 
             if (damageable_resources.death_particles)
             {
@@ -150,6 +155,15 @@ public class IDamageable : MonoBehaviour
     }
     public void RemoveStatus(StatusEffect status_flags) { m_status_effect &= ~status_flags; }
   
+
+    private void Die()
+    {
+
+    }
+
+    // Returns whether damageable object wants to handle death
+    protected virtual bool ShouldDie() { return true; }
+
     // ~ Damage Effects
     private IEnumerator ShortCircuitEffect()
     {
@@ -206,7 +220,6 @@ public class IDamageable : MonoBehaviour
 
         FMODUnity.RuntimeManager.PlayOneShotAttached(on_damage_sfx, gameObject);
     }
-
     private IEnumerator SpringDampEffect()
     {
         float start_displacement = damageable_renderer.transform.localScale.y;

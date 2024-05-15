@@ -10,28 +10,21 @@ public class Weapon : MonoBehaviour
     [SerializeField]
     public WeaponResource resource;
 
-    // ~ Weapon
+    [Header("Weapon")]
     [SerializeField]
     public float base_damage;
-
     [SerializeField]
     public float attack_speed = 5f;
-
     [SerializeField]
     public float scan_radius = 1.0f;
-
     [SerializeField]
     public float range = 1000.0f;
-
     [SerializeField]
     public int max_bullets = 32;
-
     [SerializeField]
     public float reload_time = 1.0f;
-
     [SerializeField]
     public float hold_threshold = 1.0f;
-
     [SerializeField]
     public LayerMask damageable_layers;
 
@@ -59,7 +52,10 @@ public class Weapon : MonoBehaviour
 
     void Awake()
     {
+        // Copy base stats
+        max_bullets = resource.max_bullets;
         bullets = max_bullets;
+
         OnEquip();
     }
 
@@ -93,9 +89,10 @@ public class Weapon : MonoBehaviour
 
     public void Reload()
     {
-        on_reload?.Invoke();
+        // Check if already reloading
         if (m_reload_coroutine == null)
         {
+            on_reload?.Invoke();
             m_reload_coroutine = StartCoroutine(ReloadEffect());
         }
     }

@@ -17,6 +17,6 @@ MonoBehaviour:
   attack_speed: 5
   scan_radius: 1
   range: 1000
-  max_bullets: 32
+  max_bullets: 64
   reload_time: 1
   hold_threshold: 1
