@@ -93,7 +93,7 @@
 	</object>
 	<object class="EventMixerMaster" id="{3554653f-5fa7-4cf9-bf2f-d04dcd1bcd53}">
 		<property name="volume">
-			<value>-4.5</value>
+			<value>-3</value>
 		</property>
 		<relationship name="effectChain">
 			<destination>{9c15159f-86a5-40fb-a8aa-61b51f99ce5c}</destination>
@@ -113,7 +113,7 @@
 	<object class="MixerBusPanner" id="{4320687c-7ca1-453c-9314-489273b8f010}" />
 	<object class="SingleSound" id="{1d65bc56-25ed-4e7e-a6b4-eca3614e256f}">
 		<property name="length">
-			<value>0.34375</value>
+			<value>0.28125</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{7186158c-8755-4df4-9726-1e8d01c76ea3}</destination>
@@ -141,7 +141,7 @@
 	</object>
 	<object class="SingleSound" id="{0e4839db-4ea8-441a-887b-3e75604ea142}">
 		<property name="length">
-			<value>0.34375</value>
+			<value>0.28125</value>
 		</property>
 		<property name="timelockedOffset">
 			<value>0.0078125</value>
@@ -172,7 +172,7 @@
 	</object>
 	<object class="SingleSound" id="{415267d0-bd73-4f88-be29-97e4db21ceb4}">
 		<property name="length">
-			<value>0.34375</value>
+			<value>0.28125</value>
 		</property>
 		<relationship name="modulators">
 			<destination>{a49440d2-313e-47b8-baac-8e4a64f411d8}</destination>
@@ -285,7 +285,7 @@
 	</object>
 	<object class="AutomationPoint" id="{d687c113-f001-4caa-8c24-00b3c9f29b91}">
 		<property name="position">
-			<value>0.34375</value>
+			<value>0.28125</value>
 		</property>
 		<property name="value">
 			<value>0</value>
@@ -294,7 +294,7 @@
 	<object class="MixerBusFader" id="{e997e941-26f6-4ee8-a41b-3774f09b266d}" />
 	<object class="AutomationPoint" id="{98344150-b24f-4f0e-b4f0-e55eee5a1991}">
 		<property name="position">
-			<value>0.0078125</value>
+			<value>0</value>
 		</property>
 		<property name="value">
 			<value>1</value>
@@ -305,7 +305,7 @@
 	</object>
 	<object class="AutomationPoint" id="{f017fa95-18a3-43e3-b287-9ba42d307e8d}">
 		<property name="position">
-			<value>0.34375</value>
+			<value>0.28125</value>
 		</property>
 		<property name="value">
 			<value>0</value>
@@ -325,7 +325,7 @@
 	</object>
 	<object class="AutomationPoint" id="{db3619cc-13dd-430a-ab8f-d56e6c414833}">
 		<property name="position">
-			<value>0.34375</value>
+			<value>0.28125</value>
 		</property>
 		<property name="value">
 			<value>0</value>
