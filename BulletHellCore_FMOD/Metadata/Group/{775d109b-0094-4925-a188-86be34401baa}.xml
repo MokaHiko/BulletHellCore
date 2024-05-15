@@ -11,7 +11,7 @@
 			<destination>{52b14559-fa15-4735-a644-829fe5fb50d6}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ba48b53f-ac28-4886-a74e-b6b6542628ec}</destination>
+			<destination>{01a41b21-e617-48a0-a010-99cf73209f9e}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{2e467384-427b-44cf-a898-e97ff309e913}">
