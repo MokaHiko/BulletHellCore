@@ -58,12 +58,18 @@
 			<destination>{fad71774-3988-4e7f-8d6c-dcd34938b025}</destination>
 		</relationship>
 		<relationship name="output">
-			<destination>{ba48b53f-ac28-4886-a74e-b6b6542628ec}</destination>
+			<destination>{a559153b-8c0b-46e6-8eb7-8648ccdaa337}</destination>
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{2dc1dd02-c7e6-4fde-890f-14209e751de3}">
 		<property name="maxVoices">
-			<value>3</value>
+			<value>8</value>
+		</property>
+		<property name="minimumDistance">
+			<value>0</value>
+		</property>
+		<property name="maximumDistance">
+			<value>10000</value>
 		</property>
 	</object>
 	<object class="MarkerTrack" id="{40b0710f-cf4d-4c20-a2ee-c36f1587fea1}" />
@@ -223,6 +229,7 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{f6abbe3c-09bc-493f-ae18-6c109fa6ef80}">
 		<relationship name="effects">
+			<destination>{c5b8844a-44c6-4729-8885-09c3ea8b48d2}</destination>
 			<destination>{9397512f-efe1-4706-b930-5fc8b6d081b6}</destination>
 		</relationship>
 	</object>
@@ -278,6 +285,11 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{9141807f-cb00-4626-8dc1-5bb4f881608d}" />
+	<object class="GainEffect" id="{c5b8844a-44c6-4729-8885-09c3ea8b48d2}">
+		<property name="gain">
+			<value>4</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{9397512f-efe1-4706-b930-5fc8b6d081b6}" />
 	<object class="AutomationPoint" id="{d509d958-735a-43c4-b71a-b4e91ab89486}">
 		<property name="position">

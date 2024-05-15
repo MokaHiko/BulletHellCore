@@ -1544,6 +1544,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   experience: 0
   unit_state_machine: {fileID: 813081366341526542}
+  particle_pickup_sfx:
+    Guid:
+      Data1: -135191112
+      Data2: 1275959227
+      Data3: -106264190
+      Data4: 494287380
+    Path: event:/Objects/Charge Particle Pickup
+  debug_sound:
+    Guid:
+      Data1: -1184897865
+      Data2: 1230401392
+      Data3: 620500411
+      Data4: -209194887
+    Path: event:/Player/Player Chargeup
 --- !u!1 &5905184501909644913
 GameObject:
   m_ObjectHideFlags: 0

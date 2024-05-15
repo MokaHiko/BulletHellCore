@@ -25,6 +25,10 @@ public class Merc : MonoBehaviour
     // Player events
     public MercLevelUpCallback player_level_up_callback;
 
+    //fmod ref
+    public FMODUnity.EventReference particle_pickup_sfx;
+    
+
     // ~ Getters
     public PlayerController Party { get; set; }
     public Vector3 TargetPosition{ get; set; }
@@ -51,6 +55,10 @@ public class Merc : MonoBehaviour
     }
     public void OnParticleEnter(ParticleType type)
     {
+        //fmod call not working
+        //Debug.Log("particlesoundplayed");
+        FMODUnity.RuntimeManager.PlayOneShotAttached(particle_pickup_sfx, gameObject);
+
         switch (type) 
         {
             case (ParticleType.Exp):
@@ -65,10 +73,13 @@ public class Merc : MonoBehaviour
             case (ParticleType.Energy):
             {
                 m_unit.energy += 1.0f;
-            }break;
+                    
+                }
+                break;
             default:
                 break;
         }
+        
     }
 
     private void LevelUp()

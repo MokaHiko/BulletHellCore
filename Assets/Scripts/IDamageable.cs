@@ -37,6 +37,7 @@ public class IDamageable : MonoBehaviour
     public DamagedCallback damaged_callback;
     public StatusCallback status_callback;
 
+    //fmod variable
     public FMODUnity.EventReference on_damage_sfx;
 
     // ~ IDamageable
