@@ -64,6 +64,13 @@ MonoBehaviour:
   flame_particles: {fileID: 531284786571893558}
   regular_fire_shake: 2
   burst_impact_particle_system: {fileID: 74078499623404260, guid: d8b19b0e18bc7fc4280b801faa3feedf, type: 3}
+  flamerSFX:
+    Guid:
+      Data1: -451806605
+      Data2: 1153315619
+      Data3: -1616576888
+      Data4: -2030422600
+    Path: event:/Player/Weapons/Player Flamer ignite
   particle_event_handler: {fileID: 919189870}
 --- !u!114 &6627961695947747091
 MonoBehaviour:

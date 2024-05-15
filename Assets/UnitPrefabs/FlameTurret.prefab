@@ -31,7 +31,7 @@ Transform:
   m_GameObject: {fileID: 3344294727055201112}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 0.75, y: 0.75, z: 0.75}
+  m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3018514736577909976}
   - {fileID: 3343755221664890260}
@@ -84,6 +84,13 @@ MonoBehaviour:
   damageable_resources: {fileID: 11400000, guid: a2f36fdea0d7ac64696d0cbb2998a2de, type: 2}
   damage_multiplier: 1
   damageable_renderer: {fileID: 4062610145175025758}
+  on_damage_sfx:
+    Guid:
+      Data1: 720610584
+      Data2: 1106632966
+      Data3: -1736846156
+      Data4: -1362224379
+    Path: event:/Player/Player Take Damage
   m_status_effect: 0
   m_health: 100
   energy: 0
@@ -99,7 +106,7 @@ MonoBehaviour:
   health_bar: {fileID: 457092059049742281}
   energy_bar: {fileID: 99150869761968767}
   short_circuit_particles: {fileID: 3230837557079069744}
-  m_base_stats: {fileID: 11400000, guid: 7cd2e75aa910e874c91a18ec88e014a6, type: 2}
+  m_base_stats: {fileID: 11400000, guid: 0285aa4e98d3e4441b17796ab1906253, type: 2}
   m_state: 0
   abilities: []
   m_rigidbody: {fileID: 0}
@@ -148,7 +155,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3344294727055201112}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4f948c96d2058674789bab9a1be2a150, type: 3}
   m_Name: 

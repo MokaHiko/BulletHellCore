@@ -44,8 +44,6 @@ public class FlameThrower : Weapon
             StopFlameThrower();
             flamerSFXInstance.stop(FMOD.Studio.STOP_MODE.ALLOWFADEOUT);
         };
-
-       
     }
 
     public override void AltAttackImpl(Vector3 fire_point, Vector3 target_position)
