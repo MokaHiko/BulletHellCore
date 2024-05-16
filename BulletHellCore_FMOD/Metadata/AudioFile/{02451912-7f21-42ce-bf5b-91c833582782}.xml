@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{02451912-7f21-42ce-bf5b-91c833582782}">
+		<property name="assetPath">
+			<value>Rocket_Flare_Out_ODY-0295-022(2) [2024-05-16 131041].wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>44.0999985</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>2.8546938775510204</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d28b04c0-540f-4140-b164-16a8a6d7f235}</destination>
+		</relationship>
+	</object>
+</objects>
