@@ -5,7 +5,7 @@
 			<value>Player Shotgun Explosion</value>
 		</property>
 		<property name="outputFormat">
-			<value>1</value>
+			<value>2</value>
 		</property>
 		<relationship name="folder">
 			<destination>{df250bcb-4813-445e-8810-f87309830573}</destination>
@@ -62,6 +62,12 @@
 		<property name="maxVoices">
 			<value>2</value>
 		</property>
+		<property name="minimumDistance">
+			<value>10</value>
+		</property>
+		<property name="maximumDistance">
+			<value>60</value>
+		</property>
 	</object>
 	<object class="MarkerTrack" id="{b206b9a4-787d-421e-9ca4-9b6086727132}" />
 	<object class="GroupTrack" id="{f7e98902-8aad-4268-9759-bc65bff693a4}">
@@ -96,6 +102,9 @@
 		</relationship>
 	</object>
 	<object class="EventMixerMaster" id="{76ffa1dd-7563-4395-92ca-1fe24a4f1855}">
+		<property name="volume">
+			<value>-8</value>
+		</property>
 		<relationship name="effectChain">
 			<destination>{71ab093d-6245-4d81-9cd5-a623f2abe0f5}</destination>
 		</relationship>
@@ -209,7 +218,9 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{71ab093d-6245-4d81-9cd5-a623f2abe0f5}">
 		<relationship name="effects">
+			<destination>{55d0f4e6-a04d-4214-839d-ca07cbd90e5a}</destination>
 			<destination>{2261f51a-7aae-487b-b2ed-ec501b190531}</destination>
+			<destination>{99010ec4-cf44-4650-aa3f-91d53fe5a6fe}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{8f1f94d4-fc5f-4986-b0ad-cc25a7f67aa0}" />
@@ -291,7 +302,13 @@
 		</relationship>
 	</object>
 	<object class="MixerBusPanner" id="{5d5bbd14-15ab-442a-914f-5bbecd2cedd2}" />
+	<object class="GainEffect" id="{55d0f4e6-a04d-4214-839d-ca07cbd90e5a}">
+		<property name="gain">
+			<value>5.5</value>
+		</property>
+	</object>
 	<object class="MixerBusFader" id="{2261f51a-7aae-487b-b2ed-ec501b190531}" />
+	<object class="SpatialiserEffect" id="{99010ec4-cf44-4650-aa3f-91d53fe5a6fe}" />
 	<object class="AutomationPoint" id="{4ea091b7-cbe0-4fad-a149-67a517346559}">
 		<property name="position">
 			<value>0</value>

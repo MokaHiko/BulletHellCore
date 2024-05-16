@@ -27,7 +27,9 @@
 	</object>
 	<object class="MixerBusEffectChain" id="{558c28a7-7aae-4cb5-8769-50bd1784454a}">
 		<relationship name="effects">
+			<destination>{98c03ed8-800b-4a9b-9e17-7a466735ae6c}</destination>
 			<destination>{47169cd4-8413-4d34-af3d-e97e8486b857}</destination>
+			<destination>{6473a83e-a507-4186-82d6-8a722c468ecc}</destination>
 			<destination>{9c9bbe68-ea47-43d4-8cfe-827a4fb99941}</destination>
 		</relationship>
 	</object>
@@ -45,11 +47,13 @@
 			<destination>{7b10091b-77ac-4c57-af78-a118ea0138d6}</destination>
 		</relationship>
 	</object>
+	<object class="GainEffect" id="{98c03ed8-800b-4a9b-9e17-7a466735ae6c}" />
 	<object class="LimiterEffect" id="{47169cd4-8413-4d34-af3d-e97e8486b857}">
 		<property name="ceiling">
 			<value>-1</value>
 		</property>
 	</object>
+	<object class="LoudnessMeter" id="{6473a83e-a507-4186-82d6-8a722c468ecc}" />
 	<object class="MixerBusFader" id="{9c9bbe68-ea47-43d4-8cfe-827a4fb99941}" />
 	<object class="AutomationPoint" id="{2ba2963f-8647-4e43-b9bd-2bb428bc964b}">
 		<property name="position">

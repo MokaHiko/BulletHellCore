@@ -66,10 +66,10 @@
 			<value>1</value>
 		</property>
 		<property name="minimumDistance">
-			<value>0</value>
+			<value>9.40000057</value>
 		</property>
 		<property name="maximumDistance">
-			<value>10000</value>
+			<value>85</value>
 		</property>
 	</object>
 	<object class="MarkerTrack" id="{b1d85e2f-309b-4269-9e19-74a81dded600}" />
