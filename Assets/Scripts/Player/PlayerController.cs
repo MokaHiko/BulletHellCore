@@ -36,6 +36,7 @@ public class PlayerController : MonoBehaviour
     public Vector2 AxisInput {get{return m_axis_input;}}
     public Vector3 RelativeAxisInput {get{return m_relative_axis_input;}}
     public Vector3 WorldMousePoint {get{return m_world_mouse_point;}}
+    public bool lockedControls { get => m_locked_controls; set => m_locked_controls = value; }
     public void AddMember(Merc merc)
     {
         // Find slot
@@ -131,11 +132,14 @@ public class PlayerController : MonoBehaviour
 
     private void Start()
     {
+        m_locked_controls = false;
         Debug.Assert(party_leader != null, "Party must have leader!");
     }
 
     private void Update()
     {
+        if (m_locked_controls) { return; }
+
         // Input axis
         m_axis_input.x = Input.GetAxisRaw("Horizontal");
         m_axis_input.y = Input.GetAxisRaw("Vertical");
@@ -237,4 +241,5 @@ public class PlayerController : MonoBehaviour
     private Vector2 m_axis_input;
     private Vector3 m_relative_axis_input;
     private Vector3 m_world_mouse_point;
+    private bool m_locked_controls;
 }

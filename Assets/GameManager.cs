@@ -29,6 +29,15 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     int room_count = 0;
 
+    private void Update()
+    {
+        if (Input.GetKeyDown(KeyCode.Escape))
+        {
+            Debug.Log("Pause");
+            in_game_menu.ToggleMenu("PauseMenu");
+        }
+    }
+
     public void Reward()
     {
         MenuManager menu_manager = in_game_menu.ActivateMenu("PartyLayoutMenu") as MenuManager;
@@ -50,6 +59,20 @@ public class GameManager : MonoBehaviour
         }
 
         m_stop_effect = StartCoroutine(StopEffect(duration));
+    }
+
+    public void IndefinedStop()
+    {
+        Time.timeScale = 0.0f;
+        PlayerController pc = GetPlayer();
+        if (pc) { pc.lockedControls = true; }
+    }
+
+    public void ContinueTime()
+    {
+        Time.timeScale = 1.0f;
+        PlayerController pc = GetPlayer();
+        if (pc) { pc.lockedControls = false; }
     }
 
     IEnumerator StopEffect(float duration)
