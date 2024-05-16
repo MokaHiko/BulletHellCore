@@ -1,0 +1,27 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eda019375e68e304abfbf3e5569e7a73, type: 3}
+  m_Name: Multivitamins
+  m_EditorClassIdentifier: 
+  name: Multivitamins
+  description: 'Grants stat boosts to all '
+  modifier_icon: {fileID: 6431713285205662184, guid: 2c058d5a45867554591fd2920d69d3c7, type: 3}
+  weapon_types: -1
+  modifiers: 0
+  stat_multipliers:
+    base_damage: 1.1
+    attack_speed: 1.1
+    scan_radius: 1.1
+    range: 1.1
+    max_bullets: 1
+    reload_time: 1.1
+    hold_threshold: 1.1

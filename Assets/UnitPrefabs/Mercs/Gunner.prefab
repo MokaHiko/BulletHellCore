@@ -849,7 +849,7 @@ ParticleSystemForceField:
   m_Parameters:
     m_Shape: 0
     m_StartRange: 0
-    m_EndRange: 5
+    m_EndRange: 10
     m_Length: 1
     m_GravityFocus: 0
     m_RotationRandomness: {x: 0, y: 0}
@@ -1552,13 +1552,6 @@ MonoBehaviour:
       Data3: -106264190
       Data4: 494287380
     Path: event:/Objects/Charge Particle Pickup
-  debug_sound:
-    Guid:
-      Data1: -1184897865
-      Data2: 1230401392
-      Data3: 620500411
-      Data4: -209194887
-    Path: event:/Player/Player Chargeup
 --- !u!1 &5905184501909644913
 GameObject:
   m_ObjectHideFlags: 0
@@ -2261,6 +2254,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4966527278528427639}
     m_Modifications:
+    - target: {fileID: 1656145316569427640, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4643685652382954744, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
       propertyPath: m_Name
       value: MachineGun
@@ -2310,13 +2307,13 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4692509919438955288, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
-      propertyPath: base_damage
-      value: 12
+      propertyPath: modifiers.Array.size
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4692509919438955288, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
-      propertyPath: attack_speed
-      value: 8
-      objectReference: {fileID: 0}
+      propertyPath: modifiers.Array.data[0]
+      value: 
+      objectReference: {fileID: 11400000, guid: 914999aa1e2ceea47972dad37ef7636e, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
 --- !u!4 &222840481419325199 stripped

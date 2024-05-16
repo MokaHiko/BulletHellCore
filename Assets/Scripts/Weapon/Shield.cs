@@ -15,8 +15,6 @@ public class Shield : Weapon
 
     public void Start()
     {
-        // Weapon asserts
-        Debug.Assert(attack_speed != 0);
     }
 
     public override void AltAttackImpl(Vector3 fire_point, Vector3 target_position)

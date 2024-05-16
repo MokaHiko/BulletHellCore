@@ -1,0 +1,23 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 35b30c1805adef7409804367bc35b4e5, type: 3}
+  m_Name: ChargeGun
+  m_EditorClassIdentifier: 
+  weapon_icon: {fileID: 690804884352287621, guid: bcc09fcd7dffaf7458834fb8db4087c1, type: 3}
+  base_stats:
+    base_damage: 16
+    attack_speed: 8
+    scan_radius: 0.5
+    range: 500
+    max_bullets: 16
+    reload_time: 1
+    hold_threshold: 0.25

@@ -83,6 +83,7 @@ public class MenuManager : Menu
             if (menu.name != menu_name && deactivate_others)
             {
                 menu.Deactivate();
+                continue;
             }
 
             return ActivateMenu(menu);

@@ -692,11 +692,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 1758573123050294887, guid: bad7baddf57b6ee4399f63f0c78c9f79, type: 3}
   m_PrefabInstance: {fileID: 183818509}
   m_PrefabAsset: {fileID: 0}
---- !u!2083052967 &183818511 stripped
-VisualEffect:
-  m_CorrespondingSourceObject: {fileID: 1758573123050294886, guid: bad7baddf57b6ee4399f63f0c78c9f79, type: 3}
-  m_PrefabInstance: {fileID: 183818509}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &193816488
 GameObject:
   m_ObjectHideFlags: 0
@@ -963,7 +958,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 969b235ccbdbd93449b2ba1a7854fc37, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  name: 
   menus: []
+  start_menu: {fileID: 0}
 --- !u!1 &225179534
 GameObject:
   m_ObjectHideFlags: 0
@@ -1608,6 +1605,7 @@ MonoBehaviour:
   animation_flags: 0
   effect_children: 0
   destroy_after_animation: 0
+  disable_after_animation: 0
   fade_in_duration: 1
   stretch_duration: 1
   fade_out_duration: 3
@@ -1632,6 +1630,7 @@ MonoBehaviour:
   animation_flags: 0
   effect_children: 0
   destroy_after_animation: 0
+  disable_after_animation: 0
   fade_in_duration: 1
   stretch_duration: 1
   fade_out_duration: 3
@@ -1648,6 +1647,8 @@ GameObject:
   - component: {fileID: 435760843}
   - component: {fileID: 435760842}
   - component: {fileID: 435760841}
+  - component: {fileID: 435760845}
+  - component: {fileID: 435760844}
   m_Layer: 5
   m_Name: New Game
   m_TagString: Untagged
@@ -1757,6 +1758,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 435760839}
   m_CullTransparentMesh: 1
+--- !u!114 &435760844
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435760839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1373775409
+      Data2: 1211763854
+      Data3: 2036568470
+      Data4: -1780805304
+    Path: event:/UI/UI Hoverover
+  Event: 
+  PlayEvent: 17
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &435760845
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 435760839}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1325541837
+      Data2: 1317427721
+      Data3: -1388274801
+      Data4: -1660389705
+    Path: event:/UI/UI Confirm
+  Event: 
+  PlayEvent: 19
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!43 &448742122
 Mesh:
   m_ObjectHideFlags: 0
@@ -3126,8 +3189,8 @@ MonoBehaviour:
   owner: {fileID: 0}
   bullets: 0
   charge_rate: 0.35
-  shield_effect: {fileID: 183818511}
-  barrier_prefab: {fileID: 1317578866472604768, guid: ec0ec2483bb77a24498209e0ed785ed4, type: 3}
+  max_health: 100
+  barrier: {fileID: 0}
 --- !u!1 &729615620
 GameObject:
   m_ObjectHideFlags: 0
@@ -3140,6 +3203,8 @@ GameObject:
   - component: {fileID: 729615624}
   - component: {fileID: 729615623}
   - component: {fileID: 729615622}
+  - component: {fileID: 729615626}
+  - component: {fileID: 729615625}
   m_Layer: 5
   m_Name: Settings
   m_TagString: Untagged
@@ -3249,6 +3314,68 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 729615620}
   m_CullTransparentMesh: 1
+--- !u!114 &729615625
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729615620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1373775409
+      Data2: 1211763854
+      Data3: 2036568470
+      Data4: -1780805304
+    Path: event:/UI/UI Hoverover
+  Event: 
+  PlayEvent: 17
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
+--- !u!114 &729615626
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 729615620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1325541837
+      Data2: 1317427721
+      Data3: -1388274801
+      Data4: -1660389705
+    Path: event:/UI/UI Confirm
+  Event: 
+  PlayEvent: 19
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &751119564
 GameObject:
   m_ObjectHideFlags: 0
@@ -3375,6 +3502,7 @@ MonoBehaviour:
   animation_flags: 0
   effect_children: 0
   destroy_after_animation: 0
+  disable_after_animation: 0
   fade_in_duration: 1
   stretch_duration: 1
   fade_out_duration: 3
@@ -4268,10 +4396,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9427337f6db4cbe4c8ce438072d21cef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  generate_dungeons: 0
   player_prefab: {fileID: 2190393176916935443, guid: 6713668073650d8469db5b9209f38e43, type: 3}
   starting_merc_prefab: {fileID: 0}
   dungeon_generator: {fileID: 325293797}
   player_hud: {fileID: 448818505}
+  in_game_menu: {fileID: 0}
   room_count: 0
   start_room: {fileID: 0}
   m_player: {fileID: 0}
@@ -7807,6 +7937,13 @@ MonoBehaviour:
   damageable_resources: {fileID: 11400000, guid: a2f36fdea0d7ac64696d0cbb2998a2de, type: 2}
   damage_multiplier: 0
   damageable_renderer: {fileID: 3443081956379761468}
+  on_damage_sfx:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
   m_status_effect: 0
   m_health: 100
   energy: 0
@@ -8424,8 +8561,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c9eaac9182cccde45b2f7f93c3ce6fe4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   experience: 0
   unit_state_machine: {fileID: 8853079921082140441}
+  particle_pickup_sfx:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1 &7482741751018620416
 GameObject:
   m_ObjectHideFlags: 0

@@ -40,7 +40,7 @@ public class MercAttackState : UnitAttackState
     }
     void Release()
     {
-        if(time_held > m_equiped_weapon.hold_threshold) 
+        if(time_held > m_equiped_weapon.Stats.hold_threshold) 
         {
             AltAttack(m_merc.Party.WorldMousePoint);
         }

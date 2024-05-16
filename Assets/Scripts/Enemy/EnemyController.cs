@@ -46,18 +46,7 @@ public class EnemyController : MonoBehaviour
         // Subscribe to callbacks
         m_unit.death_callback += OnDeath;
 
-        // Target
-        PlayerController player;
-        if ( player = FindObjectOfType<PlayerController>())
-        {
-            target = player.transform;
-        }
-
-        // Pathfinding
-        path_finding.seeker_transform = transform;
-        path_finding.target_transform = target.transform;
-
-        path_finding.grid = GetComponentInParent<Room>().GetComponent<PathfindingGrid>();
+        TrackPlayer();
 
         // Ability Chains
         if (m_unit.abilities.Count > 1)
@@ -69,6 +58,27 @@ public class EnemyController : MonoBehaviour
                 }
             };
         }
+    }
+
+    void TrackPlayer()
+    {
+        // Target
+        PlayerController player;
+        if ( player = FindObjectOfType<PlayerController>())
+        {
+            target = player.transform;
+        }
+        else
+        {
+            return;
+        }
+
+        // Pathfinding
+        path_finding.seeker_transform = transform;
+        path_finding.target_transform = target.transform;
+
+        // TODO: Remove room system
+        path_finding.grid = FindObjectOfType<Room>().GetComponent<PathfindingGrid>();
     }
 
     void Update()
@@ -115,6 +125,10 @@ public class EnemyController : MonoBehaviour
                     m_follow_routine = StartCoroutine(FollowPath());
                 }
             }
+        }
+        else
+        {
+            TrackPlayer();
         }
     }
 

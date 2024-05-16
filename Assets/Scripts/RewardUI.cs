@@ -6,28 +6,8 @@ using UnityEngine;
 [Serializable]
 struct ModifierWeight
 {
-    [SerializeField]
     public WeaponModifiers modifier;
-    [SerializeField]
     public float weight;
-};
-
-[Serializable]
-struct StatModifierWeight
-{
-    [SerializeField]
-    public WeaponStatModifiers stat_modifier;
-    [SerializeField]
-    public float weight;
-};
-
-[Flags]
-public enum WeaponStatModifiers
-{
-    None,
-    FireRate,
-    Damage,
-    ReloadSpeed,
 };
 
 public class RewardUI : MonoBehaviour
@@ -36,20 +16,22 @@ public class RewardUI : MonoBehaviour
     WeaponModifiers modifier_flags;
 
     [SerializeField]
-    WeaponStatModifiers stat_modifiers;
-
-    [SerializeField]
     TMP_Text description;
 
     [SerializeField]
-    GameObject rewards_container;
+    MenuManager in_game_menu;
 
     [SerializeField]
     List<ModifierWeight> weights;
 
     [SerializeField]
-    List<StatModifierWeight> stat_weights;
+    List<ModifierAttributes> possible_modifiers;
 
+    [SerializeField]
+    ModifierAttributes current_modifier;
+
+    [SerializeField]
+    RectTransform modifier_icon;
 
     private void OnEnable()
     {
@@ -69,16 +51,6 @@ public class RewardUI : MonoBehaviour
             }
         }
 
-        stat_modifiers = WeaponStatModifiers.None;
-        foreach (StatModifierWeight weight in stat_weights)
-        {
-            float roll = UnityEngine.Random.Range(0, 1.0f);
-            if (weight.weight >= roll)
-            {
-                stat_modifiers |= weight.stat_modifier;
-            }
-        }
-
         description.text = "";
         switch (modifier_flags)
         {
@@ -95,68 +67,85 @@ public class RewardUI : MonoBehaviour
                 break;
         }
 
-        if ((stat_modifiers & WeaponStatModifiers.FireRate) == WeaponStatModifiers.FireRate)
+        //if ((stat_modifiers & WeaponStatModifiers.FireRate) == WeaponStatModifiers.FireRate)
+        //{
+        //    description.text += "\n Increased fire rate!";
+        //}
+
+        //if ((stat_modifiers & WeaponStatModifiers.Damage) == WeaponStatModifiers.Damage)
+        //{
+        //    description.text += "\n Increased base damage!";
+        //}
+
+        //if ((stat_modifiers & WeaponStatModifiers.ReloadSpeed) == WeaponStatModifiers.ReloadSpeed)
+        //{
+        //    description.text += "\n Decreased reload speed!";
+        //}
+
+        current_modifier = possible_modifiers[UnityEngine.Random.Range(0, possible_modifiers.Count)];
+
+        if(modifier_icon != null)
         {
-            description.text += "\n Increased fire rate!";
+            Destroy(modifier_icon.gameObject);
         }
 
-        if ((stat_modifiers & WeaponStatModifiers.Damage) == WeaponStatModifiers.Damage)
-        {
-            description.text += "\n Increased base damage!";
-        }
-
-        if ((stat_modifiers & WeaponStatModifiers.ReloadSpeed) == WeaponStatModifiers.ReloadSpeed)
-        {
-            description.text += "\n Decreased reload speed!";
-        }
+        Instantiate(current_modifier.modifier_icon, transform);
+        description.text = current_modifier.Description();
     }
 
     public void Upgrade()
     {
         PlayerController player = GameManager.Instance.GetPlayer();
-        if (player)
+        Merc merc = player.party_slots[UnityEngine.Random.Range(0, player.party_slots.Count)].merc;
+
+        if (player && merc)
         {
-            Weapon weapon = player.GetComponent<Unit>().EquipedWeapon;
-            Modifier modifier = weapon.GetComponent<Modifier>();
+            //Weapon weapon = player.GetComponent<Unit>().EquipedWeapon;
+            //Modifier modifier = merc.GetComponent<Unit>().e.GetComponent<Modifier>();
+            Weapon weapon = merc.GetComponent<Unit>().EquipedWeapon;
 
-            switch (modifier_flags)
-            {
-            case (WeaponModifiers.Bounce):
-            {
-                modifier.ApplyModifier(WeaponModifiers.Bounce);
-                modifier.bounces++;
-                description.text = "Applies +1 bounce";
-            }break;
-            case(WeaponModifiers.Echo):
-            {
-                modifier.ApplyModifier(WeaponModifiers.Echo);
-                modifier.echo_count = 1;
-                description.text = "Applies +1 echo"; // Echo first, hit only
-            }break;
-                case (WeaponModifiers.None):
-                default:
-                    break;
-            }
+            //switch (modifier_flags)
+            //{
+            //case (WeaponModifiers.Bounce):
+            //{
+            //    modifier.ApplyModifier(WeaponModifiers.Bounce);
+            //    modifier.bounces++;
+            //    description.text = "Applies +1 bounce";
+            //}break;
+            //case(WeaponModifiers.Echo):
+            //{
+            //    modifier.ApplyModifier(WeaponModifiers.Echo);
+            //    modifier.echo_count = 1;
+            //    description.text = "Applies +1 echo"; // Echo first, hit only
+            //}break;
+            //    case (WeaponModifiers.None):
+            //    default:
+            //        break;
+            //}
 
-            if ((stat_modifiers & WeaponStatModifiers.FireRate) == WeaponStatModifiers.FireRate)
-            {
-                description.text += "\n Increased fire rate!";
-                weapon.attack_speed *= 1.15f;
-            }
+            //if ((stat_modifiers & WeaponStatModifiers.FireRate) == WeaponStatModifiers.FireRate)
+            //{
+            //    description.text += "\n Increased fire rate!";
+            //    //weapon.attack_speed *= 1.15f;
+            //}
 
-            if ((stat_modifiers & WeaponStatModifiers.Damage) == WeaponStatModifiers.Damage)
-            {
-                description.text += "\n Increased base damage!";
-                weapon.base_damage *= 1.15f;
-            }
+            //if ((stat_modifiers & WeaponStatModifiers.Damage) == WeaponStatModifiers.Damage)
+            //{
+            //    description.text += "\n Increased base damage!";
+            //    //weapon.base_damage *= 1.15f;
+            //}
 
-            if ((stat_modifiers & WeaponStatModifiers.ReloadSpeed) == WeaponStatModifiers.ReloadSpeed)
-            {
-                description.text += "\n Decreased reload speed!";
-                weapon.reload_time *= 1 - 0.15f;
-            }
+            //if ((stat_modifiers & WeaponStatModifiers.ReloadSpeed) == WeaponStatModifiers.ReloadSpeed)
+            //{
+            //    description.text += "\n Decreased reload speed!";
+            //    //weapon.reload_time *= 1 - 0.15f;
+            //}
+
+            weapon.AddModifier(current_modifier);
         }
 
-        rewards_container.SetActive(false);
+        in_game_menu.DeactivateMenu("RewardsMenu");
+        var menu = in_game_menu.FindMenu("PartyLayoutMenu");
+        in_game_menu.ActivateMenu(menu);
     }
 }

@@ -1,9 +1,13 @@
+using System;
+using System.Collections;
 using UnityEngine;
 
 
 [CreateAssetMenu(fileName = "EnemyAttackState", menuName = "EnemyUnitAttackState")]
 public class EnemyAttackState : UnitAttackState
 {
+    [SerializeField]
+    float attack_delay = 1.0f;
     public override void OnEnter(Unit unit)
     {
         m_enemy_controller = unit.GetComponent<EnemyController>();
@@ -12,6 +16,11 @@ public class EnemyAttackState : UnitAttackState
 
     public override void OnExit(Unit unit)
     {
+        if (m_delayed_attack_routine != null)
+        {
+            unit.StopCoroutine(m_delayed_attack_routine);
+            m_delayed_attack_routine = null;
+        }
     }
 
     public Weapon GetEquipedWeapon()
@@ -46,7 +55,25 @@ public class EnemyAttackState : UnitAttackState
             return;
         }
 
-        Attack(m_enemy_controller.target.position + Vector3.up);
+        if (m_equiped_weapon == null)
+        {
+            return;
+        }
+
+        if (m_delayed_attack_routine == null)
+        {
+            Vector3 target_position = m_enemy_controller.target.position + Vector3.up;
+            m_delayed_attack_routine = unit.StartCoroutine(DelayedAttack(attack_delay, target_position));
+        }
+    }
+
+    IEnumerator DelayedAttack(float delay, Vector3 target_position)
+    {
+        // TODO: wind up
+        yield return new WaitForSeconds(delay);
+
+        Attack(target_position);
+        m_delayed_attack_routine = null;
     }
 
     // ~ Weapons
@@ -56,4 +83,5 @@ public class EnemyAttackState : UnitAttackState
     // ~ Handles
     private EnemyController m_enemy_controller;
 
+    private Coroutine m_delayed_attack_routine;
 }

@@ -40,8 +40,7 @@ public class GameManager : MonoBehaviour
 
     public void Reward()
     {
-        MenuManager menu_manager = in_game_menu.ActivateMenu("PartyLayoutMenu") as MenuManager;
-        (menu_manager.FindMenu("MercInspector") as MercInspector).SetReward();
+        in_game_menu.ActivateMenu("RewardsMenu");
     }
 
     public void ToggleGameMenu()

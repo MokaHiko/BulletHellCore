@@ -57,11 +57,11 @@ public class Room : MonoBehaviour
 
     private void Start()
     {
-        grid.GenerateGrid();
-        foreach (Teleporter teleporter in teleporters)
-        {
-            teleporter.teleport_received_callback += () => Init();
-        }
+        //grid.GenerateGrid();
+        //foreach (Teleporter teleporter in teleporters)
+        //{
+        //    teleporter.teleport_received_callback += () => Init();
+        //}
     }
 
     public void Init()
@@ -99,11 +99,12 @@ public class Room : MonoBehaviour
             StartCoroutine(PrimeEnemySpawn(enemy_data));
         }
 
+        // TODO: Remove teleporter
         // Deactivate teleports until level finish
-        foreach (Teleporter teleporter in teleporters)
-        {
-            teleporter.gameObject.SetActive(false);
-        }
+        //foreach (Teleporter teleporter in teleporters)
+        //{
+        //    teleporter.gameObject.SetActive(false);
+        //}
 
         // Player callbacks
         room_complete_calblack += GameManager.Instance.GetPlayer().OnRoomComplete;

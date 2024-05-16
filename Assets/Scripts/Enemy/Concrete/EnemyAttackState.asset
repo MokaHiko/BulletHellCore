@@ -14,8 +14,5 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_substate: {fileID: 0}
   m_superstate: {fileID: 0}
-  target_radius: 1
-  targetable:
-    serializedVersion: 2
-    m_Bits: 0
+  attack_delay: 0.25
   m_equiped_weapon: {fileID: 0}
