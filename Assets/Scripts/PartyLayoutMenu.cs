@@ -9,7 +9,7 @@ public class PartyLayoutMenu : MenuManager
     [SerializeField]
     public CinemachineVirtualCamera virtual_camera;
 
-    [Header("LineUP")]
+    [Header("LineUp")]
     [SerializeField]
     bool rotate = true;
     [SerializeField]

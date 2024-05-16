@@ -6,20 +6,8 @@ using UnityEngine.UI;
 public class WeaponUI : MonoBehaviour
 {
     [SerializeField]
-    Weapon weapon;
+    public Weapon weapon;
 
     [SerializeField]
-    Image icon;
-
-    // Start is called before the first frame update
-    void Start()
-    {
-
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    public Image icon;
 }

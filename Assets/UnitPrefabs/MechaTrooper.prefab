@@ -178,7 +178,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4b4cf56579e5abd4a85c1f1a3b0a01f9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  health: 0
+  damageable_resources: {fileID: 0}
+  damage_multiplier: 1
+  damageable_renderer: {fileID: 0}
+  on_damage_sfx:
+    Guid:
+      Data1: 720610584
+      Data2: 1106632966
+      Data3: -1736846156
+      Data4: -1362224379
+    Path: event:/Player/Player Take Damage
+  m_status_effect: 0
+  m_health: 100
   energy: 0
   fossil: 0
   nuclear: 0
@@ -186,25 +197,15 @@ MonoBehaviour:
   energy_gain_rate: 1
   movement_speed: 0
   agility: 0
-  damage_multiplier: 1
-  unit_renderer: {fileID: 0}
+  weapons: []
   animator: {fileID: 1050624240292696231}
   health_bar: {fileID: 2786085180516687137}
   energy_bar: {fileID: 2422235434717796503}
   short_circuit_particles: {fileID: 877074756769296072}
-  floating_text: {fileID: 8104941988737050853, guid: 9dcb30c29e9556b4885381d04dcde940, type: 3}
-  m_base_stats:
-    health: 200
-    max_energy: 100
-    energy_gain_rate: 1
-    movement_speed: 7
-    agility: 7
-    damage_multiplier: 0.9
-  m_damaged_material: {fileID: 2100000, guid: 549e86813947003418b541f55b61ad7d, type: 2}
-  m_death_effect: {fileID: 5010119687056718631, guid: 7e9069d61875f94458c53d50b2c9ccd4, type: 3}
+  m_base_stats: {fileID: 0}
   m_state: 0
-  m_status_effect: 0
   abilities: []
+  m_rigidbody: {fileID: 0}
 --- !u!114 &1050624241534525193
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -235,6 +236,7 @@ MonoBehaviour:
   tick_rate: 1
   combat_distance: 15
   drop_particles: {fileID: 6004998939752341139, guid: 6b4bc7843febb3e4a88403c7f7f828fa, type: 3}
+  unit_state_machine: {fileID: 0}
 --- !u!114 &2113749721
 MonoBehaviour:
   m_ObjectHideFlags: 0

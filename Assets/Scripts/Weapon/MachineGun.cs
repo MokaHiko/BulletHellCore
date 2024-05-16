@@ -40,7 +40,7 @@ public class MachineGun : Weapon
     public void Start()
     {
         // Weapon asserts
-        Debug.Assert(attack_speed != 0);
+        Debug.Assert(Stats.attack_speed != 0);
         Debug.Assert(impact_particle_system != null);
         Debug.Assert(burst_impact_particle_system != null);
 
@@ -73,7 +73,7 @@ public class MachineGun : Weapon
             dir.Normalize();
 
             TrailRenderer trail = Instantiate(bullet_trail, fire_point, Quaternion.identity);
-            if (Physics.SphereCast(fire_point, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
+            if (Physics.SphereCast(fire_point, Stats.scan_radius, dir, out RaycastHit hit, Stats.range, damageable_layers))
             {
                 hit.collider.TryGetComponent<Unit>(out Unit unit);
 
@@ -88,7 +88,7 @@ public class MachineGun : Weapon
                     if (unit)
                     {
                         float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
-                        unit.TakeDamage(base_damage * burst_multiplier, StatusEffect.None, crit_roll, hit.point);
+                        unit.TakeDamage(Stats.base_damage * burst_multiplier, StatusEffect.None, crit_roll, hit.point);
                     }
 
                     on_hit?.Invoke(hit.point, dir, hit.normal);
@@ -102,7 +102,7 @@ public class MachineGun : Weapon
             }
             else
             {
-                StartCoroutine(SpawnTrail(trail, fire_point + (dir * range), -dir.normalized, burst_impact_particle_system));
+                StartCoroutine(SpawnTrail(trail, fire_point + (dir * Stats.range), -dir.normalized, burst_impact_particle_system));
             }
         }
     }
@@ -120,7 +120,7 @@ public class MachineGun : Weapon
         dir.Normalize();
 
         TrailRenderer trail = Instantiate(bullet_trail, fire_point, Quaternion.identity);
-        if (Physics.SphereCast(fire_point, scan_radius, dir, out RaycastHit hit, range, damageable_layers))
+        if (Physics.SphereCast(fire_point, Stats.scan_radius, dir, out RaycastHit hit, Stats.range, damageable_layers))
         {
             hit.collider.TryGetComponent<Unit>(out Unit unit);
             float crit_roll = UnityEngine.Random.Range(0.0f, 1.0f);
@@ -135,18 +135,18 @@ public class MachineGun : Weapon
             {
                 if (unit)
                 {
-                    unit.TakeDamage(base_damage, StatusEffect.None, crit_roll, hit.point);
+                    unit.TakeDamage(Stats.base_damage, StatusEffect.None, crit_roll, hit.point);
 
                     // ~ Property:
                     // Sap energy on hit
-                    owner.energy += charge_rate * base_damage;
+                    owner.energy += charge_rate * Stats.base_damage;
                 }
                 on_hit?.Invoke(hit.point, dir, hit.normal);
             }));
         }
         else
         {
-            StartCoroutine(SpawnTrail(trail, fire_point + (dir * range), -dir.normalized, impact_particle_system));
+            StartCoroutine(SpawnTrail(trail, fire_point + (dir * Stats.range), -dir.normalized, impact_particle_system));
         }
     }
 

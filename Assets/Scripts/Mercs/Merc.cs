@@ -13,24 +13,19 @@ public delegate void MercLevelUpCallback();
 [RequireComponent(typeof(Unit))]
 public class Merc : MonoBehaviour
 {
+    [Header("Merc")]
     [SerializeField]
     public MercType type;
-
     [SerializeField]
     public float experience = 0.0f;
-
-    //[Header("HUD UI")]
-    //public PropertyBar exp_bar;
-
     [SerializeField]
     UnitStateMachine unit_state_machine;
 
-    // Player events
-    public MercLevelUpCallback merc_level_up_callback;
-
-    //fmod ref
+    [Header("Sfx")]
     public FMODUnity.EventReference particle_pickup_sfx;
-    
+
+    // ~ Merc Events
+    public MercLevelUpCallback merc_level_up_callback;
 
     // ~ Getters
     public PlayerController Party { get; set; }
@@ -39,10 +34,6 @@ public class Merc : MonoBehaviour
 
     void Start()
     {
-        // World handles
-        //exp_bar = GameManager.Instance.GetPlayerHud().exp_bar;
-        //Debug.Assert(exp_bar != null, "Player no exp bar!");
-
         // Handles
         m_unit = GetComponent<Unit>();
 
@@ -51,16 +42,14 @@ public class Merc : MonoBehaviour
         m_unit.death_callback += () => { GameManager.Instance.RequestShake(0, 0.0f); };
         m_unit.status_callback += OnStatusEffect;
     }
-    void Update()
-    {
-        // ~ HUD UI
-        //exp_bar.SetValue(experience, 100.0f);
-    }
+
+    int ctr = 0;
     public void OnParticleEnter(ParticleType type)
     {
-        //fmod call not working
-        //Debug.Log("particlesoundplayed");
-        FMODUnity.RuntimeManager.PlayOneShotAttached(particle_pickup_sfx, gameObject);
+        if (ctr++ % 5 == 0)
+        {
+            FMODUnity.RuntimeManager.PlayOneShotAttached(particle_pickup_sfx, gameObject);
+        }
 
         switch (type) 
         {
@@ -82,7 +71,6 @@ public class Merc : MonoBehaviour
             default:
                 break;
         }
-        
     }
 
     public void LevelUp()
@@ -96,11 +84,11 @@ public class Merc : MonoBehaviour
     {
         if ((status_effect_flags & StatusEffect.ShortCircuit) == StatusEffect.ShortCircuit)
         {
+
         }
     }
 
     // ~ Handles
-    private PlayerController m_party;
     private Unit m_unit;
 }
 

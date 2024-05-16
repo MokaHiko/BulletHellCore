@@ -14,7 +14,8 @@ GameObject:
   - component: {fileID: 8210057829105676180}
   - component: {fileID: 6794309377715317961}
   - component: {fileID: 6794309377715317960}
-  m_Layer: 0
+  - component: {fileID: 2339650958635357955}
+  m_Layer: 3
   m_Name: Barrier
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -50,8 +51,16 @@ MonoBehaviour:
   damageable_resources: {fileID: 11400000, guid: d70a6e3d4c9b08a47b2bafd9d57a81bc, type: 2}
   damage_multiplier: 1
   damageable_renderer: {fileID: 8210057829105676180}
+  on_damage_sfx:
+    Guid:
+      Data1: 720610584
+      Data2: 1106632966
+      Data3: -1736846156
+      Data4: -1362224379
+    Path: event:/Player/Player Take Damage
   m_status_effect: 0
   m_health: 100
+  charge_rate: 1
   barrier_renderer: {fileID: 6794309377715317961}
 --- !u!2083052967 &9033157622540747399
 VisualEffect:
@@ -181,6 +190,20 @@ MeshFilter:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1360828042317002730}
   m_Mesh: {fileID: 1042801323994665371, guid: 17bfa0cd4d1e9e1459c27bfd7a3d90a4, type: 3}
+--- !u!64 &2339650958635357955
+MeshCollider:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1360828042317002730}
+  m_Material: {fileID: 0}
+  m_IsTrigger: 1
+  m_Enabled: 1
+  serializedVersion: 4
+  m_Convex: 1
+  m_CookingOptions: 30
+  m_Mesh: {fileID: 1042801323994665371, guid: 17bfa0cd4d1e9e1459c27bfd7a3d90a4, type: 3}
 --- !u!1 &6794309378283286560
 GameObject:
   m_ObjectHideFlags: 0
@@ -191,7 +214,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6794309378283286561}
   - component: {fileID: 6794309378283286574}
-  m_Layer: 0
+  m_Layer: 3
   m_Name: Shield
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -226,17 +249,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resource: {fileID: 11400000, guid: 897b4219076c4ff41ac177ea6a0ec394, type: 2}
-  base_damage: 0
-  attack_speed: 5
-  scan_radius: 1
-  range: 1000
-  max_bullets: 32
-  reload_time: 1
-  hold_threshold: 1
+  modifiers: []
   damageable_layers:
     serializedVersion: 2
     m_Bits: 0
   owner: {fileID: 0}
-  bullets: 0
+  m_bullets: 0
+  m_modified_stats:
+    base_damage: 1
+    attack_speed: 1
+    scan_radius: 1
+    range: 1
+    max_bullets: 1
+    reload_time: 1
+    hold_threshold: 1
   charge_rate: 0.35
+  max_health: 100
   barrier: {fileID: 1360828042317002730}

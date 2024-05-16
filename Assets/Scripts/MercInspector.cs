@@ -1,6 +1,8 @@
 using Cinemachine;
+using System.Collections.Generic;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class MercInspector : Menu
 {
@@ -23,15 +25,16 @@ public class MercInspector : Menu
     public TMP_Text energy_plus;
 
     [Header("Weapon Stats")]
-    [SerializeField]
     public TMP_Text base_damage;
     public TMP_Text base_damage_plus;
-    [SerializeField]
     public TMP_Text attack_speed;
     public TMP_Text attack_speed_plus;
-    [SerializeField]
     public TMP_Text ammo;
     public TMP_Text ammo_plus;
+
+    [Header("Modifiers")]
+    List<RectTransform> modifier_icons = new List<RectTransform>();
+    public Transform modifiers_container;
 
     public void SetReward()
     {
@@ -48,17 +51,23 @@ public class MercInspector : Menu
 
         // Update unit stats
         Unit unit = m_merc.GetComponent<Unit>();
-        health.text = $"{unit.Health}/{unit.BaseStats.health}";
-        defense.text = $"{1.0f/unit.damage_multiplier}%";
-        energy.text = $"{1.0f/unit.energy_gain_rate}%";
-        movement_speed.text = $"{unit.movement_speed}m/s";
+        health.text = $"{(int)unit.Health}/{(int)unit.BaseStats.health}";
+        defense.text = $"{(int)(1.0f/unit.damage_multiplier * 100.0f)}%";
+        energy.text = $"{(int)(1.0f/unit.energy_gain_rate* 100.0f)}%";
+        movement_speed.text = $"{(int)unit.movement_speed}m/s";
 
         Weapon weapon = unit.EquipedWeapon;
         if (weapon != null)
         {
-            base_damage.text = $"{weapon.base_damage}";
-            attack_speed.text = $"{weapon.attack_speed}";
-            ammo.text = $"{weapon.max_bullets}";
+            base_damage.text = $"{(int)weapon.Stats.base_damage}";
+            attack_speed.text = $"{(int)weapon.Stats.attack_speed}";
+            ammo.text = $"{(int)weapon.Stats.max_bullets}";
+        }
+
+        modifier_icons.Clear();
+        foreach(ModifierAttributes modifier in weapon.modifiers)
+        {
+            modifier_icons.Add(Instantiate(modifier.modifier_icon, modifiers_container));
         }
 
         if (m_reward)

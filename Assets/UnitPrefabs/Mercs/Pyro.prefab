@@ -1078,6 +1078,13 @@ MonoBehaviour:
   damageable_resources: {fileID: 11400000, guid: a2f36fdea0d7ac64696d0cbb2998a2de, type: 2}
   damage_multiplier: 0
   damageable_renderer: {fileID: 3443081956844802170}
+  on_damage_sfx:
+    Guid:
+      Data1: 720610584
+      Data2: 1106632966
+      Data3: -1736846156
+      Data4: -1362224379
+    Path: event:/Player/Player Take Damage
   m_status_effect: 0
   m_health: 100
   energy: 0
@@ -1131,6 +1138,13 @@ MonoBehaviour:
   type: 1
   experience: 0
   unit_state_machine: {fileID: 8853079921697131615}
+  particle_pickup_sfx:
+    Guid:
+      Data1: 0
+      Data2: 0
+      Data3: 0
+      Data4: 0
+    Path: 
 --- !u!1 &5143382767265657182
 GameObject:
   m_ObjectHideFlags: 0

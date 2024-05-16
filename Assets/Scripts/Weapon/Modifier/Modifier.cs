@@ -1,7 +1,6 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using TMPro;
 using UnityEngine;
 
 [Flags]
@@ -12,6 +11,7 @@ public enum WeaponModifiers
     Echo = 1 << 1, 
     Sap = 1 << 2, 
     LockedOn = 1 << 3,  
+    Piercing = 1 << 4,  
 
     EchoNoCost = 1 << 3, 
 };
@@ -19,7 +19,6 @@ public enum WeaponModifiers
 [RequireComponent(typeof(Weapon))]
 public class Modifier : MonoBehaviour
 {
-    // TODO: Make WeaponModifierEvent Class
     [Header("OnFire")]
     [SerializeField] public List<Ability> on_fire_abilities;
     [SerializeField] public WeaponModifiers modifiers;
@@ -80,7 +79,6 @@ public class Modifier : MonoBehaviour
     }
     public bool CheckModifier(WeaponModifiers modifier_flags){ return (modifiers & modifier_flags) == modifier_flags;}
     public void RemoveModifier(WeaponModifiers modifier_flags) { modifiers &= ~modifier_flags; }
-
     void OnEquip()
     {
         m_weapon = GetComponent<Weapon>();
@@ -105,7 +103,6 @@ public class Modifier : MonoBehaviour
             };
         }
     }
-
     void OnUnequip()
     {
         // TODO: Unsub from events
@@ -138,13 +135,13 @@ public class Modifier : MonoBehaviour
     }
     private void Bounce(Vector3 point, Vector3 dir, Vector3 normal)
     {
-        float start_damage = m_weapon.base_damage;
-        m_weapon.base_damage *= bounce_multiplier;
+        float start_damage = m_weapon.Stats.base_damage;
+        m_weapon.Stats.base_damage *= bounce_multiplier;
 
         dir.y = 0;
         dir.Normalize();
-        m_weapon.AttackImpl(point, Vector3.Reflect(dir, normal).normalized * m_weapon.range);
-        m_weapon.base_damage = start_damage;
+        m_weapon.AttackImpl(point, Vector3.Reflect(dir, normal).normalized * m_weapon.Stats.range);
+        m_weapon.Stats.base_damage = start_damage;
     }
 
     IEnumerator Delay(float time, Action callback)

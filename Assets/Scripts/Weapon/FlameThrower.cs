@@ -26,7 +26,7 @@ public class FlameThrower : Weapon
     public void Start()
     {
         // Weapon asserts
-        Debug.Assert(attack_speed != 0);
+        Debug.Assert(Stats.attack_speed != 0);
         Debug.Assert(impact_particle_system != null);
         Debug.Assert(burst_impact_particle_system != null);
 
@@ -56,9 +56,8 @@ public class FlameThrower : Weapon
     {
         if (!flame_particles.isPlaying)
         {
-            Debug.Log("Play!");
             flame_particles.Play();
-        flamerSFXInstance.start();
+            flamerSFXInstance.start();
         }
     }
 
@@ -66,7 +65,6 @@ public class FlameThrower : Weapon
     {
         if(flame_particles.isPlaying)
         {
-            Debug.Log("STOP!");
             flame_particles.Stop();
         }
     }
@@ -75,7 +73,7 @@ public class FlameThrower : Weapon
     {
         if (other.TryGetComponent<Unit>(out Unit unit))
         {
-            unit.TakeDamage(base_damage, StatusEffect.Burning, 0, other.transform.position);
+            unit.TakeDamage(Stats.base_damage, StatusEffect.Burning, 0, other.transform.position);
         }
     }
 }

@@ -1,6 +1,6 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+
+public delegate void ItemChosenCallback();
 
 public class ShopItem : MonoBehaviour
 {
@@ -13,17 +13,22 @@ public class ShopItem : MonoBehaviour
     [SerializeField]
     public ParticleSystem unchosen_particles;
 
+    public ItemChosenCallback item_chosen_callback;
+
     bool chosen = false;
 
     private void Start()
     {
         m_room = GetComponentInParent<Room>();
 
-        m_room.room_complete_calblack += () =>
+        if (m_room != null)
         {
-            Instantiate(chosen ? chosen_particles : unchosen_particles, transform.position, Quaternion.identity);
-            Destroy(gameObject);
-        };
+            m_room.room_complete_calblack += () =>
+            {
+                Instantiate(chosen ? chosen_particles : unchosen_particles, transform.position, Quaternion.identity);
+                Destroy(gameObject);
+            };
+        }
     }
 
     private void OnTriggerEnter(Collider other)
@@ -39,9 +44,13 @@ public class ShopItem : MonoBehaviour
             leader.Party.AddMember(merc);
 
             chosen = true;
+            item_chosen_callback?.Invoke();
 
             // Complete when shop item is chosen
-            GetComponentInParent<Room>().Complete();
+            if (m_room)
+            {
+                m_room.Complete();
+            }
         }
     }
 

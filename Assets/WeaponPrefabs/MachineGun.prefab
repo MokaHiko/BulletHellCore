@@ -46,8 +46,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resource: {fileID: 11400000, guid: 210caa32d53cece439c762af97bc293e, type: 2}
-  base_damage: 8
-  attack_speed: 10
+  base_damage: 12
+  attack_speed: 6
   scan_radius: 0.5
   range: 500
   max_bullets: 16

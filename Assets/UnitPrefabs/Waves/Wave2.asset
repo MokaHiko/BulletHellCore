@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c8c1b3bfcd5423149b7ce363cd1a17ac, type: 3}
+  m_Name: Wave2
+  m_EditorClassIdentifier: 
+  spawn_effect_prefab: {fileID: 3913098055105929163, guid: 4424fbdfee74d7446b0f2c985f608624, type: 3}
+  wave_time: 9
+  spawn_interval: 3
+  table: {fileID: 11400000, guid: 6a053f6e7534a7442bab75e073ef2fc3, type: 2}
