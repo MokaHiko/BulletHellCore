@@ -61,6 +61,9 @@
 		</relationship>
 	</object>
 	<object class="EventAutomatableProperties" id="{472e5fa0-cfb1-4ff5-b8d6-950eee5e0422}">
+		<property name="maxVoices">
+			<value>3</value>
+		</property>
 		<property name="minimumDistance">
 			<value>0</value>
 		</property>
@@ -254,7 +257,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{6fe66151-ff09-4dd1-b1c9-b66c6716be86}">
 		<property name="volume">
-			<value>-3.5</value>
+			<value>-18</value>
 		</property>
 		<property name="name">
 			<value>crashes</value>

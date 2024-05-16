@@ -1038,6 +1038,13 @@ MonoBehaviour:
       Data3: -1736846156
       Data4: -1362224379
     Path: event:/Player/Player Take Damage
+  on_damage_sfx:
+    Guid:
+      Data1: 720610584
+      Data2: 1106632966
+      Data3: -1736846156
+      Data4: -1362224379
+    Path: event:/Player/Player Take Damage
   m_status_effect: 0
   m_health: 100
   energy: 0
@@ -1093,11 +1100,11 @@ MonoBehaviour:
   unit_state_machine: {fileID: 2760316214204693992}
   particle_pickup_sfx:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -135191112
+      Data2: 1275959227
+      Data3: -106264190
+      Data4: 494287380
+    Path: event:/Objects/Charge Particle Pickup
 --- !u!1 &7817972912026028604
 GameObject:
   m_ObjectHideFlags: 0
@@ -1792,6 +1799,26 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 2481604986374075755, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
+      propertyPath: on_damage_sfx.Path
+      value: event:/Player/Weapons/Shield/Player Shield Ping
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481604986374075755, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
+      propertyPath: on_damage_sfx.Guid.Data1
+      value: 1992456176
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481604986374075755, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
+      propertyPath: on_damage_sfx.Guid.Data2
+      value: 1116277741
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481604986374075755, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
+      propertyPath: on_damage_sfx.Guid.Data3
+      value: -1191847746
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481604986374075755, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
+      propertyPath: on_damage_sfx.Guid.Data4
+      value: 1958228770
+      objectReference: {fileID: 0}
     - target: {fileID: 6794309378283286560, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
       propertyPath: m_Name
       value: Shield
@@ -1866,17 +1893,53 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 190053cf15b9ca844a19a31f7bc9e375, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1896521529318987782 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1360828042317002730, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
+  m_PrefabInstance: {fileID: 626965361341870060}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &3081310121535183495 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2481604986374075755, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
   m_PrefabInstance: {fileID: 626965361341870060}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 1896521529318987782}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9f49a726e58853a4baed14c7fd577bdc, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &4208883456216601427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1896521529318987782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 173075125
+      Data2: 1289071167
+      Data3: -464495205
+      Data4: 1192289489
+    Path: event:/Player/Weapons/Shield/Player Shield Deploy
+  Event: 
+  PlayEvent: 1
+  StopEvent: 2
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1001 &7953399318269932724
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2097,22 +2160,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
---- !u!224 &2621451938022366771 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
-  m_PrefabInstance: {fileID: 7953399318338156419}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5070664027311589497 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 2899958189105840122, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
-  m_PrefabInstance: {fileID: 7953399318338156419}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &4713357788742995407 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3389261520146397772, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
@@ -2124,6 +2171,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &5070664027311589497 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2899958189105840122, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
+  m_PrefabInstance: {fileID: 7953399318338156419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!224 &2621451938022366771 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
+  m_PrefabInstance: {fileID: 7953399318338156419}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7953399318785511566
 PrefabInstance:
   m_ObjectHideFlags: 0

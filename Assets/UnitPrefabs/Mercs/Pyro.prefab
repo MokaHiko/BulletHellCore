@@ -1140,11 +1140,11 @@ MonoBehaviour:
   unit_state_machine: {fileID: 8853079921697131615}
   particle_pickup_sfx:
     Guid:
-      Data1: 0
-      Data2: 0
-      Data3: 0
-      Data4: 0
-    Path: 
+      Data1: -135191112
+      Data2: 1275959227
+      Data3: -106264190
+      Data4: 494287380
+    Path: event:/Objects/Charge Particle Pickup
 --- !u!1 &5143382767265657182
 GameObject:
   m_ObjectHideFlags: 0
@@ -1989,14 +1989,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
---- !u!4 &3674087132737004783 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4000014129045996, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
-  m_PrefabInstance: {fileID: 3671224494977795331}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &3480614887126617419 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198000012368742472, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
+  m_PrefabInstance: {fileID: 3671224494977795331}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3674087132737004783 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4000014129045996, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
   m_PrefabInstance: {fileID: 3671224494977795331}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3671224495045887540
@@ -2123,6 +2123,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8715500016612437892 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
+  m_PrefabInstance: {fileID: 3671224495045887540}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2160562747150285944 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3389261520146397772, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
@@ -2134,11 +2139,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &8715500016612437892 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
-  m_PrefabInstance: {fileID: 3671224495045887540}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3671224495431906215
 PrefabInstance:
   m_ObjectHideFlags: 0
