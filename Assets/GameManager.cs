@@ -1,6 +1,8 @@
 using Cinemachine;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 
 // Singleton class 
@@ -20,11 +22,12 @@ public class GameManager : MonoBehaviour
     [SerializeField]
     DungeonGenerator2D dungeon_generator;
 
+    [Header("Effects")]
+    public Volume post_process_volume;
+
     [Header("UI")]
-    [SerializeField]
-    private PlayerHud player_hud;
-    [SerializeField]
-    private MenuManager in_game_menu;
+    public PlayerHud player_hud;
+    public MenuManager in_game_menu;
 
     [SerializeField]
     int room_count = 0;
@@ -33,16 +36,17 @@ public class GameManager : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Escape))
         {
-            Debug.Log("Pause");
             in_game_menu.ToggleMenu("PauseMenu");
         }
     }
 
-    public void Reward()
+    public void Reward(Merc merc)
     {
-        in_game_menu.ActivateMenu("RewardsMenu");
+        //in_game_menu.ActivateMenu("RewardsMenu");
+        PartyLayoutMenu layout_menu = in_game_menu.FindMenu("PartyLayoutMenu") as PartyLayoutMenu;
+        in_game_menu.ActivateMenu(layout_menu);
+        //in_game_menu.ActivateMenu("PartyLayoutMenu");
     }
-
     public void ToggleGameMenu()
     {
         in_game_menu.ToggleMenu("GameMenu");
@@ -91,6 +95,38 @@ public class GameManager : MonoBehaviour
 
         m_shake_routine = StartCoroutine(ShakeEffect(intensity, time));
     }
+
+    public void RequestVignette(float duration, float intensity = 0.45f)
+    {
+        if (m_vignette_routine != null)
+        {
+            StopCoroutine(m_vignette_routine);
+            m_vignette_routine = null;
+        }
+
+        m_vignette_routine = StartCoroutine(VignetteEffect(duration, intensity));
+    }
+
+    public void RequestSlowMo(float duration, float scale = 0.02f)
+    {
+        if (m_slowmo_routine != null)
+        {
+            StopCoroutine(m_slowmo_routine);
+            m_slowmo_routine = null;
+        }
+
+        m_slowmo_routine = StartCoroutine(SlowMoEffect(duration, scale));
+    }
+    public void RequestZoom(float round_trip_duration, float zoom_scale = 2.0f) 
+    {
+        if (m_zoom_routine != null)
+        {
+            return;
+        }
+
+        m_zoom_routine = StartCoroutine(ZoomEffect(round_trip_duration, zoom_scale));
+    }
+
     public CinemachineVirtualCamera GetVirtualCamera()
     {
         return m_virtual_camera;
@@ -223,7 +259,77 @@ public class GameManager : MonoBehaviour
         cinemachine_perlin.m_AmplitudeGain = 0;
         m_shake_routine = null;
     }
+    IEnumerator ZoomEffect(float round_trip_duration, float zoom_scale)
+    {
+        float start_ortho_size = m_virtual_camera.m_Lens.OrthographicSize;
 
+        float time = 0.0f;
+        float duration = round_trip_duration / 2.0f;
+
+        while(time < duration) 
+        {
+            time += Time.deltaTime;
+            m_virtual_camera.m_Lens.OrthographicSize = Mathf.Lerp(start_ortho_size, start_ortho_size / zoom_scale, time / duration);
+            yield return null;
+        }
+
+        time = 0.0f;
+        while(time < duration) 
+        {
+            time += Time.deltaTime;
+            m_virtual_camera.m_Lens.OrthographicSize = Mathf.Lerp(start_ortho_size / zoom_scale, start_ortho_size, time / duration);
+            yield return null;
+        }
+
+        m_virtual_camera.m_Lens.OrthographicSize = start_ortho_size;
+        m_zoom_routine = null;
+    }
+
+    private IEnumerator VignetteEffect(float duration, float intensity)
+    {
+        if (!post_process_volume.profile.TryGet<Vignette>(out Vignette vignette))
+        {
+            yield break;
+        }
+
+        float start_intensity = vignette.intensity.value;
+        vignette.intensity.value = intensity;
+
+        yield return new WaitForSeconds(duration);
+
+        vignette.intensity.value = start_intensity;
+    }
+
+    private IEnumerator SlowMoEffect(float duration, float scale)
+    {
+        //burst_particle_system.Play();
+        //burst = true;
+
+        // Slow time
+        Time.timeScale = 0.5f;
+        Time.fixedDeltaTime = Time.timeScale * scale;
+
+        //float start_distance = m_camera_start_distance;
+        //float end_distance = start_distance - burst_zoom;
+
+        float time = 0.0f;
+        while (time < duration)
+        {
+            //(m_cm_component_base as CinemachineFramingTransposer).m_CameraDistance = Mathf.Lerp(start_distance, end_distance, time / duration);
+            time += (1.0f / duration) * Time.unscaledDeltaTime;
+
+            yield return null;
+        }
+
+        //(m_cm_component_base as CinemachineFramingTransposer).m_CameraDistance = start_distance;
+
+        // Reset time
+        Time.timeScale = 1.0f;
+        m_slowmo_routine = null;
+
+        //burst = false;
+        //m_burst_routine = null;
+    }
 
     // ~ Handles
     [SerializeField]
@@ -231,11 +337,15 @@ public class GameManager : MonoBehaviour
 
     [SerializeField]
     CinemachineVirtualCamera m_virtual_camera;
+    CinemachineComponentBase m_cm_component_base;
 
     // ~ Camera Effects
     Coroutine m_shake_routine;
+    Coroutine m_zoom_routine;
     float m_current_shake;
 
     // ~ Game effects
     Coroutine m_stop_effect;
+    Coroutine m_slowmo_routine;
+    Coroutine m_vignette_routine;
 }

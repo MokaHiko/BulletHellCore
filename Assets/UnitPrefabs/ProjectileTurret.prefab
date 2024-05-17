@@ -102,7 +102,6 @@ MonoBehaviour:
   solar: 0
   energy_gain_rate: 0
   movement_speed: 0
-  agility: 0
   weapons: []
   animator: {fileID: 0}
   health_bar: {fileID: 457092059049742281}
@@ -253,8 +252,8 @@ MonoBehaviour:
   AllowNonRigidbodyDoppler: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 10000
+  OverrideMinDistance: 8
+  OverrideMaxDistance: 85
 --- !u!1001 &3344294725501809459
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -65,10 +65,17 @@ public class MercInspector : Menu
         }
 
         modifier_icons.Clear();
+        float base_damage_percent = 1.0f;
+        float base_attack_speed_percent = 1.0f;
         foreach(ModifierAttributes modifier in weapon.modifiers)
         {
             modifier_icons.Add(Instantiate(modifier.modifier_icon, modifiers_container));
+            base_damage_percent *= modifier.stat_multipliers.base_damage;
+            base_attack_speed_percent *= modifier.stat_multipliers.attack_speed;
         }
+
+        base_damage_plus.text = $"{base_damage_percent * 100.0f}%";
+        attack_speed_plus.text = $"{base_attack_speed_percent * 100.0f}%";
 
         if (m_reward)
         {

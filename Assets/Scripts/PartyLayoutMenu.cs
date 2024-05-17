@@ -25,12 +25,11 @@ public class PartyLayoutMenu : MenuManager
     {
         Debug.Assert(virtual_camera != null);
 
+        GameManager.Instance.IndefinedStop();
+
         virtual_camera.LookAt = line_up;
         virtual_camera.Follow = line_up;
 
-        // Store default camera values
-        //m_default_orthographic_size = virtual_camera.m_Lens.OrthographicSize;
-        //m_default_offset = virtual_camera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset;
         virtual_camera.m_Lens.OrthographicSize = 2.5f;
         virtual_camera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0.0f, 1.5f, -10.0f);
 
@@ -48,6 +47,7 @@ public class PartyLayoutMenu : MenuManager
                 m_mercs.Add(Instantiate(merc_views[(int)slot.merc.type], line_up_containers[ctr++].position, Quaternion.identity, line_up_containers[(int)slot.merc.type]));
             }
         }
+
     }
 
     private void Update()
@@ -56,7 +56,7 @@ public class PartyLayoutMenu : MenuManager
         {
             foreach(GameObject merc in m_mercs) 
             {
-                merc.transform.rotation = Quaternion.Euler(0.0f, rotation_speed * Time.timeSinceLevelLoad, 0.0f);
+                merc.transform.rotation = Quaternion.Euler(0.0f, rotation_speed * Time.unscaledTime, 0.0f);
             }
         }
     }
@@ -72,6 +72,8 @@ public class PartyLayoutMenu : MenuManager
 
         virtual_camera.m_Lens.OrthographicSize = m_default_orthographic_size;
         virtual_camera.GetCinemachineComponent<CinemachineTransposer>().m_FollowOffset = new Vector3(0.0f, 1.5f, -10.0f);
+
+        GameManager.Instance.ContinueTime();
     }
 
     public override void OnMenuClose(Menu menu)

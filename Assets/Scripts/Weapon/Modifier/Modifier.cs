@@ -35,8 +35,9 @@ public class Modifier : MonoBehaviour
     // On Bounce
 
     // Start is called before the first frame update
-    void Start()
+    public void Equip(Merc merc)
     {
+        m_weapon = merc.GetComponent<Unit>().EquipedWeapon;
         OnEquip();
     }
 
@@ -56,7 +57,7 @@ public class Modifier : MonoBehaviour
 
         if(CheckModifier(WeaponModifiers.Bounce))
         {
-            int n_bounces = bounces;
+            int n_bounces = ++bounces;
             m_weapon.on_hit += (Vector3 point, Vector3 dir, Vector3 normal) =>
             {
                 if (n_bounces <= 0)
@@ -81,8 +82,6 @@ public class Modifier : MonoBehaviour
     public void RemoveModifier(WeaponModifiers modifier_flags) { modifiers &= ~modifier_flags; }
     void OnEquip()
     {
-        m_weapon = GetComponent<Weapon>();
-
         if(CheckModifier(WeaponModifiers.Echo))
         {
             m_weapon.on_fire += Echo;

@@ -43,13 +43,9 @@ public class Merc : MonoBehaviour
         m_unit.status_callback += OnStatusEffect;
     }
 
-    int ctr = 0;
     public void OnParticleEnter(ParticleType type)
     {
-        if (ctr++ % 5 == 0)
-        {
-            FMODUnity.RuntimeManager.PlayOneShotAttached(particle_pickup_sfx, gameObject);
-        }
+        FMODUnity.RuntimeManager.PlayOneShotAttached(particle_pickup_sfx, gameObject);
 
         switch (type) 
         {
@@ -77,14 +73,12 @@ public class Merc : MonoBehaviour
     {
         // TODO: Level up effects
         merc_level_up_callback?.Invoke();
-        GameManager.Instance.Reward();
+        GameManager.Instance.Reward(this);
     }
- 
     private void OnStatusEffect(StatusEffect status_effect_flags)
     {
         if ((status_effect_flags & StatusEffect.ShortCircuit) == StatusEffect.ShortCircuit)
         {
-
         }
     }
 

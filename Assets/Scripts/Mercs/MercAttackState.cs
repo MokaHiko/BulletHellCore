@@ -12,14 +12,19 @@ public class MercAttackState : UnitAttackState
     [SerializeField]
     float time_held = 0.0f;
 
+    [SerializeField]
+    float attack_movement_speed_multplier = 0.75f;
+
     public override void OnEnter(Unit unit)
     {
         m_merc = unit.GetComponent<Merc>();
         m_equiped_weapon = unit.EquipedWeapon;
+
     }
 
     public override void OnExit(Unit unit)
     {
+        unit.movement_speed = unit.BaseStats.movement_speed;
     }
 
     // Attack and target location
@@ -35,22 +40,28 @@ public class MercAttackState : UnitAttackState
     {
         if(m_equiped_weapon != null)
         {
+            // Alt attacks are merc specials
+            GameManager.Instance.GetPlayerHud().ShowMercSpecial(m_merc);
+
             m_equiped_weapon.Attack(world_location, true);
         }
     }
+
     void Release()
     {
-        if(time_held > m_equiped_weapon.Stats.hold_threshold) 
+        if(time_held >= m_equiped_weapon.Stats.hold_threshold) 
         {
             AltAttack(m_merc.Party.WorldMousePoint);
         }
         time_held = 0.0f;
     }
+
     public override void OnFrameTick(Unit unit, float dt)
     {
         // Fire current weapon
         if(Input.GetMouseButton(0)) 
         {
+            unit.movement_speed = unit.BaseStats.movement_speed * attack_movement_speed_multplier;
             time_held += Time.deltaTime;
             Attack(m_merc.Party.WorldMousePoint);
             return;

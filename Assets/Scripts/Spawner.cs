@@ -1,9 +1,12 @@
 using System.Collections.Generic;
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
 {
+    [Header("Spawns")]
     public List<Wave> waves;
+    public List<Transform> spawn_points;
 
     public int wave_index;
     public Wave current_wave;
@@ -20,7 +23,7 @@ public class Spawner : MonoBehaviour
     {
         if (current_wave == null)
         {
-            Debug.Assert(false, "Level has waves!"); 
+            Debug.Assert(false, "Level has waves!");
             return;
         }
 
@@ -36,6 +39,9 @@ public class Spawner : MonoBehaviour
             }
             else
             {
+                // TODO: Next level / Game over
+                GameManager.Instance.GameOver();
+
                 Debug.Log("Level Complete");
             }
         }

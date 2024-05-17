@@ -101,7 +101,7 @@ public class UIEffect : MonoBehaviour
 
         while (time < duration)
         {
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             Vector3 scale = Vector3.Lerp(new Vector3(0.0f, start_scale.y, start_scale.z), start_scale, time / duration);
             GetComponent<RectTransform>().localScale = scale;
             yield return null;
@@ -123,7 +123,7 @@ public class UIEffect : MonoBehaviour
 
         while (time < duration)
         {
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             Vector3 position = Vector3.Lerp(start_position, target_position, time / duration);
             GetComponent<RectTransform>().position = position;
             yield return null;
@@ -139,7 +139,7 @@ public class UIEffect : MonoBehaviour
         TryGetComponent<CanvasGroup>(out CanvasGroup group);
         while (time < duration)
         {
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             float alpha = Mathf.Lerp(0, 1.0f, time / duration);
             GetComponent<CanvasRenderer>().SetAlpha(alpha);
 
@@ -172,7 +172,7 @@ public class UIEffect : MonoBehaviour
 
         while (time < duration)
         {
-            time += Time.deltaTime;
+            time += Time.unscaledDeltaTime;
             float alpha = Mathf.Lerp(start_alpha, 0.0f, time / duration);
 
             if (canvas_renderer != null)

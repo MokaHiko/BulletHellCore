@@ -15,7 +15,10 @@ public class Wave : ScriptableObject
 {
     [Header("Spawn Effects")]
     public SpawnEffectHandler spawn_effect_prefab;
+    public SpawnEffectHandler reward_spawn_effect_prefab;
 
+    [Header("Reward")]
+    public List<GameObject> wave_rewards;
     public void Init(Spawner spawner)
     {
         Debug.Assert(m_spawner == null, "Wave already initialized");
@@ -92,7 +95,8 @@ public class Wave : ScriptableObject
             Debug.Log("Wave Complete!");
         }
 
-        SpawnEffectHandler spawn_effect = GameObject.Instantiate(spawn_effect_prefab, m_spawner.transform.position, Quaternion.identity);
+        Vector3 spawn_position = m_spawner.spawn_points[Random.Range(0, m_spawner.spawn_points.Count)].position;
+        SpawnEffectHandler spawn_effect = GameObject.Instantiate(reward_spawn_effect_prefab, spawn_position, Quaternion.identity);
 
         foreach (Unit spawnable_unit in unit_interval_spawns[m_interval])
         {
@@ -105,7 +109,7 @@ public class Wave : ScriptableObject
                 // Complete when in final interval and all units dead
                 if(m_total_units == m_dead_units)
                 {
-                    m_complete = true;
+                    Complete();
                 }
             };
 
@@ -113,6 +117,19 @@ public class Wave : ScriptableObject
         }
 
         spawn_effect.LoadObjects();
+    }
+    void Complete()
+    {
+        Vector3 spawn_position = GameManager.Instance.GetPlayer().transform.position;
+        SpawnEffectHandler spawn_effect = GameObject.Instantiate(spawn_effect_prefab, spawn_position, Quaternion.identity);
+
+        foreach (var reward in wave_rewards)
+        {
+            spawn_effect.spawn_objects.Add(GameObject.Instantiate(reward));
+        }
+
+        spawn_effect.LoadObjects();
+        m_complete = true;
     }
 
     public float wave_time = 60.0f;

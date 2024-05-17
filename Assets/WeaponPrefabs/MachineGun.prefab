@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 4643685652382954745}
   - component: {fileID: 4692509919438955288}
-  - component: {fileID: 1656145316569427640}
   m_Layer: 3
   m_Name: MachineGun
   m_TagString: Untagged
@@ -46,18 +45,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   resource: {fileID: 11400000, guid: 210caa32d53cece439c762af97bc293e, type: 2}
-  base_damage: 12
-  attack_speed: 6
-  scan_radius: 0.5
-  range: 500
-  max_bullets: 16
-  reload_time: 1
-  hold_threshold: 0.25
+  modifiers: []
   damageable_layers:
     serializedVersion: 2
     m_Bits: 6848
   owner: {fileID: 0}
-  bullets: 0
+  m_bullets: 0
+  m_modified_stats:
+    base_damage: 1
+    attack_speed: 1
+    scan_radius: 1
+    range: 1
+    max_bullets: 1
+    reload_time: 1
+    hold_threshold: 1
   impact_particle_system: {fileID: 74078499623404260, guid: d8b19b0e18bc7fc4280b801faa3feedf, type: 3}
   spread: 0.1
   charge_rate: 0.35
@@ -67,29 +68,12 @@ MonoBehaviour:
   regular_fire_shake: 1
   regular_fire_shake_time: 0.1
   alt_fire_hit_stop: 0.015
+  alt_fire_hit_slow_mo_duration: 0.45
   burst_fire_shake: 1
   burst_spread: 20
   burst_multiplier: 3
-  shots: 3
+  base_shots: 2
   burst_impact_particle_system: {fileID: 7017294773630732249, guid: b1e15e49e7825114d8040c8460244bab, type: 3}
---- !u!114 &1656145316569427640
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4643685652382954744}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5f4f84425007ecb4eae9c3358504f1f4, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  on_fire_abilities: []
-  modifiers: 0
-  echo_delay: 1
-  echo_count: 0
-  bounce_multiplier: 0.5
-  bounces: 0
 --- !u!1001 &4643685652139974651
 PrefabInstance:
   m_ObjectHideFlags: 0

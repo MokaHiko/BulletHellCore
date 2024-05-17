@@ -1,0 +1,49 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!21 &2100000
+Material:
+  serializedVersion: 6
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: RewardTelegraphMaterial
+  m_Shader: {fileID: -6465566751694194690, guid: f71ba45e3ba07cb4ebdf5f46218f5450, type: 3}
+  m_ShaderKeywords: 
+  m_LightmapFlags: 4
+  m_EnableInstancingVariants: 0
+  m_DoubleSidedGI: 0
+  m_CustomRenderQueue: -1
+  stringTagMap: {}
+  disabledShaderPasses: []
+  m_SavedProperties:
+    serializedVersion: 3
+    m_TexEnvs:
+    - Texture2D_d61bd2ef338d458cb2581e89de542ddf:
+        m_Texture: {fileID: 2800000, guid: 25534d7e0c9de5646aee54d576a28388, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_Lightmaps:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_LightmapsInd:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - unity_ShadowMasks:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    m_Floats:
+    - Vector1_294efe3b3f914b26a21684dc802213e9: 0.1
+    - Vector1_60290cbba5804765ada43b3298f1dc27: 2
+    - Vector1_657ca942a5644830b8eb60cbaa16ed43: 1
+    - Vector1_75f87c9814d24409b40fa468fc2b4cb4: 10
+    - Vector1_d79c2482962a4ebeb9b12a64f502c1ad: 10
+    - Vector1_ffdab28f0e984474a304f55c61461140: 3
+    m_Colors:
+    - Color_120591e2185d464fbeab2564191ae7c9: {r: 0, g: 0.9433962, b: 0.37506774, a: 1}
+    - Color_68e9d8306d8549b1a74c55c790709f6f: {r: 0.11949676, g: 1, b: 0.43629143, a: 1}
+    - Vector2_2da9309a1faf48ef9f5b7e38a3ff5798: {r: 1, g: 1, b: 1, a: 0}
+  m_BuildTextureStacks: []

@@ -15,6 +15,5 @@ MonoBehaviour:
   health: 100
   max_energy: 150
   energy_gain_rate: 1
-  movement_speed: 9
-  agility: 9
+  movement_speed: 12
   damage_multiplier: 1

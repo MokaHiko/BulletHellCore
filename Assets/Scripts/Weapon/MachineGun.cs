@@ -27,12 +27,13 @@ public class MachineGun : Weapon
     public float regular_fire_shake_time = 0.5f;
     [SerializeField]
     public float alt_fire_hit_stop = 0.1f;
+    public float alt_fire_hit_slow_mo_duration = 0.45f;
 
     [Header("Burst fire")]
     public float burst_fire_shake = 5.0f;
     public float burst_spread = 20.0f;
     public float burst_multiplier = 20.0f;
-    public int shots = 4;
+    public int base_shots = 4;
 
     [SerializeField]
     public ParticleSystem burst_impact_particle_system;
@@ -52,6 +53,15 @@ public class MachineGun : Weapon
 
     public override void AltAttackImpl(Vector3 fire_point, Vector3 target_position)
     {
+        int extra_shots = Mathf.FloorToInt((Stats.max_bullets - m_bullets) * 0.5f);
+        int shots = base_shots + Mathf.Clamp(extra_shots, 0, extra_shots);
+
+        if (shots <= 0)
+        {
+            return;
+        }
+
+        GameManager.Instance.RequestZoom(0.5f, 1.05f);
         Shake(burst_fire_shake * shots, muzzle_flash.main.duration);
         muzzle_flash.Play();
 
@@ -116,7 +126,7 @@ public class MachineGun : Weapon
 
         // Recoil
         dir += new Vector3(UnityEngine.Random.Range(-spread, spread), 0, UnityEngine.Random.Range(-spread, spread));
-        dir.y = Mathf.Clamp(dir.y, -0.05f, dir.y);
+        dir.y = Mathf.Clamp(dir.y, -0.01f, dir.y);
         dir.Normalize();
 
         TrailRenderer trail = Instantiate(bullet_trail, fire_point, Quaternion.identity);
@@ -173,7 +183,9 @@ public class MachineGun : Weapon
 
         if (hit_stop)
         {
-            GameManager.Instance.RequestStop(alt_fire_hit_stop);
+            //GameManager.Instance.RequestStop(alt_fire_hit_stop);
+            GameManager.Instance.RequestVignette(0.5f);
+            GameManager.Instance.RequestSlowMo(alt_fire_hit_slow_mo_duration, 0.01f);
         }
 
         // Invoke call back 

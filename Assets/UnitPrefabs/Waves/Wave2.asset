@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Wave2
   m_EditorClassIdentifier: 
   spawn_effect_prefab: {fileID: 3913098055105929163, guid: 4424fbdfee74d7446b0f2c985f608624, type: 3}
+  reward_spawn_effect_prefab: {fileID: 3913098055105929163, guid: c1abab114e7d6b24dabdfe62080fd2fb, type: 3}
+  wave_rewards: []
   wave_time: 9
   spawn_interval: 3
   table: {fileID: 11400000, guid: 6a053f6e7534a7442bab75e073ef2fc3, type: 2}

@@ -22,9 +22,6 @@ public class Room : MonoBehaviour
     float seed;
 
     [SerializeField]
-    float rarity = 1.0f;
-
-    [SerializeField]
     RectTransform room_intro_prefab;
 
     [SerializeField]

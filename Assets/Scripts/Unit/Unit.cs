@@ -16,8 +16,7 @@ public enum UnitStateFlags
     ManagedMovement = 1 << 1,
 
     TakingDamage = 1 << 2,
-
-    Dead = 1 << 3,
+    Dead = 1 << 4,
 };
 
 [RequireComponent(typeof(Rigidbody))]
@@ -30,7 +29,6 @@ public class Unit : IDamageable
     public float solar = 0.0f;
     public float energy_gain_rate = 1.0f;
     public float movement_speed = 0.0f;
-    public float agility = 0.0f;
 
     [Header("Combat")]
     [SerializeField]
@@ -116,7 +114,7 @@ public class Unit : IDamageable
 
         Debug.Log("Unit has no ability at index: " + type_index);
     }
-    
+
     private void Awake()
     {
         // Handles
@@ -149,7 +147,6 @@ public class Unit : IDamageable
         energy = m_base_stats.max_energy * 0.75f;
         energy_gain_rate = m_base_stats.energy_gain_rate;
         movement_speed = m_base_stats.movement_speed;
-        agility = m_base_stats.agility;
         damage_multiplier = m_base_stats.damage_multiplier;
 
         health_bar.SetValue(m_health, m_base_stats.health);
@@ -180,12 +177,10 @@ public class Unit : IDamageable
         // Slow movement
         ApplyState(UnitStateFlags.TakingDamage);
         movement_speed = m_base_stats.movement_speed * 0.75f;
-        agility = m_base_stats.agility * 0.75f;
 
         yield return new WaitForSeconds(0.15f);
 
         RemoveState(UnitStateFlags.TakingDamage);
-        agility = m_base_stats.agility;
         movement_speed = m_base_stats.movement_speed;
     }
 

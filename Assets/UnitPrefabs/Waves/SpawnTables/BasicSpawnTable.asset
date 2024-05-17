@@ -35,3 +35,9 @@ MonoBehaviour:
     normalized_wave_spawn_time: 0
     reward: {fileID: 0}
     drop_chance: 0
+  - spawnable_objects:
+    - {fileID: 3344294727055201091, guid: 990f41b6999b592489255677c82bffeb, type: 3}
+    weight: 1
+    normalized_wave_spawn_time: 0
+    reward: {fileID: 4381107132436674671, guid: 2199a299f5a1da944be7c9566f903ad6, type: 3}
+    drop_chance: 1

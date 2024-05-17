@@ -6,6 +6,7 @@ public class MercWalkState : UnitWalkState
 {
     [SerializeField]
     float threshold = 0.25f;
+
     public override void OnEnter(Unit unit)
     {
         m_merc = unit.GetComponent<Merc>();
@@ -20,7 +21,6 @@ public class MercWalkState : UnitWalkState
         }
 
         Vector3 target_pos = m_merc.TargetPosition;
-
         if ((unit.transform.position - target_pos).magnitude < threshold)
         {
             StateMachine.QueueRemoveState(this);

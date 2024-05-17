@@ -163,6 +163,8 @@ public class EnemyController : MonoBehaviour
 
     void OnDeath()
     {
+        GameManager.Instance.RequestSlowMo(0.45f);
+ 
         // Drop modifier
         var particles = Instantiate(drop_particles, transform.position, Quaternion.identity);
         Vector3 back = -transform.forward;

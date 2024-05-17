@@ -20,4 +20,4 @@ MonoBehaviour:
     range: 500
     max_bullets: 16
     reload_time: 1
-    hold_threshold: 0.25
+    hold_threshold: 0.15
