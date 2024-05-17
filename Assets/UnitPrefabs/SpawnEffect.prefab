@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3913098055105929162}
   - component: {fileID: 3913098055105929163}
+  - component: {fileID: 5865600620089531607}
   m_Layer: 0
   m_Name: SpawnEffect
   m_TagString: Untagged
@@ -58,6 +59,37 @@ MonoBehaviour:
   fire_particle_system: {fileID: 8489312967972401685, guid: acdc261fa1a62874f8398614dcee267f, type: 3}
   targetting_quad: {fileID: 3094347468955608207, guid: 4153287c4d8b2f04cb7317cbccf42804, type: 3}
   impact_particle_system: {fileID: 198656289721292014, guid: 64891a0eb28db934898420d80ca07cb3, type: 3}
+--- !u!114 &5865600620089531607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3913098055105929157}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: -1949139326
+      Data2: 1239918108
+      Data3: 1345595806
+      Data4: -1978607142
+    Path: event:/Enemies/Drop Pod/Enemy Pod Drop
+  Event: 
+  PlayEvent: 11
+  StopEvent: 12
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 9.400001
+  OverrideMaxDistance: 70
 --- !u!1 &3929363337091469074
 GameObject:
   m_ObjectHideFlags: 0

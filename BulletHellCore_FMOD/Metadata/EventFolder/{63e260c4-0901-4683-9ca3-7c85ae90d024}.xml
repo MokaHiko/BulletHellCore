@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="EventFolder" id="{63e260c4-0901-4683-9ca3-7c85ae90d024}">
+		<property name="name">
+			<value>Drop Pod</value>
+		</property>
+		<relationship name="folder">
+			<destination>{7c3e3f98-4d09-4548-85e0-275e7e3615e7}</destination>
+		</relationship>
+	</object>
+</objects>
