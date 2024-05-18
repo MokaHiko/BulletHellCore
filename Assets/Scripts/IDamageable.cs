@@ -154,12 +154,6 @@ public class IDamageable : MonoBehaviour
         }
     }
     public void RemoveStatus(StatusEffect status_flags) { m_status_effect &= ~status_flags; }
-  
-
-    private void Die()
-    {
-
-    }
 
     // Returns whether damageable object wants to handle death
     protected virtual bool ShouldDie() { return true; }

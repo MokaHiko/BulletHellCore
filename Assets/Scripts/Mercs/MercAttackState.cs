@@ -41,8 +41,6 @@ public class MercAttackState : UnitAttackState
         if(m_equiped_weapon != null)
         {
             // Alt attacks are merc specials
-            GameManager.Instance.GetPlayerHud().ShowMercSpecial(m_merc);
-
             m_equiped_weapon.Attack(world_location, true);
         }
     }

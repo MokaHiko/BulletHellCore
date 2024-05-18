@@ -16,15 +16,12 @@ public class PlayerHud : MonoBehaviour
     public GameObject rewards;
 
     [Header("Merc Coms")]
-    public List<RectTransform> special_transforms;
+    public RectTransform power_up_container;
     public GameObject special_prefab;
 
-    public void ShowMercSpecial(Merc merc, float duration = 0.5f)
+    public void ShowMercSpecial(Merc merc, float duration = 2.0f)
     {
-        if (m_free_index < special_transforms.Count)
-        {
-            StartCoroutine(MercSpecialEffect(merc, duration));
-        }
+        StartCoroutine(MercSpecialEffect(merc, duration));
     }
 
     public void Reward()
@@ -33,23 +30,14 @@ public class PlayerHud : MonoBehaviour
         rewards.SetActive(true);
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        Debug.Assert(special_transforms.Count >= 4);
-    }
-
     IEnumerator MercSpecialEffect(Merc merc, float duration)
     {
-        GameObject special_animation = Instantiate(special_prefab, special_transforms[m_free_index++].transform);
+        GameObject special_animation = Instantiate(special_prefab, power_up_container.transform);
 
-        yield return new WaitForSeconds(duration);  
+        GameManager.Instance.IndefinedStop();
+        yield return new WaitForSecondsRealtime(duration);  
+        GameManager.Instance.ContinueTime();
 
         Destroy(special_animation);
-        m_free_index--;
     }
-
-
-    // ~ Specials
-    int m_free_index = 0;
 }

@@ -16,7 +16,7 @@ MonoBehaviour:
   m_superstate: {fileID: 0}
   duration: 0.15
   cooldown: 1.5
-  energy_cost: 15
+  energy_cost: 35
   stacks: 1
   max_stacks: 1
   trail_renderer: {fileID: 2428749671714479871, guid: 452a1a6cbc452664bbd01b49a3f05e77, type: 3}

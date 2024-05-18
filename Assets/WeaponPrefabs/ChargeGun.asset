@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   weapon_icon: {fileID: 690804884352287621, guid: bcc09fcd7dffaf7458834fb8db4087c1, type: 3}
   base_stats:
-    base_damage: 16
+    base_damage: 24
     attack_speed: 8
     scan_radius: 0.5
     range: 500

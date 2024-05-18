@@ -399,7 +399,7 @@ Animator:
   m_Avatar: {fileID: 0}
   m_Controller: {fileID: 9100000, guid: ff4870acbe46768479f702281a3cc10f, type: 2}
   m_CullingMode: 0
-  m_UpdateMode: 2
+  m_UpdateMode: 0
   m_ApplyRootMotion: 0
   m_LinearVelocityBlending: 0
   m_WarningMessage: 
@@ -1038,13 +1038,6 @@ MonoBehaviour:
       Data3: -1736846156
       Data4: -1362224379
     Path: event:/Player/Player Take Damage
-  on_damage_sfx:
-    Guid:
-      Data1: 720610584
-      Data2: 1106632966
-      Data3: -1736846156
-      Data4: -1362224379
-    Path: event:/Player/Player Take Damage
   m_status_effect: 0
   m_health: 100
   energy: 0
@@ -1053,7 +1046,6 @@ MonoBehaviour:
   solar: 0
   energy_gain_rate: 0
   movement_speed: 0
-  agility: 0
   weapons:
   - {fileID: 6267130297841590210}
   animator: {fileID: 2864160217687640422}
@@ -1800,6 +1792,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2481604986374075755, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
+      propertyPath: m_status_effect
+      value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 2481604986374075755, guid: 4fc4e23602cbcf74092a9bc574627d4b, type: 3}
       propertyPath: on_damage_sfx.Path
       value: event:/Player/Weapons/Shield/Player Shield Ping
       objectReference: {fileID: 0}
@@ -2160,17 +2156,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
---- !u!114 &4713357788742995407 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 3389261520146397772, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
-  m_PrefabInstance: {fileID: 7953399318338156419}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &5070664027311589497 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2899958189105840122, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
@@ -2187,6 +2172,17 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
   m_PrefabInstance: {fileID: 7953399318338156419}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &4713357788742995407 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3389261520146397772, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
+  m_PrefabInstance: {fileID: 7953399318338156419}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &7953399318785511566
 PrefabInstance:
   m_ObjectHideFlags: 0

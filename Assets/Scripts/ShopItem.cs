@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public delegate void ItemChosenCallback();
@@ -11,22 +12,22 @@ public enum ItemType
 
 public class ShopItem : MonoBehaviour
 {
-    [SerializeField]
-    ItemType type;
+    [Header("DropItem")]
+    public ItemType type;
+    public ParticleSystem chosen_particles;
+    public ItemChosenCallback item_chosen_callback;
+    public LayerMask clear_mask;
+    public float clear_radius = 1.0f;
 
-    [SerializeField]
+    [Header("Merc")]
     public Merc merc_prefab;
+    public float duration = 10.0f;
 
-    [SerializeField]
+    [Header("Attributes")]
     public ModifierAttributes attributes;
 
-    [SerializeField]
+    [Header("Modifier")]
     public WeaponModifiers modifier_flags;
-
-    [SerializeField]
-    public ParticleSystem chosen_particles;
-
-    public ItemChosenCallback item_chosen_callback;
 
     private void OnTriggerEnter(Collider other)
     {
@@ -41,13 +42,13 @@ public class ShopItem : MonoBehaviour
             {
                 case ItemType.Merc:
                 {
-                    Merc merc = Instantiate(merc_prefab, transform.position, Quaternion.identity);
-                    leader.Party.AddMember(merc);
+                    leader.Party.AddMember(merc_prefab, duration);
                 }break;
                 case ItemType.ModifierAttribute:
                 {
-                    leader.GetComponent<Unit>().EquipedWeapon.modifiers.Add(attributes);
-                    GameManager.Instance.Reward(leader);
+                    leader.GetComponent<Unit>().EquipedWeapon.AddModifier(attributes);
+                    // TODO: Change to stat indicator in the side
+                    //GameManager.Instance.Reward(leader);
                 }break;
                 case ItemType.Modifier:
                 {
@@ -56,7 +57,7 @@ public class ShopItem : MonoBehaviour
                     modifier.Equip(leader);
                     modifier.ApplyModifier(modifier_flags);
 
-                    GameManager.Instance.Reward(leader);
+                    //GameManager.Instance.Reward(leader);
                 }break;
                 default:
                     break;
@@ -64,10 +65,29 @@ public class ShopItem : MonoBehaviour
 
             item_chosen_callback?.Invoke();
 
-            Destroy(Instantiate(chosen_particles, transform.position, Quaternion.identity), chosen_particles.main.duration);
+            // Clear projectiles 
+            // TODO: Delay
+            if(clear_radius > 0.0f) 
+            {
+                Collider[] cols = Physics.OverlapSphere(transform.position, clear_radius, clear_mask);
+
+                if (cols.Length > 0)
+                {
+                    GameManager.Instance.RequestSlowMo(0.25f);
+                }
+
+                foreach(Collider col in cols)
+                {
+                    Destroy(Instantiate(chosen_particles, col.transform.position, Quaternion.identity).gameObject, chosen_particles.main.duration);
+                    col.GetComponent<Projectile>().Die();
+                }
+            }
+
+            Destroy(Instantiate(chosen_particles, transform.position, Quaternion.identity).gameObject, chosen_particles.main.duration);
             Destroy(gameObject);
         }
     }
+
 
     private Room m_room;
 }

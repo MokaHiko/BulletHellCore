@@ -12,9 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37384d2a9f5ea99418e70dd1e6d24225, type: 3}
   m_Name: BossMechaStats
   m_EditorClassIdentifier: 
-  health: 2000
+  health: 5000
   max_energy: 150
   energy_gain_rate: 1
   movement_speed: 9
-  agility: 9
   damage_multiplier: 1

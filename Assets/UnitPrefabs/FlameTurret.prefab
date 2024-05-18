@@ -99,7 +99,6 @@ MonoBehaviour:
   solar: 0
   energy_gain_rate: 0
   movement_speed: 0
-  agility: 0
   weapons:
   - {fileID: 579953023288094606}
   animator: {fileID: 0}
@@ -165,6 +164,7 @@ MonoBehaviour:
   tick_rate: 1
   combat_distance: 10
   drop_particles: {fileID: 6004998939752341139, guid: 6b4bc7843febb3e4a88403c7f7f828fa, type: 3}
+  drop_attributes: []
   unit_state_machine: {fileID: 1409853621}
 --- !u!1001 &3344294725501809459
 PrefabInstance:

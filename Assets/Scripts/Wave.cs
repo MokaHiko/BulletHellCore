@@ -96,7 +96,7 @@ public class Wave : ScriptableObject
         }
 
         Vector3 spawn_position = m_spawner.spawn_points[Random.Range(0, m_spawner.spawn_points.Count)].position;
-        SpawnEffectHandler spawn_effect = GameObject.Instantiate(reward_spawn_effect_prefab, spawn_position, Quaternion.identity);
+        SpawnEffectHandler spawn_effect = GameObject.Instantiate(spawn_effect_prefab, spawn_position, Quaternion.identity);
 
         foreach (Unit spawnable_unit in unit_interval_spawns[m_interval])
         {
@@ -121,7 +121,7 @@ public class Wave : ScriptableObject
     void Complete()
     {
         Vector3 spawn_position = GameManager.Instance.GetPlayer().transform.position;
-        SpawnEffectHandler spawn_effect = GameObject.Instantiate(spawn_effect_prefab, spawn_position, Quaternion.identity);
+        SpawnEffectHandler spawn_effect = GameObject.Instantiate(reward_spawn_effect_prefab, spawn_position, Quaternion.identity);
 
         foreach (var reward in wave_rewards)
         {

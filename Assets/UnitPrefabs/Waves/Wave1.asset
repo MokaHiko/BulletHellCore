@@ -16,6 +16,6 @@ MonoBehaviour:
   reward_spawn_effect_prefab: {fileID: 3913098055105929163, guid: c1abab114e7d6b24dabdfe62080fd2fb, type: 3}
   wave_rewards:
   - {fileID: 7374107884145504017, guid: 6bd107cc554bb094287da5bde0af3ab2, type: 3}
-  wave_time: 24
-  spawn_interval: 6
+  wave_time: 2
+  spawn_interval: 2
   table: {fileID: 11400000, guid: 6a053f6e7534a7442bab75e073ef2fc3, type: 2}

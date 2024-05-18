@@ -37,108 +37,31 @@ public class PlayerController : MonoBehaviour
     public Vector3 RelativeAxisInput {get{return m_relative_axis_input;}}
     public Vector3 WorldMousePoint {get{return m_world_mouse_point;}}
     public bool lockedControls { get => m_locked_controls; set => m_locked_controls = value; }
-    public void AddMember(Merc merc)
+    public void AddMember(Merc merc_prefab, float duration = -1.0f)
     {
-        // Find slot
-        PartySlot free_slot = null;
-        foreach (PartySlot slot in party_slots)
-        {
-            if (slot.merc == null)
-            {
-                free_slot = slot; 
-                break;
-            }
-        }
-
-        if (free_slot == null)
-        {
-            Debug.Log("Could not find slot. Party Full!");
-            return;
-        }
-
-        // Assign merc
-        free_slot.merc = merc;
-        merc.Party = this;
-        if (free_slot.slot == PartySlotLocation.Center)
-        {
-            party_leader = merc.GetComponent<Unit>();
-        }
-        
-        // Instantiate weapon Icons
-        foreach (Weapon weapon in merc.GetComponent<Unit>().weapons)
-        {
-            Instantiate(weapon.resource.weapon_icon, GameManager.Instance.GetPlayerHud().weapons_container.transform);
-        }
-
-        merc.GetComponent<Unit>().death_callback += () =>
-        {
-            PartySlot center_slot = null;
-            if (merc.gameObject == party_leader.gameObject)
-            {
-                GameManager.Instance.GameOver();
-
-                // TODO: Switch party leaders 
-                foreach(PartySlot slot in party_slots) 
-                { 
-                    if (party_leader != null)
-                    {
-                        break;
-                    }
-
-                    if (slot.merc == merc && slot.slot == PartySlotLocation.Center)
-                    {
-                        center_slot = slot;
-                        continue;
-                    }
-
-                    party_leader = slot.merc.GetComponent<Unit>();
-                }
-
-                // Reassign to center
-                if (party_leader != null)
-                {
-                    center_slot.merc = party_leader.GetComponent<Merc>();
-                }
-                else
-                {
-                    // Lose
-                    GameManager.Instance.GameOver();
-                }
-            }
-
-            RemoveMember(merc);
-        };
+        StartCoroutine(MercPowerUp(this, merc_prefab, duration));
     }
 
     public void RemoveMember(Merc merc)
     {
-        int index = -1;
         for(int i = 0; i <  party_slots.Count; i++) 
         { 
             if (party_slots[i].merc == merc)
             {
-                index = i;
                 break;
             }
         }
-
-        if (index > 0)
-        {
-            party_slots.RemoveAt(index);
-        }
-
-        // TODO: Remove any weapon icons
     }
 
     private void Start()
     {
         m_locked_controls = false;
-        Debug.Assert(party_leader != null, "Party must have leader!");
     }
 
     private void Update()
     {
         if (m_locked_controls) { return; }
+        if(party_leader == null) { return; }
 
         // Input axis
         m_axis_input.x = Input.GetAxisRaw("Horizontal");
@@ -206,7 +129,6 @@ public class PlayerController : MonoBehaviour
         // Shield/Parry
         if (Input.GetKeyDown(KeyCode.Space))
         {
-
         }
 
         //if (Input.GetKeyDown(KeyCode.R))
@@ -235,6 +157,99 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(duration);
 
         particle_field.endRange = start_radius;
+    }
+
+    IEnumerator MercPowerUp(PlayerController party, Merc merc_prefab, float duration)
+    {
+        float effect_duration = 0.75f;
+        GameManager.Instance.GetPlayerHud().ShowMercSpecial(merc_prefab, effect_duration);
+        GameManager.Instance.RequestVignette(effect_duration, 1.0f, true);
+
+        float time = 0.0f;
+
+        while (time < effect_duration)
+        {
+            time += Time.unscaledDeltaTime;
+            yield return null;
+        }
+
+        Merc merc = Instantiate(merc_prefab, transform.position, Quaternion.identity);
+
+        // Find slot
+        PartySlot free_slot = null;
+        foreach (PartySlot slot in party_slots)
+        {
+            if (slot.merc == null)
+            {
+                free_slot = slot; 
+                break;
+            }
+        }
+
+        if (free_slot == null)
+        {
+            Debug.Log("Could not find slot. Party Full!");
+            yield break;
+        }
+
+        // Assign merc
+        free_slot.merc = merc;
+        merc.Party = this;
+        if (free_slot.slot == PartySlotLocation.Center)
+        {
+            party_leader = merc.GetComponent<Unit>();
+        }
+        
+        // Instantiate weapon Icons
+        foreach (Weapon weapon in merc.GetComponent<Unit>().weapons)
+        {
+            Instantiate(weapon.resource.weapon_icon, GameManager.Instance.GetPlayerHud().weapons_container.transform);
+        }
+
+        merc.GetComponent<Unit>().death_callback += () =>
+        {
+            PartySlot center_slot = null;
+            if (merc.gameObject == party_leader.gameObject)
+            {
+                GameManager.Instance.GameOver();
+
+                // TODO: Switch party leaders 
+                foreach(PartySlot slot in party_slots) 
+                { 
+                    if (party_leader != null)
+                    {
+                        break;
+                    }
+
+                    if (slot.merc == merc && slot.slot == PartySlotLocation.Center)
+                    {
+                        center_slot = slot;
+                        continue;
+                    }
+
+                    party_leader = slot.merc.GetComponent<Unit>();
+                }
+
+                // Reassign to center
+                if (party_leader != null)
+                {
+                    center_slot.merc = party_leader.GetComponent<Merc>();
+                }
+                else
+                {
+                    // Lose
+                    GameManager.Instance.GameOver();
+                }
+            }
+
+            RemoveMember(merc);
+        };
+
+        if (duration > 0.0f)
+        {
+            yield return new WaitForSeconds(duration);
+            merc.GetComponent<Unit>().TakeDamage(int.MaxValue);
+        }
     }
 
     // ~ Input 

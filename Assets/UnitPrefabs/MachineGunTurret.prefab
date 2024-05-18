@@ -101,7 +101,6 @@ MonoBehaviour:
   solar: 0
   energy_gain_rate: 0
   movement_speed: 0
-  agility: 0
   weapons:
   - {fileID: 1271786870109780285}
   animator: {fileID: 0}
@@ -167,6 +166,8 @@ MonoBehaviour:
   tick_rate: 1
   combat_distance: 15
   drop_particles: {fileID: 6004998939752341139, guid: 6b4bc7843febb3e4a88403c7f7f828fa, type: 3}
+  drop_attributes:
+  - {fileID: 8260282943874351911, guid: 075cd36edd43657468a7c6cdd8ea825e, type: 3}
   unit_state_machine: {fileID: 1409853621}
 --- !u!114 &1072126119502555306
 MonoBehaviour:
@@ -228,8 +229,8 @@ MonoBehaviour:
   AllowNonRigidbodyDoppler: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 10000
+  OverrideMinDistance: 8
+  OverrideMaxDistance: 85
 --- !u!1001 &3344294725501809459
 PrefabInstance:
   m_ObjectHideFlags: 0

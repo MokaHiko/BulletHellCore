@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6259538438374374473}
   - component: {fileID: 6057544143002416795}
   - component: {fileID: 6058400764323009131}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Gas (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -4829,7 +4829,7 @@ GameObject:
   - component: {fileID: 6059253157831314793}
   - component: {fileID: 6255661783769644323}
   - component: {fileID: 7299013739443547555}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Corossion
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -9675,7 +9675,7 @@ GameObject:
   - component: {fileID: 6259976950126664749}
   - component: {fileID: 6057981698861402891}
   - component: {fileID: 6058652715874565609}
-  m_Layer: 2
+  m_Layer: 0
   m_Name: Gas (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}

@@ -1,4 +1,5 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 [RequireComponent(typeof(Unit))]
@@ -22,6 +23,7 @@ public class EnemyController : MonoBehaviour
     // Drops
     [SerializeField]
     public ParticleSystem drop_particles;
+    public List<ShopItem> drop_attributes;
 
     [SerializeField]
     UnitStateMachine unit_state_machine;
@@ -168,9 +170,16 @@ public class EnemyController : MonoBehaviour
         // Drop modifier
         var particles = Instantiate(drop_particles, transform.position, Quaternion.identity);
         Vector3 back = -transform.forward;
+
         var module = particles.velocityOverLifetime;
         float magnitude = 10.0f;
         module.x = back.x * magnitude; module.y = back.y * magnitude; module.z = back.z * magnitude;
+
+        // Drop Items
+        foreach (ShopItem attrib in drop_attributes)
+        {
+            Instantiate(attrib, transform.position, Quaternion.identity);
+        }
     }
 
     // ~ AI

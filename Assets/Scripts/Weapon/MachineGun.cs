@@ -31,7 +31,7 @@ public class MachineGun : Weapon
 
     [Header("Burst fire")]
     public float burst_fire_shake = 5.0f;
-    public float burst_spread = 20.0f;
+    public float burst_spread = 45.0f;
     public float burst_multiplier = 20.0f;
     public int base_shots = 4;
 

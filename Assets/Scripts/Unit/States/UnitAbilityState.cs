@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 public class UnitAbilityState : UnitState
@@ -29,6 +30,7 @@ public class UnitAbilityState : UnitState
         TimeElapsed += dt;
         if (TimeElapsed >= duration)
         {
+            IncrementStack();
             StateMachine.QueueRemoveState(this);
         }
     }

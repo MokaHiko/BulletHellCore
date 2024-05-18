@@ -96,7 +96,7 @@ public class GameManager : MonoBehaviour
         m_shake_routine = StartCoroutine(ShakeEffect(intensity, time));
     }
 
-    public void RequestVignette(float duration, float intensity = 0.45f)
+    public void RequestVignette(float duration, float intensity = 0.45f, bool fixed_time = false)
     {
         if (m_vignette_routine != null)
         {
@@ -104,7 +104,7 @@ public class GameManager : MonoBehaviour
             m_vignette_routine = null;
         }
 
-        m_vignette_routine = StartCoroutine(VignetteEffect(duration, intensity));
+        m_vignette_routine = StartCoroutine(VignetteEffect(duration, intensity, fixed_time));
     }
 
     public void RequestSlowMo(float duration, float scale = 0.02f)
@@ -215,8 +215,7 @@ public class GameManager : MonoBehaviour
         if (!m_player)
         {
             m_player = Instantiate(player_prefab, start_room.spawn_points[0].position, Quaternion.identity);
-            Merc merc = Instantiate(starting_merc_prefab, start_room.spawn_points[0].position, Quaternion.identity);
-            m_player.AddMember(merc);
+            m_player.AddMember(starting_merc_prefab);
         }
         CameraTarget camera_target = m_player.GetComponentInChildren<CameraTarget>();
         Debug.Assert(camera_target != null, "Player has no camera target!");
@@ -285,7 +284,7 @@ public class GameManager : MonoBehaviour
         m_zoom_routine = null;
     }
 
-    private IEnumerator VignetteEffect(float duration, float intensity)
+    private IEnumerator VignetteEffect(float duration, float intensity, bool fixed_time)
     {
         if (!post_process_volume.profile.TryGet<Vignette>(out Vignette vignette))
         {
@@ -295,7 +294,14 @@ public class GameManager : MonoBehaviour
         float start_intensity = vignette.intensity.value;
         vignette.intensity.value = intensity;
 
-        yield return new WaitForSeconds(duration);
+        if (fixed_time)
+        {
+            yield return new WaitForSecondsRealtime(duration);
+        }
+        else
+        {
+            yield return new WaitForSeconds(duration);
+        }
 
         vignette.intensity.value = start_intensity;
     }

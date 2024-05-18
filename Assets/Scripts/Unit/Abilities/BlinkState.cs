@@ -23,13 +23,13 @@ public class BlinkState : UnitAbilityState
 
     BlinkState() 
     { 
-        m_exclusive = true;
+        //m_exclusive = true;
     }
 
     public override void OnEnter(Unit unit)
     {
         TimeElapsed = 0.0f;
-        Use(IsBurst, Direction);
+        UseWithCost(true, Direction);
     }
 
     public override void Use(bool burst, Vector3 direction)

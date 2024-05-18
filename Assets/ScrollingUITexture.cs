@@ -18,7 +18,7 @@ public class ScrollingUITexture : MonoBehaviour
 
     void Update()
     {
-        m_currentscroll += speed * Time.deltaTime;
+        m_currentscroll += speed * Time.unscaledDeltaTime;
         Rect rect = image.uvRect;
         rect.width = 0.035f;
         rect.height = 0.5f;

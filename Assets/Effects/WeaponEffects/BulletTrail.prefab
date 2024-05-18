@@ -82,7 +82,7 @@ TrailRenderer:
       m_Curve:
       - serializedVersion: 3
         time: 0
-        value: 0.18937823
+        value: 0.43527427
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -91,7 +91,7 @@ TrailRenderer:
         outWeight: 0.33333334
       - serializedVersion: 3
         time: 1
-        value: 0.04724121
+        value: 0.18385315
         inSlope: 0
         outSlope: 0
         tangentMode: 0
@@ -168,5 +168,5 @@ MonoBehaviour:
   AllowNonRigidbodyDoppler: 0
   Params: []
   OverrideAttenuation: 0
-  OverrideMinDistance: 0
-  OverrideMaxDistance: 10000
+  OverrideMinDistance: 9.400001
+  OverrideMaxDistance: 75
