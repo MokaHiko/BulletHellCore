@@ -42,6 +42,7 @@ public class Merc : MonoBehaviour
         m_unit.death_callback += () => { GameManager.Instance.RequestShake(0, 0.0f); };
         if (TryGetComponent(out DialogueTrigger dialogueTrigger))
         {
+            dialogueTrigger.TriggerDialogue("Start");
             m_unit.death_callback += () => { dialogueTrigger.TriggerDialogue("Death"); };
         }
         m_unit.status_callback += OnStatusEffect;

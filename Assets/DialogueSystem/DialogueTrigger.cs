@@ -10,13 +10,13 @@ public class DialogueTrigger : MonoBehaviour
 
     
 
-    public void TriggerDialogue(string dialogueIdentifier, bool stopTime = false)
+    public void TriggerDialogue(string dialogueIdentifier)
     {
         foreach (Dialogue dialogue in dialogues)
         {
             if (dialogue.identifier == dialogueIdentifier)
             {
-                FindObjectOfType<DialogueManager>().StartDialogue(dialogue, name: characterName, stopTime: stopTime);
+                FindObjectOfType<DialogueManager>().StartDialogue(dialogue, name: characterName);
                 return;
             }
         }

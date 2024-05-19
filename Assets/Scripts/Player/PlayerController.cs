@@ -164,11 +164,6 @@ public class PlayerController : MonoBehaviour
         float effect_duration = 0.75f;
         //GameManager.Instance.GetPlayerHud().ShowMercSpecial(merc_prefab, effect_duration);
         //GameManager.Instance.RequestVignette(effect_duration, 1.0f, true);
-        if (merc_prefab.TryGetComponent(out DialogueTrigger dialogueTrigger))
-        {
-
-            dialogueTrigger.TriggerDialogue("Start", true);
-        }
 
         float time = 0.0f;
 
