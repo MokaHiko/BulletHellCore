@@ -31,7 +31,7 @@ public class UIEffect : MonoBehaviour
 
     [Header("FadeIn")]
     [SerializeField]
-    float fade_in_duration = 1.0f;
+    public float fade_in_duration = 1.0f;
 
     [SerializeField]
     float stretch_duration = 1.0f;

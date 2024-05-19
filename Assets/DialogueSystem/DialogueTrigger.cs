@@ -4,11 +4,24 @@ using UnityEngine;
 
 public class DialogueTrigger : MonoBehaviour
 {
+    public string characterName;
 
-    public Dialogue dialogue;
+    public Dialogue[] dialogues;
 
-    public void TriggerDialogue()
+    
+
+    public void TriggerDialogue(string dialogueIdentifier, bool stopTime = false)
     {
-        FindObjectOfType<DialogueManager>().StartDialogue(dialogue);
+        foreach (Dialogue dialogue in dialogues)
+        {
+            if (dialogue.identifier == dialogueIdentifier)
+            {
+                FindObjectOfType<DialogueManager>().StartDialogue(dialogue, name: characterName, stopTime: stopTime);
+                return;
+            }
+        }
+
+        Debug.Log("No dialogue with identifier: " + dialogueIdentifier);
+        
     }
 }

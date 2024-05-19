@@ -21,6 +21,7 @@ public class PlayerHud : MonoBehaviour
 
     public void ShowMercSpecial(Merc merc, float duration = 2.0f)
     {
+        // Gonna be replaced with Dialogue
         StartCoroutine(MercSpecialEffect(merc, duration));
     }
 

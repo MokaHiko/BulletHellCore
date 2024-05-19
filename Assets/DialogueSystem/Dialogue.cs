@@ -6,9 +6,9 @@ using UnityEngine.UI;
 [System.Serializable]
 public class Dialogue
 {
-    public string name;
-
-    public Sprite characterSprite;
+    public string identifier;
+    public Sprite characterBanner;
+    public Sprite characterPP; // PP is Profile Picture
 
     [TextArea(3, 10)]
     public string[] sentences;
