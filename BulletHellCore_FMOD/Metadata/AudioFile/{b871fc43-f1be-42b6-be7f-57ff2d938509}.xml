@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{b871fc43-f1be-42b6-be7f-57ff2d938509}">
+		<property name="assetPath">
+			<value>Giant_Space_Door_ODY-1499-007.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>3.0510416666666669</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d28b04c0-540f-4140-b164-16a8a6d7f235}</destination>
+		</relationship>
+	</object>
+</objects>

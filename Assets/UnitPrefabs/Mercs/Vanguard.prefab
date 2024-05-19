@@ -960,7 +960,7 @@ GameObject:
   - component: {fileID: 7107048940979385633}
   - component: {fileID: 2760316214204693992}
   - component: {fileID: 4322882442054125206}
-  - component: {fileID: 8297261557324873265}
+  - component: {fileID: 498591572810172491}
   m_Layer: 3
   m_Name: Vanguard
   m_TagString: Untagged
@@ -1127,6 +1127,38 @@ MonoBehaviour:
     sentences:
     - Egh...
     - Sorry to leave you...
+  heat_loss_time: 8
+--- !u!114 &498591572810172491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7107048940979385643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 2122071427
+      Data2: 1100258862
+      Data3: 1107986094
+      Data4: -1582895915
+    Path: event:/Player/Player Die
+  Event: 
+  PlayEvent: 2
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &7817972912026028604
 GameObject:
   m_ObjectHideFlags: 0

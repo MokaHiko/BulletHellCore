@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<objects serializationModel="Studio.02.02.00">
+	<object class="AudioFile" id="{56594098-1cf2-46f8-8a37-e64c4096d82f}">
+		<property name="assetPath">
+			<value>Underwater Water Ambience Boat Motor Dock Start Up Rev Shut Off 01.wav</value>
+		</property>
+		<property name="frequencyInKHz">
+			<value>48</value>
+		</property>
+		<property name="channelCount">
+			<value>2</value>
+		</property>
+		<property name="length">
+			<value>3.0183333333333335</value>
+		</property>
+		<relationship name="masterAssetFolder">
+			<destination>{d28b04c0-540f-4140-b164-16a8a6d7f235}</destination>
+		</relationship>
+	</object>
+</objects>

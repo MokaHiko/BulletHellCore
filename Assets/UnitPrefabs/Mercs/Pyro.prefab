@@ -1006,6 +1006,7 @@ GameObject:
   - component: {fileID: 4482109585698129046}
   - component: {fileID: 8853079921697131615}
   - component: {fileID: 7453210121089693473}
+  - component: {fileID: 8927946536813857128}
   m_Layer: 3
   m_Name: Pyro
   m_TagString: Untagged
@@ -1144,6 +1145,38 @@ MonoBehaviour:
       Data3: -106264190
       Data4: 494287380
     Path: event:/Objects/Charge Particle Pickup
+  heat_loss_time: 8
+--- !u!114 &8927946536813857128
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4482109585698129052}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 2122071427
+      Data2: 1100258862
+      Data3: 1107986094
+      Data4: -1582895915
+    Path: event:/Player/Player Die
+  Event: 
+  PlayEvent: 2
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &5143382767265657182
 GameObject:
   m_ObjectHideFlags: 0
@@ -1988,14 +2021,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
---- !u!4 &3674087132737004783 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4000014129045996, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
-  m_PrefabInstance: {fileID: 3671224494977795331}
-  m_PrefabAsset: {fileID: 0}
 --- !u!198 &3480614887126617419 stripped
 ParticleSystem:
   m_CorrespondingSourceObject: {fileID: 198000012368742472, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
+  m_PrefabInstance: {fileID: 3671224494977795331}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &3674087132737004783 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4000014129045996, guid: 78b71003e8b357d4bbf89c8b5e5e4f0e, type: 3}
   m_PrefabInstance: {fileID: 3671224494977795331}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3671224495045887540
@@ -2122,6 +2155,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &8715500016612437892 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
+  m_PrefabInstance: {fileID: 3671224495045887540}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &2160562747150285944 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3389261520146397772, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
@@ -2133,11 +2171,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!224 &8715500016612437892 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
-  m_PrefabInstance: {fileID: 3671224495045887540}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3671224495431906215
 PrefabInstance:
   m_ObjectHideFlags: 0

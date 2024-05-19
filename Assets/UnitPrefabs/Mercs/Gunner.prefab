@@ -1444,6 +1444,7 @@ GameObject:
   - component: {fileID: 5739686621176474823}
   - component: {fileID: 813081366341526542}
   - component: {fileID: 5739686621176474828}
+  - component: {fileID: 6960667660563335428}
   m_Layer: 3
   m_Name: Gunner
   m_TagString: Untagged
@@ -1582,6 +1583,38 @@ MonoBehaviour:
       Data3: -106264190
       Data4: 494287380
     Path: event:/Objects/Charge Particle Pickup
+  heat_loss_time: 4
+--- !u!114 &6960667660563335428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5739686621176474829}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a6610d2e704f1648819acc8d7460285, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  CollisionTag: 
+  EventReference:
+    Guid:
+      Data1: 2122071427
+      Data2: 1100258862
+      Data3: 1107986094
+      Data4: -1582895915
+    Path: event:/Player/Player Die
+  Event: 
+  PlayEvent: 2
+  StopEvent: 0
+  AllowFadeout: 1
+  TriggerOnce: 0
+  Preload: 0
+  AllowNonRigidbodyDoppler: 0
+  Params: []
+  OverrideAttenuation: 0
+  OverrideMinDistance: 1
+  OverrideMaxDistance: 20
 --- !u!1 &5905184501909644913
 GameObject:
   m_ObjectHideFlags: 0

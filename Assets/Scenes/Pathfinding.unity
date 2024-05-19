@@ -5191,6 +5191,26 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1050624241534525192, guid: c5db7f71a09bfe14da7dad4d90aba112, type: 3}
+      propertyPath: on_damage_sfx.Path
+      value: event:/Enemies/Boss Take Damage
+      objectReference: {fileID: 0}
+    - target: {fileID: 1050624241534525192, guid: c5db7f71a09bfe14da7dad4d90aba112, type: 3}
+      propertyPath: on_damage_sfx.Guid.Data1
+      value: 1763232538
+      objectReference: {fileID: 0}
+    - target: {fileID: 1050624241534525192, guid: c5db7f71a09bfe14da7dad4d90aba112, type: 3}
+      propertyPath: on_damage_sfx.Guid.Data2
+      value: 1199359366
+      objectReference: {fileID: 0}
+    - target: {fileID: 1050624241534525192, guid: c5db7f71a09bfe14da7dad4d90aba112, type: 3}
+      propertyPath: on_damage_sfx.Guid.Data3
+      value: 1600746405
+      objectReference: {fileID: 0}
+    - target: {fileID: 1050624241534525192, guid: c5db7f71a09bfe14da7dad4d90aba112, type: 3}
+      propertyPath: on_damage_sfx.Guid.Data4
+      value: -877165177
+      objectReference: {fileID: 0}
     - target: {fileID: 4625106965170088613, guid: c5db7f71a09bfe14da7dad4d90aba112, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1

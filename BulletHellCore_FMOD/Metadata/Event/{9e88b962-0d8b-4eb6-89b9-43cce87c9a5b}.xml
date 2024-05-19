@@ -148,7 +148,7 @@
 			<value>0.21875</value>
 		</property>
 		<property name="length">
-			<value>1.8540150971512479</value>
+			<value>2.25</value>
 		</property>
 		<property name="playlistMode">
 			<value>1</value>
@@ -325,7 +325,7 @@
 	</object>
 	<object class="AutomationPoint" id="{9ac4e698-14d9-4fdf-87e6-af4ffc27bc21}">
 		<property name="position">
-			<value>0.9375</value>
+			<value>0.375</value>
 		</property>
 		<property name="value">
 			<value>1</value>
@@ -336,7 +336,7 @@
 	</object>
 	<object class="AutomationPoint" id="{1aa5fd14-b669-4af2-94e3-192958dcef09}">
 		<property name="position">
-			<value>2.0727650971512479</value>
+			<value>2.46875</value>
 		</property>
 		<property name="value">
 			<value>0</value>

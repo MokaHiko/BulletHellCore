@@ -109,7 +109,7 @@
 	</object>
 	<object class="EventMixerMaster" id="{b237b6df-61ad-48ab-b66e-e678514234fc}">
 		<property name="volume">
-			<value>-10.5</value>
+			<value>-9</value>
 		</property>
 		<relationship name="effectChain">
 			<destination>{5d3950f0-abcb-44e9-8bb2-a111118c03fb}</destination>
@@ -134,7 +134,7 @@
 	</object>
 	<object class="SingleSound" id="{0d89173c-61c0-477c-9bca-9a9168e690be}">
 		<property name="length">
-			<value>0.7870322151849245</value>
+			<value>0.46875</value>
 		</property>
 		<property name="timelockedOffset">
 			<value>0.015394088669950741</value>
@@ -147,6 +147,9 @@
 		</relationship>
 		<relationship name="fadeInCurve">
 			<destination>{d885284e-8496-4819-969d-4df2887fd1de}</destination>
+		</relationship>
+		<relationship name="fadeOutCurve">
+			<destination>{5a2e6cf6-b782-4c70-9c2e-ff75a95135a1}</destination>
 		</relationship>
 		<relationship name="audioFile">
 			<destination>{1cb01011-f2a4-4572-9f8d-2c33ae7281d0}</destination>
@@ -229,7 +232,7 @@
 	</object>
 	<object class="EventMixerGroup" id="{602485d7-4f5a-4cb2-b5bb-369f51c6e791}">
 		<property name="volume">
-			<value>-12</value>
+			<value>-8</value>
 		</property>
 		<property name="name">
 			<value>Audio 3</value>
@@ -274,6 +277,14 @@
 		</relationship>
 		<relationship name="endPoint">
 			<destination>{55febc48-5bde-4857-b566-e695c08d796f}</destination>
+		</relationship>
+	</object>
+	<object class="FadeCurve" id="{5a2e6cf6-b782-4c70-9c2e-ff75a95135a1}">
+		<relationship name="startPoint">
+			<destination>{14c8969a-8509-480a-a190-c86051f46704}</destination>
+		</relationship>
+		<relationship name="endPoint">
+			<destination>{1ef62aab-f109-4caa-9745-6052e2e6a28c}</destination>
 		</relationship>
 	</object>
 	<object class="MixerBusEffectChain" id="{f221b95d-06a1-4c8a-a9cd-343d7a7f1780}">
@@ -390,6 +401,25 @@
 		</property>
 		<property name="value">
 			<value>1</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{14c8969a-8509-480a-a190-c86051f46704}">
+		<property name="position">
+			<value>0.1953125</value>
+		</property>
+		<property name="value">
+			<value>1</value>
+		</property>
+		<property name="curveShape">
+			<value>-0.333419621</value>
+		</property>
+	</object>
+	<object class="AutomationPoint" id="{1ef62aab-f109-4caa-9745-6052e2e6a28c}">
+		<property name="position">
+			<value>0.46875</value>
+		</property>
+		<property name="value">
+			<value>0</value>
 		</property>
 	</object>
 	<object class="ThreeEQEffect" id="{96663a3f-f772-43a9-b709-485f57bd61bf}">
