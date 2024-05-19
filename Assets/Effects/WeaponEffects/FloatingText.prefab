@@ -92,7 +92,7 @@ MeshRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_AdditionalVertexStreams: {fileID: 0}
 --- !u!114 &6823129639491081771
 MonoBehaviour:
@@ -114,9 +114,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: '0
-
-'
+  m_text: 32
   m_isRightToLeft: 0
   m_fontAsset: {fileID: 11400000, guid: e45e57e4b06d62a4e9ec21e62577707d, type: 2}
   m_sharedMaterial: {fileID: 1011628134247846357, guid: e45e57e4b06d62a4e9ec21e62577707d, type: 2}
@@ -143,13 +141,13 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 8
-  m_fontSizeBase: 8
+  m_fontSize: 16
+  m_fontSizeBase: 16
   m_fontWeight: 400
   m_enableAutoSizing: 0
   m_fontSizeMin: 18
   m_fontSizeMax: 72
-  m_fontStyle: 17
+  m_fontStyle: 1
   m_HorizontalAlignment: 2
   m_VerticalAlignment: 512
   m_textAlignment: 65535
@@ -203,7 +201,9 @@ MonoBehaviour:
   animation_flags: 12
   effect_children: 1
   destroy_after_animation: 1
+  disable_after_animation: 0
   fade_in_duration: 1
   stretch_duration: 1
   fade_out_duration: 0.75
-  bounce_duration: 0.25
+  bounce_duration: 0.15
+  bounce_strength: 5

@@ -22,6 +22,11 @@ public class UnitWalkState : UnitState
 
     public sealed override void OnPhysicsTick(Unit unit, float dt) 
     {
+        if (unit.CheckState(UnitStateFlags.ManagedMovement))
+        {
+            return;
+        }
+
         Vector3 diff = (m_target_location - unit.transform.position);
         Debug.DrawLine(m_target_location, unit.transform.position, Color.red);
 

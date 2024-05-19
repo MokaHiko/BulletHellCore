@@ -15,6 +15,11 @@ public struct SpawnData
     [Range(0f, 1f)] public float drop_chance;
 };
 
+public class SpawnGroup
+{
+    public List<Unit> units;
+};
+
 [CreateAssetMenu(fileName = "SpawnTable", menuName = "SpawnTable")]
 public class SpawnTable : ScriptableObject
 { 
@@ -22,24 +27,33 @@ public class SpawnTable : ScriptableObject
     public List<SpawnData> data;
 
     // Returns a list of units based of the weighted spawn table
-    public List<Unit> Roll(float normalized_time)
+    public List<SpawnGroup> Roll(float normalized_time, int n_groups = 1)
     {
-        float roll = Random.Range(0, 1.0f);
+        List<SpawnGroup> groups = new List<SpawnGroup>();
 
-        List<Unit> interval_units = new List<Unit>();
-        foreach (SpawnData spawnable in data)
+        for (int i = 0; i < n_groups; i++)
         {
-            // Check if in time range
-            if (spawnable.normalized_wave_spawn_time > normalized_time) continue;
+            float roll = Random.Range(0, 1.0f);
 
-            // Check probablity
-            if (spawnable.weight >= roll)
+            SpawnGroup group = new SpawnGroup();
+            group.units = new List<Unit>();
+
+            foreach (SpawnData spawnable in data)
             {
-                interval_units.AddRange(spawnable.spawnable_objects);
+                // Check if in time range
+                if (spawnable.normalized_wave_spawn_time > normalized_time) continue;
+
+                // Check probablity
+                if (spawnable.weight >= roll)
+                {
+                    group.units.AddRange(spawnable.spawnable_objects);
+                }
             }
+
+            groups.Add(group);
         }
 
-        return interval_units;
+        return groups;
     }
 
     // Normalizes spawn table

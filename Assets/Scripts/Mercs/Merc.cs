@@ -42,26 +42,6 @@ public class Merc : MonoBehaviour
         m_unit.death_callback += () => { GameManager.Instance.RequestShake(0, 0.0f); };
         m_unit.status_callback += OnStatusEffect;
     }
-
-    public float heat_loss_time = 8.0f;
-    float heat_loss_timer = 0.0f;
-    public void Update()
-    {
-        // lose heat when no kills
-        heat_loss_timer += Time.deltaTime;
-        if (heat_loss_timer > heat_loss_time)
-        {
-            heat_loss_timer = 0.0f;
-            Weapon weapon = GetComponent<Unit>().EquipedWeapon;
-            if (weapon.modifiers.Count > 0)
-            {
-                Debug.Log("Heat lost!");
-                weapon.modifiers.RemoveAt(weapon.modifiers.Count - 1);
-                weapon.CalculateModifierStats();
-            }
-        }
-    }
-
     public void OnParticleEnter(ParticleType type)
     {
         FMODUnity.RuntimeManager.PlayOneShotAttached(particle_pickup_sfx, gameObject);
@@ -79,10 +59,8 @@ public class Merc : MonoBehaviour
             }break;
             case (ParticleType.Energy):
             {
-                m_unit.energy += 1.0f;
-                    
-                }
-                break;
+                m_unit.energy += 0.25f;
+            }break;
             default:
                 break;
         }

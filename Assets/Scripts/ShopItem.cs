@@ -47,17 +47,12 @@ public class ShopItem : MonoBehaviour
                 case ItemType.ModifierAttribute:
                 {
                     leader.GetComponent<Unit>().EquipedWeapon.AddModifier(attributes);
-                    // TODO: Change to stat indicator in the side
-                    //GameManager.Instance.Reward(leader);
                 }break;
                 case ItemType.Modifier:
                 {
-                    // TODO: Find merc with corresponding weapon type
                     Modifier modifier = leader.GetComponent<Unit>().EquipedWeapon.gameObject.AddComponent<Modifier>();
                     modifier.Equip(leader);
                     modifier.ApplyModifier(modifier_flags);
-
-                    //GameManager.Instance.Reward(leader);
                 }break;
                 default:
                     break;

@@ -15,9 +15,10 @@ MonoBehaviour:
   weapon_icon: {fileID: 690804884352287621, guid: bcc09fcd7dffaf7458834fb8db4087c1, type: 3}
   base_stats:
     base_damage: 24
-    attack_speed: 8
+    attack_speed: 6
     scan_radius: 0.5
     range: 500
+    bullet_cost: 0
     max_bullets: 16
     reload_time: 1
     hold_threshold: 0.15

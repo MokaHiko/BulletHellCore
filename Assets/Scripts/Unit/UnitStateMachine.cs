@@ -21,19 +21,24 @@ public class UnitStateMachine : MonoBehaviour
 
     public void QueueAddState(UnitState state)
     {
+        if (state == null)
+        {
+            return;
+        }
+
         if (m_activation_queue.Contains(state)) return;
         m_activation_queue.Add(state);
 
-        foreach (UnitState top_state in m_top_level_states)
-        {
-            if(top_state == state) continue;  
+        //foreach (UnitState top_state in m_top_level_states)
+        //{
+        //    if(top_state == state) continue;  
 
-            // Interrupt exclusive states
-            if (top_state.Exclusive)
-            {
-                QueueRemoveState(top_state);
-            }
-        }
+        //    // Interrupt exclusive states
+        //    if (top_state.Exclusive)
+        //    {
+        //        QueueRemoveState(top_state);
+        //    }
+        //}
     }
 
     public void QueueRemoveState(UnitState state)
@@ -46,6 +51,17 @@ public class UnitStateMachine : MonoBehaviour
     private void AddState(UnitState state, bool deactivate_others = false)
     {
         Debug.Assert(state != null, "Cannot activate null state!");
+
+        // Check if current state is exclusive and interruptable
+        if (m_active_states.Count == 1)
+        {
+            if (m_active_states[0].Exclusive && !m_active_states[0].IsInterruptable)
+            {
+                return;
+            }
+        }
+
+        // Do not reactive active state
         if (m_active_states.Contains(state))
         {
             return;

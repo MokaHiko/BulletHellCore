@@ -12,9 +12,6 @@ public class MercAttackState : UnitAttackState
     [SerializeField]
     float time_held = 0.0f;
 
-    [SerializeField]
-    float attack_movement_speed_multplier = 0.75f;
-
     public override void OnEnter(Unit unit)
     {
         m_merc = unit.GetComponent<Merc>();
@@ -59,7 +56,6 @@ public class MercAttackState : UnitAttackState
         // Fire current weapon
         if(Input.GetMouseButton(0)) 
         {
-            unit.movement_speed = unit.BaseStats.movement_speed * attack_movement_speed_multplier;
             time_held += Time.deltaTime;
             Attack(m_merc.Party.WorldMousePoint);
             return;

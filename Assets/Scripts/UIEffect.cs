@@ -40,9 +40,8 @@ public class UIEffect : MonoBehaviour
     float fade_out_duration = 3.0f;
 
     [Header("Bounce")]
-    [SerializeField]
-    float bounce_duration = 1.0f;
-    float bounce_strength = 1.0f;
+    public float bounce_duration = 1.0f;
+    public float bounce_strength = 1.0f;
 
     // Start is called before the first frame update
     void Start()

@@ -12,12 +12,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f95003db13c57cb468d73c122a0d4486, type: 3}
   m_Name: DashState
   m_EditorClassIdentifier: 
-  duration: 0.2
-  cooldown: 1.15
+  m_substate: {fileID: 0}
+  m_superstate: {fileID: 0}
+  duration: 0.35
+  cooldown: 1
   energy_cost: 0
   stacks: 1
   max_stacks: 1
-  trail_renderer: {fileID: 5113547844858984007, guid: 6368f56043e3c894f89080b7d534b3f7, type: 3}
-  dash_multiplier: 4
-  teleport_distance: 7.5
+  dash_multiplier: 25
   dash_status: 0
+  mesh_refresh_time: 0.05
+  mesh_trail_material: {fileID: 2100000, guid: 9999e967e6c53144f8e9245357428183, type: 2}

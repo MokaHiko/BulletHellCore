@@ -15,6 +15,7 @@ public class UnitState : ScriptableObject, IUnitState
     public UnitState SubState { get { return m_substate; } set { m_substate = value; } }
     public UnitState SuperState { get { return m_superstate; } set { m_superstate = value; }}
     public bool Exclusive { get { return m_exclusive; }}
+    public bool IsInterruptable { get {return m_interruptable; }}
 
     public UnitState(UnitState substate = null, UnitState superstate = null, bool exclusive = false)
     {
@@ -45,5 +46,6 @@ public class UnitState : ScriptableObject, IUnitState
 
     private UnitStateMachine m_state_machine;
     protected bool m_exclusive = false;
+    protected bool m_interruptable = true;
 } 
 

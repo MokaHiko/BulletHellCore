@@ -144,7 +144,7 @@ public class Unit : IDamageable
         m_state = UnitStateFlags.None;
 
         m_health = m_base_stats.health;
-        energy = m_base_stats.max_energy * 0.75f;
+        energy = 0;
         energy_gain_rate = m_base_stats.energy_gain_rate;
         movement_speed = m_base_stats.movement_speed;
         damage_multiplier = m_base_stats.damage_multiplier;
@@ -165,6 +165,9 @@ public class Unit : IDamageable
         // Set UI
         energy_bar.SetValue(energy, m_base_stats.max_energy);
         health_bar.SetValue(m_health, m_base_stats.health);
+
+        float cool_speed_bonus = (1 - energy/BaseStats.max_energy) * BaseStats.movement_speed * 0.25f;
+        movement_speed = BaseStats.movement_speed + Mathf.Clamp(cool_speed_bonus, 0, BaseStats.movement_speed);
 
         if (animator)
         {

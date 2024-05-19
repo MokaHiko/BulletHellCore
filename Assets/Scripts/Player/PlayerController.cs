@@ -122,6 +122,7 @@ public class PlayerController : MonoBehaviour
 
             if (Input.GetMouseButtonDown((int)MouseButton.RightMouse) || Input.GetKeyDown(KeyCode.LeftShift))
             {
+                (merc.StateMachine.EmpoweredMovementAbilityState as UnitAbilityState).Direction = RelativeAxisInput;
                 merc.StateMachine.QueueAddState(merc.StateMachine.EmpoweredMovementAbilityState);
             }
         }
@@ -173,8 +174,6 @@ public class PlayerController : MonoBehaviour
             yield return null;
         }
 
-        Merc merc = Instantiate(merc_prefab, transform.position, Quaternion.identity);
-
         // Find slot
         PartySlot free_slot = null;
         foreach (PartySlot slot in party_slots)
@@ -193,8 +192,10 @@ public class PlayerController : MonoBehaviour
         }
 
         // Assign merc
-        free_slot.merc = merc;
+        Merc merc = Instantiate(merc_prefab, transform.position, Quaternion.identity);
         merc.Party = this;
+
+        free_slot.merc = merc;
         if (free_slot.slot == PartySlotLocation.Center)
         {
             party_leader = merc.GetComponent<Unit>();

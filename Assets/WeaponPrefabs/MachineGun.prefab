@@ -56,12 +56,14 @@ MonoBehaviour:
     attack_speed: 1
     scan_radius: 1
     range: 1
+    bullet_cost: 1
     max_bullets: 1
     reload_time: 1
     hold_threshold: 1
   impact_particle_system: {fileID: 74078499623404260, guid: d8b19b0e18bc7fc4280b801faa3feedf, type: 3}
   spread: 0.1
-  charge_rate: 0.35
+  charge_rate: 1.05
+  max_attack_speed: 12.5
   muzzle_flash: {fileID: 4805880017770381985}
   bullet_trail: {fileID: 5113547844858984007, guid: 6368f56043e3c894f89080b7d534b3f7, type: 3}
   bullet_trail_speed: 60
@@ -69,11 +71,6 @@ MonoBehaviour:
   regular_fire_shake_time: 0.1
   alt_fire_hit_stop: 0.015
   alt_fire_hit_slow_mo_duration: 0.45
-  burst_fire_shake: 1
-  burst_spread: 20
-  burst_multiplier: 3
-  base_shots: 2
-  burst_impact_particle_system: {fileID: 7017294773630732249, guid: b1e15e49e7825114d8040c8460244bab, type: 3}
 --- !u!1001 &4643685652139974651
 PrefabInstance:
   m_ObjectHideFlags: 0

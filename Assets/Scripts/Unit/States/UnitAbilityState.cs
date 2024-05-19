@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using UnityEngine;
 
 public class UnitAbilityState : UnitState
@@ -30,15 +31,16 @@ public class UnitAbilityState : UnitState
         TimeElapsed += dt;
         if (TimeElapsed >= duration)
         {
-            IncrementStack();
             StateMachine.QueueRemoveState(this);
         }
     }
 
     protected float TimeElapsed { get { return m_time_elapsed; } set { m_time_elapsed = value; } }
-    public void IncrementStack()
+    IEnumerator IncrementStack()
     {
+        yield return new WaitForSeconds(duration);
         stacks = Mathf.Clamp(stacks + 1, 0, max_stacks);
+
     }
 
     // Returns whether ability was used succesefully
@@ -57,6 +59,7 @@ public class UnitAbilityState : UnitState
             }
         }
 
+        Owner.StartCoroutine(IncrementStack());
         if (StateMachine.Owner.SpendEnergy(energy_cost))
         {
             Use(burst, direction);

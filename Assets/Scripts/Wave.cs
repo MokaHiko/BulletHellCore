@@ -5,11 +5,6 @@ using UnityEngine;
 public delegate void WaveCompleteCallback(Wave wave);
 
 
-public class WaveGroup
-{
-
-};
-
 [CreateAssetMenu(fileName = "Wave", menuName = "Wave")]
 public class Wave : ScriptableObject
 {
@@ -27,14 +22,14 @@ public class Wave : ScriptableObject
         m_spawner = spawner;
 
         // Init unit list
-        unit_interval_spawns = new List<List<Unit>>();
+        unit_interval_spawns = new List<List<SpawnGroup>>();
 
         // Pre-Roll for all intervals
         m_total_intervals = Mathf.FloorToInt(wave_time / spawn_interval);
         for (int i = 0; i < m_total_intervals; i++)
         {
             // Roll units
-            List<Unit> units_roll = table.Roll((spawn_interval * i) / wave_time);
+            List<SpawnGroup> units_roll = table.Roll((spawn_interval * i) / wave_time, 2);
             if (units_roll != null && units_roll.Count > 0)
             {
                 unit_interval_spawns.Add(units_roll);
@@ -95,29 +90,32 @@ public class Wave : ScriptableObject
             Debug.Log("Wave Complete!");
         }
 
-        Vector3 spawn_position = m_spawner.spawn_points[Random.Range(0, m_spawner.spawn_points.Count)].position;
-        SpawnEffectHandler spawn_effect = GameObject.Instantiate(spawn_effect_prefab, spawn_position, Quaternion.identity);
-
-        foreach (Unit spawnable_unit in unit_interval_spawns[m_interval])
+        foreach (SpawnGroup spawnable_group in unit_interval_spawns[m_interval])
         {
-            Unit unit = GameObject.Instantiate(spawnable_unit);
+            Vector3 spawn_position = m_spawner.spawn_points[Random.Range(0, m_spawner.spawn_points.Count)].position;
+            SpawnEffectHandler spawn_effect = GameObject.Instantiate(spawn_effect_prefab, spawn_position, Quaternion.identity);
 
-            unit.death_callback += () =>
+            foreach (Unit spawnable_unit in spawnable_group.units)
             {
-                m_dead_units++;
+                Unit unit = GameObject.Instantiate(spawnable_unit);
 
-                // Complete when in final interval and all units dead
-                if(m_total_units == m_dead_units)
+                unit.death_callback += () =>
                 {
-                    Complete();
-                }
-            };
+                    m_dead_units++;
 
-            spawn_effect.spawn_objects.Add(unit.gameObject);
+                    // Complete when in final interval and all units dead
+                    if(m_total_units == m_dead_units)
+                    {
+                        Complete();
+                    }
+                };
+                spawn_effect.spawn_objects.Add(unit.gameObject);
+            }
+
+            spawn_effect.LoadObjects();
         }
-
-        spawn_effect.LoadObjects();
     }
+
     void Complete()
     {
         Vector3 spawn_position = GameManager.Instance.GetPlayer().transform.position;
@@ -136,7 +134,7 @@ public class Wave : ScriptableObject
     public float spawn_interval = 10.0f;
     public SpawnTable table;
 
-    private List<List<Unit>> unit_interval_spawns;
+    private List<List<SpawnGroup>> unit_interval_spawns;
 
     private int m_total_units = 0;
     private int m_dead_units = 0;

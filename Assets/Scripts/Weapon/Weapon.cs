@@ -24,6 +24,7 @@ public class WeaponStats
     public float attack_speed = 1f;
     public float scan_radius = 1.0f;
     public float range = 1.0f;
+    public int bullet_cost = 1;
     public int max_bullets = 1;
     public float reload_time = 1.0f;
     public float hold_threshold = 1.0f;
@@ -51,7 +52,6 @@ public class Weapon : MonoBehaviour
 
     // ~ Getters
     public WeaponStats Stats { get { return m_modified_stats; } }
-
     public void AddModifier(ModifierAttributes modifier)
     {
         modifiers.Add(modifier);
@@ -83,6 +83,7 @@ public class Weapon : MonoBehaviour
         m_modified_stats.scan_radius = resource.base_stats.scan_radius;
         m_modified_stats.reload_time = resource.base_stats.reload_time;
         m_modified_stats.hold_threshold = resource.base_stats.hold_threshold;
+        m_modified_stats.bullet_cost = resource.base_stats.bullet_cost;
 
         m_modified_stats.max_bullets = resource.base_stats.max_bullets;
         m_modified_stats.range = resource.base_stats.range;
@@ -119,7 +120,7 @@ public class Weapon : MonoBehaviour
                 return;
             }
             m_time_since_last_fire = 0.0f;
-            m_bullets--;
+            m_bullets-=Stats.bullet_cost;
             AttackImpl(transform.position, target_position);
         }
         on_fire?.Invoke(target_position);

@@ -6,6 +6,7 @@ public class DamageableResources : ScriptableObject
 {
     public float damageable_duration = 0.1f;
     public ParticleSystem short_circuit_particles;
+    public ParticleSystem burning_particles;
     public ParticleSystem death_particles;
     public GameObject floating_text;
     public Material damaged_material;

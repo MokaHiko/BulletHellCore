@@ -69,6 +69,10 @@ public class IDamageable : MonoBehaviour
         {
             damage_color = Color.green;
         }
+        else if (damage_type == StatusEffect.Burning)
+        {
+            damage_color = Color.yellow;
+        }
         else if (crit_roll > 0.95f)
         {
             damage *= UnityEngine.Random.Range(2.0f, 3.0f);
@@ -101,10 +105,9 @@ public class IDamageable : MonoBehaviour
             start_pos = hit_position;
         }
 
-        //var damage_number = Instantiate(damageable_resources.floating_text, hit_position, Quaternion.identity, transform);
         var damage_number = Instantiate(damageable_resources.floating_text, hit_position, Quaternion.identity);
         TMP_Text tmp_text = damage_number.GetComponent<TMP_Text>();
-        tmp_text.text = (damage * 10).ToString();
+        tmp_text.text = (damage).ToString();
         tmp_text.color = damage_color;
 
         if (m_health <= 0.0f)
@@ -152,6 +155,15 @@ public class IDamageable : MonoBehaviour
             }
             m_corossion_routine = StartCoroutine(CorossionEffect());
         }
+
+        if ((status_flags & StatusEffect.Burning) == StatusEffect.Burning)
+        {
+            if (m_burning_routine != null)
+            {
+                StopCoroutine(m_burning_routine);
+            }
+            m_burning_routine = StartCoroutine(BurningEffect());
+        }
     }
     public void RemoveStatus(StatusEffect status_flags) { m_status_effect &= ~status_flags; }
 
@@ -189,7 +201,7 @@ public class IDamageable : MonoBehaviour
 
             if (interval_timer > 0.5f)
             {
-                TakeDamage(2.5f, StatusEffect.Corrosion);
+                TakeDamage(2.5f, StatusEffect.Corrosion, 0, transform.position);
                 interval_timer = 0.0f;
             }
 
@@ -199,6 +211,33 @@ public class IDamageable : MonoBehaviour
         RemoveStatus(StatusEffect.Corrosion);
         m_short_circuit_routine = null;
     }
+    private IEnumerator BurningEffect()
+    {
+        float time = 0.0f;
+
+        float interval_timer = 0.0f;
+
+        ParticleSystem burning_particles = Instantiate(damageable_resources.burning_particles, transform.position, Quaternion.identity, transform);
+
+        while (time < 10.0f)
+        {
+            time += Time.deltaTime;
+            interval_timer += Time.deltaTime;
+
+            if (interval_timer > 0.5f)
+            {
+                TakeDamage(7f, StatusEffect.Burning, 0, transform.position);
+                interval_timer = 0.0f;
+            }
+
+            yield return null;
+        }
+
+        Destroy(burning_particles.gameObject);
+        RemoveStatus(StatusEffect.Burning);
+        m_short_circuit_routine = null;
+    }
+
     private IEnumerator DefaultDamageEffect()
     {
         if(m_start_material == null)
@@ -243,6 +282,7 @@ public class IDamageable : MonoBehaviour
     // ~ Effect Coroutines
     private Coroutine m_short_circuit_routine = null;
     private Coroutine m_corossion_routine = null;
+    private Coroutine m_burning_routine = null;
 
     // ~ Effects
     float m_spring_velocity = 0.0f;

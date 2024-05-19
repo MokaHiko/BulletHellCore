@@ -1,6 +1,7 @@
 using Cinemachine;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.PlayerLoop;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
@@ -29,6 +30,9 @@ public class GameManager : MonoBehaviour
     public PlayerHud player_hud;
     public MenuManager in_game_menu;
 
+    // TODO: Replace with equiped weapon
+    public PropertyBar charge_gun_heat;
+
     [SerializeField]
     int room_count = 0;
 
@@ -37,6 +41,11 @@ public class GameManager : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             in_game_menu.ToggleMenu("PauseMenu");
+        }
+
+        if (m_player.party_leader != null)
+        {
+            charge_gun_heat.SetValue(m_player.party_leader.energy, m_player.party_leader.BaseStats.max_energy);
         }
     }
 
@@ -98,10 +107,10 @@ public class GameManager : MonoBehaviour
 
     public void RequestVignette(float duration, float intensity = 0.45f, bool fixed_time = false)
     {
+        // Cannot repeat viggenettes
         if (m_vignette_routine != null)
         {
-            StopCoroutine(m_vignette_routine);
-            m_vignette_routine = null;
+            return;
         }
 
         m_vignette_routine = StartCoroutine(VignetteEffect(duration, intensity, fixed_time));
@@ -236,7 +245,6 @@ public class GameManager : MonoBehaviour
             room.GenerateRoom();
         }
     }
-
     public void GameOver()
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
