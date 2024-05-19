@@ -28,7 +28,7 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
     }
 
-    public void StartDialogue(Dialogue dialogue, string name = "", bool auto = true, bool stopTime = false)
+    public void StartDialogue(Dialogue dialogue, string name = "", bool auto = true)
     {
         if (canvasInstance) { Destroy(canvasInstance); }
 
@@ -57,7 +57,7 @@ public class DialogueManager : MonoBehaviour
 
         if (auto)
         {
-            StartCoroutine(AutoDisplaySentences(stopTime));
+            StartCoroutine(AutoDisplaySentences(dialogue.stopTime));
         }
         else
         {
