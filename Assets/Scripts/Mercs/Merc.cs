@@ -40,6 +40,10 @@ public class Merc : MonoBehaviour
         // Subscribe to callbacks
         m_unit.damaged_callback += (float damage) => { GameManager.Instance.RequestShake(5, 0.5f); };
         m_unit.death_callback += () => { GameManager.Instance.RequestShake(0, 0.0f); };
+        if (TryGetComponent(out DialogueTrigger dialogueTrigger))
+        {
+            m_unit.death_callback += () => { dialogueTrigger.TriggerDialogue("Death"); };
+        }
         m_unit.status_callback += OnStatusEffect;
     }
     public void OnParticleEnter(ParticleType type)

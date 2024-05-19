@@ -31,7 +31,7 @@ public class UIEffect : MonoBehaviour
 
     [Header("FadeIn")]
     [SerializeField]
-    float fade_in_duration = 1.0f;
+    public float fade_in_duration = 1.0f;
 
     [SerializeField]
     float stretch_duration = 1.0f;
@@ -80,15 +80,17 @@ public class UIEffect : MonoBehaviour
         gameObject.SetActive(false);
     }
 
-    void Die()
+    public void Die(GameObject root = null)
     {
+        GameObject destroyTarget = root ? root : gameObject;
+
         if ((animation_flags & ScriptedAnimation.FadeOut) == ScriptedAnimation.FadeOut)
         {
-            StartCoroutine(FadeOut(fade_out_duration, () => Destroy(gameObject)));
+            StartCoroutine(FadeOut(fade_out_duration, () => Destroy(destroyTarget)));
         }
         else
         {
-            Destroy(gameObject);
+            Destroy(destroyTarget);
         }
     }
 

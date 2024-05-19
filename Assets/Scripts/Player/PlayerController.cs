@@ -163,8 +163,13 @@ public class PlayerController : MonoBehaviour
     IEnumerator MercPowerUp(PlayerController party, Merc merc_prefab, float duration)
     {
         float effect_duration = 0.75f;
-        GameManager.Instance.GetPlayerHud().ShowMercSpecial(merc_prefab, effect_duration);
-        GameManager.Instance.RequestVignette(effect_duration, 1.0f, true);
+        //GameManager.Instance.GetPlayerHud().ShowMercSpecial(merc_prefab, effect_duration);
+        //GameManager.Instance.RequestVignette(effect_duration, 1.0f, true);
+
+        if (merc_prefab.TryGetComponent(out DialogueTrigger dialogueTrigger))
+        {
+            dialogueTrigger.TriggerDialogue("Start");
+        }
 
         float time = 0.0f;
 
