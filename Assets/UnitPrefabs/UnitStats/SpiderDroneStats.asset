@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37384d2a9f5ea99418e70dd1e6d24225, type: 3}
   m_Name: SpiderDroneStats
   m_EditorClassIdentifier: 
-  health: 150
+  health: 125
   max_energy: 150
   energy_gain_rate: 1
-  movement_speed: 5
+  movement_speed: 2
   damage_multiplier: 1

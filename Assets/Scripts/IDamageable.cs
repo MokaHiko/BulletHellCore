@@ -10,6 +10,7 @@ public enum StatusEffect
     ShortCircuit = 1 << 1,
     Corrosion = 1 << 2,
     Armored = 1 << 3,
+    Pure = 1 << 4,
 };
 
 // Called whenever the unit is damaged
@@ -112,32 +113,33 @@ public class IDamageable : MonoBehaviour
 
         if (m_health <= 0.0f)
         {
-            // Invoke callbacks
-            death_callback?.Invoke();
-            death_callback = null;
-
-            // Check other death conditions
-            if (!ShouldDie())
-            {
-                return;
-            }
-
-            if (damageable_resources.death_particles)
-            {
-                ParticleSystem death_effect = Instantiate(damageable_resources.death_particles, transform.position + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity);
-                Destroy(death_effect.gameObject, death_effect.main.duration);
-
-                // De parent effects
-                damage_number.transform.SetParent(death_effect.transform);
-            }
-
-            // ~ Clean up
-
-            // Spring effect
-            StopAllCoroutines();
-
-            Destroy(gameObject);
+            // De parent effects
+            damage_number.transform.SetParent(null);
+            Die();
         }
+    }
+
+    public void Die()
+    {
+        // Invoke callbacks
+        death_callback?.Invoke();
+        death_callback = null;
+
+        // Check other death conditions
+        if (!ShouldDie())
+        {
+            return;
+        }
+
+        ParticleSystem death_effect = Instantiate(damageable_resources.death_particles, transform.position + new Vector3(0.0f, 1.0f, 0.0f), Quaternion.identity);
+        Destroy(death_effect.gameObject, death_effect.main.duration);
+
+        // ~ Clean up
+
+        // Spring effect
+        StopAllCoroutines();
+
+        Destroy(gameObject);
     }
     
     // ~ Status Flags Helpers
@@ -237,7 +239,6 @@ public class IDamageable : MonoBehaviour
         RemoveStatus(StatusEffect.Burning);
         m_short_circuit_routine = null;
     }
-
     private IEnumerator DefaultDamageEffect()
     {
         if(m_start_material == null)

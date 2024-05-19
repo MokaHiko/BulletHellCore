@@ -700,6 +700,14 @@ PrefabInstance:
       value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 4692509919438955288, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
+      propertyPath: laser_bullet_trail
+      value: 
+      objectReference: {fileID: 6713593077530247724, guid: ad054fce5f6eb1447880fc436d63ee33, type: 3}
+    - target: {fileID: 4692509919438955288, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
+      propertyPath: laser_muzzle_flash
+      value: 
+      objectReference: {fileID: 2288445269319124713, guid: d3dd7237c76b1ab479b88f35e8d6a5ac, type: 3}
+    - target: {fileID: 4692509919438955288, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
       propertyPath: regular_fire_shake
       value: 0.5
       objectReference: {fileID: 0}
@@ -715,6 +723,10 @@ PrefabInstance:
       propertyPath: damageable_layers.m_Bits
       value: 2697
       objectReference: {fileID: 0}
+    - target: {fileID: 4692509919438955288, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
+      propertyPath: laser_impact_particle_system
+      value: 
+      objectReference: {fileID: 417761080263594739, guid: e4c2354b3d6be584c85c58ee32b6fb44, type: 3}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 597f7414f5f2e654da981f486a339eeb, type: 3}
 --- !u!1 &1209428689404358365 stripped

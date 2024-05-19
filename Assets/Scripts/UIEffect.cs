@@ -78,19 +78,30 @@ public class UIEffect : MonoBehaviour
     void Disable()
     {
         gameObject.SetActive(false);
+
     }
 
-    public void Die(GameObject root = null)
+    public void Die()
     {
-        GameObject destroyTarget = root ? root : gameObject;
-
         if ((animation_flags & ScriptedAnimation.FadeOut) == ScriptedAnimation.FadeOut)
         {
-            StartCoroutine(FadeOut(fade_out_duration, () => Destroy(destroyTarget)));
+            StartCoroutine(FadeOut(fade_out_duration, () => Destroy(gameObject)));
         }
         else
         {
-            Destroy(destroyTarget);
+            Destroy(gameObject);
+        }
+    }
+
+    public void Die(GameObject root)
+    {
+        if ((animation_flags & ScriptedAnimation.FadeOut) == ScriptedAnimation.FadeOut)
+        {
+            StartCoroutine(FadeOut(fade_out_duration, () => Destroy(root)));
+        }
+        else
+        {
+            Destroy(root);
         }
     }
 

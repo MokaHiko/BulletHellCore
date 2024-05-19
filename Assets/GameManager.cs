@@ -64,6 +64,8 @@ public class GameManager : MonoBehaviour
     // Requests a stop for the time of the game
     public void RequestStop(float duration)
     {
+        if (m_indefinite_stop) return;
+
         if (m_stop_effect != null)
         {
             StopCoroutine(m_stop_effect);
@@ -75,6 +77,7 @@ public class GameManager : MonoBehaviour
 
     public void IndefinedStop()
     {
+        m_indefinite_stop = true;
         Time.timeScale = 0.0f;
         PlayerController pc = GetPlayer();
         if (pc) { pc.lockedControls = true; }
@@ -82,6 +85,7 @@ public class GameManager : MonoBehaviour
 
     public void ContinueTime()
     {
+        m_indefinite_stop = false;
         Time.timeScale = 1.0f;
         PlayerController pc = GetPlayer();
         if (pc) { pc.lockedControls = false; }
@@ -96,6 +100,8 @@ public class GameManager : MonoBehaviour
 
     public void RequestShake(float intensity, float time)
     {
+        if (m_indefinite_stop) return;
+
         if (m_shake_routine != null)
         {
             StopCoroutine(m_shake_routine);
@@ -118,6 +124,8 @@ public class GameManager : MonoBehaviour
 
     public void RequestSlowMo(float duration, float scale = 0.02f)
     {
+        if (m_indefinite_stop) return;
+
         if (m_slowmo_routine != null)
         {
             StopCoroutine(m_slowmo_routine);
@@ -361,5 +369,7 @@ public class GameManager : MonoBehaviour
     // ~ Game effects
     Coroutine m_stop_effect;
     Coroutine m_slowmo_routine;
+    bool m_indefinite_stop = false;
+
     Coroutine m_vignette_routine;
 }

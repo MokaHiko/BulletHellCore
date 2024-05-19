@@ -254,7 +254,7 @@ public class PlayerController : MonoBehaviour
         if (duration > 0.0f)
         {
             yield return new WaitForSeconds(duration);
-            merc.GetComponent<Unit>().TakeDamage(int.MaxValue);
+            merc.GetComponent<Unit>().Die();
         }
     }
 
