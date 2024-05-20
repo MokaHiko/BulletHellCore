@@ -258,6 +258,36 @@ public class GameManager : MonoBehaviour
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex, LoadSceneMode.Single);
     }
 
+    public void SetChromoaticAbberation(float value)
+    {
+        if (!post_process_volume.profile.TryGet<ChromaticAberration>(out ChromaticAberration ca))
+        {
+            return;
+        }
+
+        ca.intensity.value = value;
+    }
+
+    public void SetVignette(float value)
+    {
+        if (!post_process_volume.profile.TryGet<Vignette>(out Vignette vignette))
+        {
+            return;
+        }
+
+        vignette.intensity.value = value;
+    }
+
+    public void ZoomTo(float duration, float start_scale, float end_scale)
+    {
+        if (m_zoom_to_routine != null)
+        {
+            StopCoroutine(m_zoom_to_routine);
+            m_zoom_to_routine = null;
+        }
+        m_zoom_to_routine = StartCoroutine(ZoomToEffect(duration, start_scale, end_scale));
+    }
+
     // ~ Camera Effects
     IEnumerator ShakeEffect(float intensity, float shake_time)
     {
@@ -300,6 +330,23 @@ public class GameManager : MonoBehaviour
         m_zoom_routine = null;
     }
 
+    IEnumerator ZoomToEffect(float duration, float start_scale, float end_scale)
+    {
+        float time = 0.0f;
+
+        while(time < duration) 
+        {
+            time += Time.unscaledDeltaTime;
+            m_virtual_camera.m_Lens.OrthographicSize = Mathf.Lerp(start_scale, end_scale, time / duration);
+            yield return null;
+        }
+
+        m_virtual_camera.m_Lens.OrthographicSize = end_scale;
+
+        m_zoom_to_routine = null;
+    }
+
+
     private IEnumerator VignetteEffect(float duration, float intensity, bool fixed_time)
     {
         if (!post_process_volume.profile.TryGet<Vignette>(out Vignette vignette))
@@ -324,33 +371,20 @@ public class GameManager : MonoBehaviour
 
     private IEnumerator SlowMoEffect(float duration, float scale)
     {
-        //burst_particle_system.Play();
-        //burst = true;
-
         // Slow time
         Time.timeScale = 0.5f;
         Time.fixedDeltaTime = Time.timeScale * scale;
 
-        //float start_distance = m_camera_start_distance;
-        //float end_distance = start_distance - burst_zoom;
-
         float time = 0.0f;
         while (time < duration)
         {
-            //(m_cm_component_base as CinemachineFramingTransposer).m_CameraDistance = Mathf.Lerp(start_distance, end_distance, time / duration);
             time += (1.0f / duration) * Time.unscaledDeltaTime;
-
             yield return null;
         }
-
-        //(m_cm_component_base as CinemachineFramingTransposer).m_CameraDistance = start_distance;
 
         // Reset time
         Time.timeScale = 1.0f;
         m_slowmo_routine = null;
-
-        //burst = false;
-        //m_burst_routine = null;
     }
 
     // ~ Handles
@@ -364,6 +398,7 @@ public class GameManager : MonoBehaviour
     // ~ Camera Effects
     Coroutine m_shake_routine;
     Coroutine m_zoom_routine;
+    Coroutine m_zoom_to_routine;
     float m_current_shake;
 
     // ~ Game effects

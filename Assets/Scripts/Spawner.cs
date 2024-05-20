@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class Spawner : MonoBehaviour
@@ -10,7 +9,6 @@ public class Spawner : MonoBehaviour
 
     public int wave_index;
     public Wave current_wave;
-
     private void Start()
     {
         Debug.Assert(waves.Count > 0);

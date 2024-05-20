@@ -397,7 +397,7 @@ Animator:
   m_GameObject: {fileID: 2864160217687640421}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ff4870acbe46768479f702281a3cc10f, type: 2}
+  m_Controller: {fileID: 9100000, guid: 4ff3bd2dacbfb3342b665c72ae4aa942, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -961,6 +961,7 @@ GameObject:
   - component: {fileID: 2760316214204693992}
   - component: {fileID: 4322882442054125206}
   - component: {fileID: 498591572810172491}
+  - component: {fileID: 8297261557324873265}
   m_Layer: 3
   m_Name: Vanguard
   m_TagString: Untagged
@@ -1098,36 +1099,6 @@ MonoBehaviour:
       Data3: -106264190
       Data4: 494287380
     Path: event:/Objects/Charge Particle Pickup
-  heat_loss_time: 8
---- !u!114 &8297261557324873265
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7107048940979385643}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 23b756be0afc88e4788cb29014353c8e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  characterName: Vanguard
-  dialogues:
-  - identifier: Start
-    characterBanner: {fileID: 21300000, guid: c333abb55d1c9df48a35294db00d6dd0, type: 3}
-    characterPP: {fileID: 21300000, guid: c333abb55d1c9df48a35294db00d6dd0, type: 3}
-    stopTime: 1
-    sentences:
-    - I'll be your shield
-    - Let's go!
-  - identifier: Death
-    characterBanner: {fileID: 0}
-    characterPP: {fileID: 21300000, guid: c333abb55d1c9df48a35294db00d6dd0, type: 3}
-    stopTime: 0
-    sentences:
-    - Egh...
-    - Sorry to leave you...
-  heat_loss_time: 8
 --- !u!114 &498591572810172491
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1159,6 +1130,34 @@ MonoBehaviour:
   OverrideAttenuation: 0
   OverrideMinDistance: 1
   OverrideMaxDistance: 20
+--- !u!114 &8297261557324873265
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7107048940979385643}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 23b756be0afc88e4788cb29014353c8e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterName: Vanguard
+  dialogues:
+  - identifier: Start
+    characterBanner: {fileID: 21300000, guid: c333abb55d1c9df48a35294db00d6dd0, type: 3}
+    characterPP: {fileID: 21300000, guid: c333abb55d1c9df48a35294db00d6dd0, type: 3}
+    stopTime: 1
+    sentences:
+    - I'll be your shield
+    - Let's go!
+  - identifier: Death
+    characterBanner: {fileID: 0}
+    characterPP: {fileID: 21300000, guid: c333abb55d1c9df48a35294db00d6dd0, type: 3}
+    stopTime: 0
+    sentences:
+    - Egh...
+    - Sorry to leave you...
 --- !u!1 &7817972912026028604
 GameObject:
   m_ObjectHideFlags: 0
@@ -2218,11 +2217,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
---- !u!224 &2621451938022366771 stripped
-RectTransform:
-  m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
-  m_PrefabInstance: {fileID: 7953399318338156419}
-  m_PrefabAsset: {fileID: 0}
 --- !u!114 &5070664027311589497 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 2899958189105840122, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
@@ -2234,6 +2228,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcb40921c4174034685f8a7b4f73c5af, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!224 &2621451938022366771 stripped
+RectTransform:
+  m_CorrespondingSourceObject: {fileID: 5332651377316604336, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}
+  m_PrefabInstance: {fileID: 7953399318338156419}
+  m_PrefabAsset: {fileID: 0}
 --- !u!114 &4713357788742995407 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 3389261520146397772, guid: 95f7517106c19a54081d53ee2610cab7, type: 3}

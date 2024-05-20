@@ -21,5 +21,12 @@ MonoBehaviour:
   max_stacks: 1
   dash_multiplier: 25
   dash_status: 0
-  mesh_refresh_time: 0.05
+  mesh_refresh_time: 0.1
   mesh_trail_material: {fileID: 2100000, guid: 9999e967e6c53144f8e9245357428183, type: 2}
+  dash_audio:
+    Guid:
+      Data1: -1366986781
+      Data2: 1248031663
+      Data3: -63819644
+      Data4: 1124852202
+    Path: event:/Player/Player Speed Lines

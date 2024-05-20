@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
-using System.Threading;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.UIElements;
 
 
 [CreateAssetMenu(fileName = "DashState", menuName = "UnitDashState")]
@@ -14,13 +14,14 @@ public class DashState : UnitAbilityState
     public StatusEffect dash_status = StatusEffect.None;
 
     [Header("Trail effect")]
-    public float mesh_refresh_time = 0.1f;
+    public float mesh_refresh_time = 0.3f;
     public Material mesh_trail_material;
+    public FMODUnity.EventReference dash_audio;
 
     DashState()
     {
-        m_exclusive = true;
-        m_interruptable = false;
+        //m_exclusive = true;
+        //m_interruptable = false;
     }
 
     public override void OnEnter(Unit unit)
@@ -30,40 +31,49 @@ public class DashState : UnitAbilityState
         // Indicate managed movement
         if (skinned_meshes == null)
         {
+            start_size = GameManager.Instance.GetVirtualCamera().m_Lens.OrthographicSize;
             skinned_meshes = unit.GetComponentsInChildren<SkinnedMeshRenderer>();
         }
 
-        UseWithCost(false, Direction.magnitude > 0.0f ? Direction : unit.transform.forward);
-    }
+        // Effects
+        GameManager.Instance.ZoomTo(1.5f, start_size, start_size / 2.0f);
+        GameManager.Instance.SetChromoaticAbberation(1.0f);
+        FMODUnity.RuntimeManager.PlayOneShotAttached(dash_audio, unit.gameObject);
 
-    public override void Use(bool burst, Vector3 direction)
-    {
+        // Slow time
+        Time.timeScale = 0.5f;
+        Time.fixedDeltaTime = Time.timeScale * 0.02f;
+
         if (m_dash_routine != null)
         {
-
-            Owner.StopCoroutine(m_dash_routine);
-            m_dash_routine = null;
+            unit.StopCoroutine(m_dash_routine);
         }
-
-        m_dash_routine = Owner.StartCoroutine(DashEffect(direction));
+        m_dash_routine = unit.StartCoroutine(DashEffect());
     }
 
-    private IEnumerator DashEffect(Vector3 direction)
+    public override void OnFrameTick(Unit unit, float dt)
     {
-        Owner.ApplyState(UnitStateFlags.ManagedMovement);
-        Owner.GetComponent<Rigidbody>().AddForce(direction *  dash_multiplier, ForceMode.Impulse);
+        if(!Input.GetMouseButton((int)MouseButton.RightMouse)) 
+        { 
+            StateMachine.QueueRemoveState(this);
+        }
 
-        float effect_timer = 0.0f;
-        float mesh_refresh_interval_timer = 0.0f;
-        while (effect_timer <= duration)
+        Owner.energy -= 1.0f;
+        if (Owner.energy < 1.0f)
         {
-            effect_timer += Time.deltaTime;
+        }
+    }
+    private IEnumerator DashEffect()
+    {
+        float mesh_refresh_interval_timer = 0.0f;
+        while(true)
+        {
             mesh_refresh_interval_timer += Time.deltaTime;
+            Owner.energy -= 0.2f;
 
             if (mesh_refresh_interval_timer > mesh_refresh_time)
             {
                 mesh_refresh_interval_timer = 0.0f;
-
                 for(int i = 0; i < skinned_meshes.Length; i++) 
                 { 
                     GameObject trail_object = new GameObject();
@@ -86,9 +96,6 @@ public class DashState : UnitAbilityState
 
             yield return null;
         }
-
-        Owner.RemoveState(UnitStateFlags.ManagedMovement);
-        m_dash_routine = null;
     }
 
     IEnumerator AnimateMaterialFloat(Material material, float end, float rate, float refresh_rate)
@@ -104,11 +111,26 @@ public class DashState : UnitAbilityState
 
     public override void OnExit(Unit unit)
     {
+        if (m_dash_routine != null)
+        {
+            unit.StopCoroutine(m_dash_routine);
+            m_dash_routine = null;
+        }
+
+        // Reset time
+        Time.timeScale = 1.0f;
+
+        // Reset Effects
+        GameManager.Instance.ZoomTo(1.5f, start_size/2.0f, start_size);
+        GameManager.Instance.SetChromoaticAbberation(0.15f);
+
         unit.RemoveState(UnitStateFlags.ManagedMovement);
     }
 
     // ~ Trail Effect
     SkinnedMeshRenderer[] skinned_meshes;
     Coroutine m_dash_routine;
+
+    private float start_size = 0.0f;
 }
 
